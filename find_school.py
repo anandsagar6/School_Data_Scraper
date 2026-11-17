@@ -72,7 +72,11 @@ import urllib.parse
 #  A rank.json beside this script, or SCHOOL_RANK / SCHOOL_NUM_SYS in the
 #  environment, override these without touching the file.
 rank = 1
-num_sys = 25
+#  FIVE school collectors, as the deployment plan says. This number must be
+#  the same on every laptop: it is what divides the 866 cities between them,
+#  173-174 each, every city to exactly one laptop. Leaving it at 25 while
+#  only five laptops run would collect 175 cities and silently skip 691.
+num_sys = 5
 
 # --- how Google Maps is scrolled -------------------------------------------
 #  The loop is: copy the whole list, save it, press Down, wait, copy again.
@@ -109,6 +113,14 @@ KEEP_CAPTURED_TEXT = False
 #  Lines older than this are dropped from find_school.log at every start.
 #  0 keeps everything.
 LOG_KEEP_DAYS = 10
+#  The order the work is done in.
+#  True  : one keyword across every assigned city, then the next keyword -
+#          Private Schools everywhere, then Government Schools everywhere.
+#  False : the older behaviour - one city at a time, all its keywords
+#          before the next city. Both reach the same rows; only the order
+#          differs, and a city is closed only once EVERY keyword is done
+#          either way.
+KEYWORD_FIRST_ORDER = True
 #  Keep a second copy of every FINISHED cycle file in Backup/. The copy is
 #  verified after it is written and is never deleted by any cleanup.
 BACKUP_COMPLETED_CYCLES = True
@@ -1835,15 +1847,22 @@ def night_pause_status():
     return "%02d:00-%02d:00 %s%s" % (start, end, TIME_ZONE, inside)
 
 
-def git_run(args, timeout=120):
+def git_run(args, timeout=120, index=None):
     """One git command in the project directory. Never raises.
 
     Returns ``(ok, output)``. Git is given the project folder explicitly
     because the run's working directory is not guaranteed to be it.
+    ``index`` points git at a throwaway index file, so staging the data
+    files does not disturb whatever the operator has staged.
     """
+    env = None
+    if index:
+        env = dict(os.environ)
+        env["GIT_INDEX_FILE"] = index
     try:
         done = subprocess.run(["git", "-C", PROJECT_DIR] + list(args),
-                              capture_output=True, text=True, timeout=timeout)
+                              capture_output=True, text=True, timeout=timeout,
+                              env=env)
     except (OSError, subprocess.SubprocessError) as error:
         return False, str(error)[:300]
     output = (done.stdout or "") + (done.stderr or "")
@@ -1970,37 +1989,81 @@ def git_sync(reason, checkpoint=None, force=False):
     if not paths:
         return False
 
-    # -f is needed and is safe HERE, and only here: .gitignore keeps the
-    # collected data out of a casual "git add ." - which is what it is
-    # for - but these are the files a recovery cannot do without. The
-    # path list is built by recovery_paths(), never from a wildcard, so
-    # forcing it cannot widen what is committed by a single file.
-    ok, out = git_run(["add", "-f", "--"] + paths)
-    if not ok:
+    branch = GIT_STATE["branch"]
+    # THE DATA NEVER TOUCHES THE SOURCE BRANCH.
+    #
+    # This used to commit onto whatever branch was checked out and push
+    # that. When a push failed - no network, no key - the commit stayed
+    # behind on master, and the next ordinary "git push origin master"
+    # would have carried the collected school records into the public
+    # source repository. On a public repo that is a one-way mistake.
+    #
+    # So the commit is built with plumbing instead: a throwaway index, a
+    # tree written from it, and a commit recorded straight onto the rank
+    # branch's ref. HEAD, the checked-out branch and the operator's own
+    # staged changes are never touched, and nothing about the data can
+    # reach the source branch even if every push fails for a week.
+    ref = "refs/heads/%s" % branch
+    # git_run returns (ok, output): the FIRST value says whether the ref
+    # exists, the second is its hash.
+    has_ref, parent_sha = git_run(["rev-parse", "--verify", "--quiet", ref])
+    parent_sha = parent_sha.strip() if has_ref else ""
+    if not parent_sha:
+        # first sync of this rank: build on the source commit instead
+        ok_head, head_sha = git_run(["rev-parse", "--verify", "--quiet",
+                                     "HEAD"])
+        parent_sha = head_sha.strip() if ok_head else ""
+    # A repository with no commits at all has neither; then the commit is
+    # a root commit built on an empty tree. A laptop that ran "git init"
+    # and nothing else lands here.
+    base = parent_sha
+    index = os.path.join(PROJECT_DIR, ".git", "school-sync-index")
+    try:
+        if os.path.exists(index):
+            os.remove(index)
+    except OSError:
+        pass
+
+    def fail(stage, detail):
         GIT_STATE["pending"] = True
-        GIT_STATE["last_error"] = "add failed: %s" % out[:200]
+        GIT_STATE["last_error"] = "%s failed: %s" % (stage, detail[:200])
         LOG.warning("   [GIT] %s", GIT_STATE["last_error"])
         git_note_state(checkpoint)
         return False
 
-    # nothing staged is not a failure: there was simply nothing new
-    staged, _out = git_run(["diff", "--cached", "--quiet", "--"] + paths)
-    if staged:
-        if not GIT_STATE["pending"]:
-            return False
-    else:
-        message = "school data: %s (rank %s)" % (reason,
-                                                 RUNTIME.get("rank_label", "?"))
-        ok, out = git_run(["commit", "-m", message, "--"] + paths)
-        if not ok and "nothing to commit" not in out.lower():
-            GIT_STATE["pending"] = True
-            GIT_STATE["last_error"] = "commit failed: %s" % out[:200]
-            LOG.warning("   [GIT] %s", GIT_STATE["last_error"])
-            git_note_state(checkpoint)
+    # the rank branch's own tree (or the source commit, the first time)
+    ok, out = git_run(["read-tree", base] if base else ["read-tree", "--empty"],
+                      index=index)
+    if not ok:
+        return fail("read-tree", out)
+    # -f because the collected data is deliberately in .gitignore
+    ok, out = git_run(["add", "-f", "--"] + paths, index=index)
+    if not ok:
+        return fail("add", out)
+    ok, tree = git_run(["write-tree"], index=index)
+    if not ok or not tree.strip():
+        return fail("write-tree", tree)
+    tree = tree.strip()
+
+    # nothing changed since the last sync: not a failure, just nothing to do
+    if base:
+        ok, head_tree = git_run(["rev-parse", "%s^{tree}" % base])
+        if ok and head_tree.strip() == tree and not GIT_STATE["pending"]:
             return False
 
-    branch = GIT_STATE["branch"]
-    ok, out = git_run(["push", GIT_REMOTE, "HEAD:refs/heads/%s" % branch],
+    message = "school data: %s (rank %s)" % (reason,
+                                             RUNTIME.get("rank_label", "?"))
+    making = ["commit-tree", tree, "-m", message]
+    if parent_sha:
+        making = ["commit-tree", tree, "-p", parent_sha, "-m", message]
+    ok, commit = git_run(making)
+    if not ok or not commit.strip():
+        return fail("commit-tree", commit)
+    ok, out = git_run(["update-ref", ref, commit.strip()])
+    if not ok:
+        return fail("update-ref", out)
+
+    ok, out = git_run(["push", GIT_REMOTE, "%s:%s" % (ref, ref)],
                       timeout=180)
     if not ok:
         GIT_STATE["pending"] = True
@@ -2726,6 +2789,19 @@ class Checkpoint:
         done = self.data["enriched"].setdefault(self.key(state, city), [])
         if identity not in done:
             done.append(identity)
+        self.save()
+
+    def add_totals(self, saved, duplicates):
+        """Add one visit's counts to the running totals.
+
+        Needed because a city can now be visited more than once - one
+        keyword per pass - and only the visit that CLOSES the city reaches
+        mark_city_complete(). Without this the earlier passes' saved
+        schools were in the Excel files but missing from the totals that
+        --status reports.
+        """
+        self.data["saved"] += int(saved)
+        self.data["duplicates"] += int(duplicates)
         self.save()
 
     def mark_city_complete(self, state, city, saved, duplicates):
@@ -5328,6 +5404,25 @@ def is_directory_host(host):
     return any(mark in low for mark in DIRECTORY_HOSTS)
 
 
+#: A school in India does not publish its contact details on another
+#: country's domain. Found by a live run: a school in Sikkim was offered
+#: an address on a NEPALI school's domain, accepted only because the two
+#: names share one word. The two-letter country code is the cheapest
+#: reliable way to refuse that. Generic suffixes are allowed because an
+#: Indian school may well use .com, .org or .edu.
+FOREIGN_TLD_ALLOWED = {"in", "com", "org", "net", "edu", "gov", "info",
+                       "biz", "site", "online", "school", "academy"}
+
+
+def foreign_country_host(host):
+    """True when the host's last label is another country's code."""
+    last = (host or "").rsplit(".", 1)[-1].lower()
+    if not last or last in FOREIGN_TLD_ALLOWED:
+        return False
+    # a two-letter suffix that is not "in" is another country
+    return len(last) == 2
+
+
 def host_belongs_to_school(host, record):
     """True when this host looks like the school's OWN site.
 
@@ -5337,6 +5432,8 @@ def host_belongs_to_school(host, record):
     """
     host = (host or "").lower()
     if not host or is_directory_host(host):
+        return False
+    if foreign_country_host(host):
         return False
     known = domain_of(record.get("School Website", ""))
     if known and (host == known or host.endswith("." + known)):
@@ -5863,8 +5960,16 @@ def process_keyword(director, gemini, checkpoint, state, city, keyword,
 
 
 def process_city(director, gemini, checkpoint, state, city, keywords,
-                 limit=None):
-    """One city: every keyword, each finished completely before the next."""
+                 limit=None, all_keywords=None):
+    """One visit to a city: the keywords given, each finished completely.
+
+    ``keywords`` is what this visit works on. ``all_keywords`` is every
+    keyword the city needs before it can be called complete - the same
+    list when a city is done in one visit, and the full enabled set when
+    the run is working one keyword at a time across many cities. A city is
+    closed, and its working files removed, only when every one of
+    ``all_keywords`` is finished, whichever order they were done in.
+    """
     LOG.info("")
     LOG.info("=" * 72)
     LOG.info("CITY: %s, %s", city, state)
@@ -5911,6 +6016,25 @@ def process_city(director, gemini, checkpoint, state, city, keywords,
         LOG.warning("   %s", report["note"])
         return report
     if RUNTIME["stop"]:
+        return report
+
+    # This visit's keywords are done, but the city may still owe another
+    # one from a later pass. Closing it now would clear the working files
+    # that the next keyword's duplicate check needs, and would mark a city
+    # complete that has not been searched for Government Schools yet.
+    expected = list(all_keywords or keywords)
+    waiting = [k for k in expected
+               if not checkpoint.keyword_done(state, city, k)]
+    if waiting:
+        report["note"] = ("%d of %d keyword(s) still to come for %s (%s) - "
+                          "it stays open until they are done"
+                          % (len(waiting), len(expected), city,
+                             ", ".join(waiting[:3])))
+        LOG.info("   %s", report["note"])
+        # This visit's rows are already in the Excel files, so they belong
+        # in the totals now - the visit that finally closes the city will
+        # only count its own.
+        checkpoint.add_totals(report["saved"], report["duplicates"])
         return report
 
     # every keyword finished: the city's rows must be in the master before
@@ -6083,8 +6207,10 @@ def run(args):
     # the whole log is on the screen already and saying this would be
     # both pointless and untrue.
     if terminal_is_quiet():
-        announce("Working through %d city(ies), %d search(es).",
-                 len(pending), len(pending) * len(keywords))
+        announce("Working through %d city(ies), %d search(es)%s.",
+                 len(pending), len(pending) * len(keywords),
+                 ", one keyword at a time across all of them"
+                 if KEYWORD_FIRST_ORDER and len(keywords) > 1 else "")
         announce("   below        : what it is doing right now, on one line")
         announce("   every step   : tail -f %s", LOG_FILE)
         announce("   to watch it  : run again with --show")
@@ -6110,26 +6236,44 @@ def run(args):
         LOG.info("One browser at a time: Maps while copying, Gemini while "
                  "researching")
 
-        for position, (state, city) in enumerate(pending, start=1):
+        # The order of the work, decided in one place. Each visit is one
+        # city and the keyword(s) to do there now.
+        #   keyword-first: Private Schools across every city, then
+        #                  Government Schools across every city
+        #   city-first   : every keyword of one city, then the next city
+        # Both do the same searches and save the same rows.
+        if KEYWORD_FIRST_ORDER and len(keywords) > 1:
+            visits = [(state, city, [keyword])
+                      for keyword in keywords for state, city in pending]
+        else:
+            visits = [(state, city, list(keywords)) for state, city in pending]
+
+        for position, (state, city, doing) in enumerate(visits, start=1):
             if RUNTIME["stop"]:
                 LOG.warning("Stopped before %s at your request.", city)
                 break
-            # The safest point there is: nothing of this city has started.
+            # The safest point there is: nothing of this visit has started.
             if not schedule_gate(director, checkpoint):
                 LOG.warning("Stopped before %s at your request.", city)
                 break
+            # A city finished by an earlier pass needs no further visit.
+            if checkpoint.is_city_complete(state, city):
+                continue
             LOG.info("")
             LOG.info("=" * 49)
-            LOG.info("City %d of %d: %s, %s", position, len(pending), city,
-                     state)
+            LOG.info("Visit %d of %d: %s, %s%s", position, len(visits), city,
+                     state,
+                     "" if len(doing) == len(keywords)
+                     else "  [%s]" % ", ".join(doing))
             WHERE.update({"city": city, "city_at": position,
-                          "cities": len(pending), "keyword": "",
+                          "cities": len(visits), "keyword": "",
                           "keyword_at": 0, "keywords": 0})
             say_status("starting")
             LOG.info("=" * 49)
             try:
                 report = process_city(director, gemini, checkpoint, state,
-                                      city, keywords, limit=args.limit)
+                                      city, doing, limit=args.limit,
+                                      all_keywords=keywords)
             except BrowserUnavailable as error:
                 LOG.error("%s", error)
                 exit_code = 4
@@ -6141,7 +6285,7 @@ def run(args):
             reports.append(report)
             if not report["complete"]:
                 exit_code = exit_code or 1
-            if position < len(pending) and not RUNTIME["stop"]:
+            if position < len(visits) and not RUNTIME["stop"]:
                 pause(CITY_DELAY_SECONDS, "before the next city")
     except DesktopUnavailable as error:
         # --show could not reach the desktop: say so plainly instead of
@@ -6372,12 +6516,25 @@ def print_dry_run(args):
     print("rank %d of %d (from %s)" % (value_rank, value_num, source))
     print("%d cities x %d keywords = %d searches"
           % (len(pairs), len(enabled_keywords()), len(plan)))
+    words = enabled_keywords()
+    first = KEYWORD_FIRST_ORDER and len(words) > 1
+    print("order: %s" % ("one keyword across every city, then the next"
+                         if first else "every keyword of one city, then the "
+                                       "next city"))
     print("-" * 72)
-    for state, city in pairs:
-        print("%s, %s" % (city, state))
-        for keyword in enabled_keywords():
-            query = build_query(keyword, city)
-            print("    %-46s %s" % (query, maps_search_url(query)))
+    if first:
+        # exactly the order run() will work in
+        for keyword in words:
+            print("%s - all %d city(ies)" % (keyword, len(pairs)))
+            for state, city in pairs:
+                query = build_query(keyword, city)
+                print("    %-46s %s" % (query, maps_search_url(query)))
+    else:
+        for state, city in pairs:
+            print("%s, %s" % (city, state))
+            for keyword in words:
+                query = build_query(keyword, city)
+                print("    %-46s %s" % (query, maps_search_url(query)))
     print("-" * 72)
     print("%d searches in total" % len(plan))
     return 0
@@ -6759,14 +6916,28 @@ def self_test():
 
 def _excel_self_test():
     """The master file, the 100-record cycles and the crash repair."""
-    global EXCEL_DIR, CYCLE_SIZE
+    # BACKUP_DIR is redirected too, and that is not optional: this section
+    # finalises cycles at CYCLE_SIZE = 3, and finalise_current_cycle() now
+    # takes a permanent backup. Without this the self-test wrote three-row
+    # fixture workbooks straight into the project's real Backup/ folder
+    # every single time it ran.
+    # GIT_SYNC_ENABLED is turned off here for the same reason BACKUP_DIR
+    # is redirected: this section finalises cycles, finalise_current_cycle()
+    # calls git_sync(), and an offline self-test must not commit anything -
+    # it was creating a real commit on the rank branch holding the real
+    # checkpoint and working sheet.
+    global EXCEL_DIR, CYCLE_SIZE, BACKUP_DIR, GIT_SYNC_ENABLED
     kept_dir, kept_size = EXCEL_DIR, CYCLE_SIZE
+    kept_backup = BACKUP_DIR
+    kept_sync = GIT_SYNC_ENABLED
     kept_level = LOG.level
     folder = tempfile.mkdtemp(prefix="school_excel_")
     problems = []
     try:
         LOG.setLevel(logging.CRITICAL)
         EXCEL_DIR, CYCLE_SIZE = folder, 3
+        BACKUP_DIR = os.path.join(folder, "Backup")
+        GIT_SYNC_ENABLED = False
 
         def school(number):
             record = blank_record()
@@ -6839,6 +7010,8 @@ def _excel_self_test():
         problems.append("Excel: %s" % str(error)[:200])
     finally:
         EXCEL_DIR, CYCLE_SIZE = kept_dir, kept_size
+        BACKUP_DIR = kept_backup
+        GIT_SYNC_ENABLED = kept_sync
         LOG.setLevel(kept_level)
         shutil.rmtree(folder, ignore_errors=True)
     return problems

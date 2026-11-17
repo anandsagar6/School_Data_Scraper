@@ -1,5 +1,5 @@
 {
-    "_comment": "Optional. Copy to rank.json to set this laptop's rank without editing find_school.py. The values at the top of the script are used when this file is absent.",
-    "rank": 1,
-    "num_sys": 25
+  "_comment": "Optional. Copy to rank.json on each laptop to set its rank without editing find_school.py. num_sys must be the SAME on every laptop - it divides the 866 cities between them. Five laptops: rank 1..5 with num_sys 5.",
+  "rank": 1,
+  "num_sys": 5
 }
