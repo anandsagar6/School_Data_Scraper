@@ -4269,5 +4269,15 @@ class GitRemotePerInstallTests(SandboxTest):
 
     def test_the_push_uses_the_resolved_remote_not_the_global(self):
         source = inspect.getsource(fs.git_sync)
-        self.assertIn('RUNTIME["git_remote"]', source)
-        self.assertNotIn("GIT_REMOTE,", source)
+        self.assertIn("git_remote_now()", source)
+        self.assertNotIn("GIT_REMOTE", source)
+
+    def test_the_resolver_works_without_run_having_set_it(self):
+        # git_sync() must not depend on run() having resolved the remote
+        fs.RUNTIME.pop("git_remote_from", None)
+        fs.RUNTIME.pop("git_remote", None)
+        with open(fs.RANK_FILE, "w", encoding="utf-8") as handle:
+            json.dump({"git_remote": "set-in-rank-file"}, handle)
+        os.environ.pop("SCHOOL_GIT_REMOTE", None)
+        self.assertEqual(fs.git_remote_now(), "set-in-rank-file")
+        self.assertEqual(fs.RUNTIME["git_remote_from"], "rank.json")
