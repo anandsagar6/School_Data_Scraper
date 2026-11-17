@@ -60,121 +60,63 @@ import unicodedata
 import urllib.parse
 
 # ===========================================================================
-#  USER SETTINGS
+#  SETTINGS
 # ===========================================================================
-#  The only settings meant to be changed. Everything else is technical and
-#  lives further down, beside the code that uses it.
+#  Everything meant to be changed, most important first. Anything not here
+#  is technical and lives further down, beside the code that uses it.
 # ---------------------------------------------------------------------------
 
-# --- which machine this is -------------------------------------------------
-#  Laptop 1: rank = 1   Laptop 2: rank = 2  ...  Laptop 25: rank = 25
-#  num_sys is the SAME on every laptop. Changing rank needs no other edit.
-#  A rank.json beside this script, or SCHOOL_RANK / SCHOOL_NUM_SYS in the
-#  environment, override these without touching the file.
-rank = 1
-#  FIVE school collectors, as the deployment plan says. This number must be
-#  the same on every laptop: it is what divides the 866 cities between them,
-#  173-174 each, every city to exactly one laptop. Leaving it at 25 while
-#  only five laptops run would collect 175 cities and silently skip 691.
-num_sys = 5
+# --- this laptop -----------------------------------------------------------
+rank = 1                            # laptop 1..num_sys; rank.json overrides
+num_sys = 5                         # SAME on every laptop; splits the cities
 
-# --- how Google Maps is scrolled -------------------------------------------
-#  The loop is: copy the whole list, save it, press Down, wait, copy again.
-#  Nothing is ever scrolled past before the text on screen has been saved.
-#
-#  Each copy takes the WHOLE list, not the new part, so pressing Down
-#  several times between copies cannot skip a school - it only means fewer
-#  copies of the same text. One press moves the list about 24 pixels, so
-#  at 1 press a long city needs several hundred copies and takes hours.
-#  Lower this to copy more often, raise it to finish sooner.
-DOWN_PRESSES_PER_ROUND = 10
-#  Seconds to wait after the Down presses for new results to appear.
-SCROLL_PAUSE_SECONDS = 2.5
+
+# --- where the records go --------------------------------------------------
+CYCLE_SIZE = 1000                   # rows in a finished Excel cycle file
+BACKUP_COMPLETED_CYCLES = True      # keep a verified copy in Backup/
+
+# --- GitHub sync -----------------------------------------------------------
+GIT_SYNC_ENABLED = True             # push recovery files to a remote
+GIT_REMOTE = "localtest"            # "origin" is the public repo - careful
+GIT_SYNC_MINUTES = 5                # never sync more often than this
+GIT_BRANCH_PER_RANK = True          # rank 1 -> school-data-rank-1
+
+# --- what is collected -----------------------------------------------------
+OFFICIAL_CONTACT_SEARCH = True      # official email/phone from Google Search
+KEYWORD_FIRST_ORDER = True          # one keyword across every city, then next
+COUNTRY = "India"                   # added to every Maps and Google query
+
+# --- working hours ---------------------------------------------------------
+WORK_PERIOD_MIN_HOURS = 2           # work this long (working time only)...
+WORK_PERIOD_MAX_HOURS = 6
+BREAK_MIN_MINUTES = 30              # ...then stop this long
+BREAK_MAX_MINUTES = 90
+NIGHT_PAUSE_ENABLED = False         # no collecting between the hours below
+NIGHT_START_HOUR = 23
+NIGHT_END_HOUR = 5
+TIME_ZONE = "Asia/Kolkata"          # the clock the night stop is read on
+
+# --- pacing: every wait is a fresh random draw from its range --------------
+GOOGLE_BETWEEN_SCHOOLS_DELAY_SECONDS = (8, 16)   # between two schools
+GOOGLE_BETWEEN_QUERIES_DELAY_SECONDS = (3, 7)    # email search -> phone search
+GOOGLE_TO_GEMINI_DELAY_SECONDS = (5, 12)         # searches -> Gemini
+PAUSE_CLOSES_BROWSER_SECONDS = 600  # a break this long closes the browser
+
+# --- Google Maps scrolling -------------------------------------------------
+#  Each copy takes the WHOLE list, so more presses between copies cannot
+#  skip a school - it only means fewer copies. One press moves ~24 pixels.
+DOWN_PRESSES_PER_ROUND = 10         # lower = copy more often, slower
+SCROLL_PAUSE_SECONDS = 2.5          # wait after the presses for new results
 
 # --- Gemini ----------------------------------------------------------------
 GEMINI_URL = "https://gemini.google.com/app?hl=en-IN"
-#  The answer is not looked at before this. After it, the response is
-#  watched until it stops growing, so a slow answer is still waited for.
-GEMINI_FIRST_READ_SECONDS = 15
-#  Give up on one school after this many seconds.
-GEMINI_ANSWER_TIMEOUT = 240
-#  Extra attempts for a school whose answer comes back unusable.
-GEMINI_RETRIES = 2
+GEMINI_FIRST_READ_SECONDS = 15      # before the answer is looked at
+GEMINI_ANSWER_TIMEOUT = 240         # give up on one school after this
+GEMINI_RETRIES = 2                  # extra tries for an unusable answer
 
-# --- output ----------------------------------------------------------------
-#  Rows in a finished Excel cycle file.
-CYCLE_SIZE = 1000
-#  Keep each keyword's copied text after its city finishes, as the evidence
-#  behind every row. Off by default: finished work cleans up after itself and
-#  Temp_Data stays empty. This setting only ever applies to work that
-#  SUCCEEDED - text belonging to an unresolved keyword, an unfinished city or
-#  a pending school is preserved either way, because a resume needs it.
-KEEP_CAPTURED_TEXT = False
-#  Lines older than this are dropped from find_school.log at every start.
-#  0 keeps everything.
-LOG_KEEP_DAYS = 10
-#  The order the work is done in.
-#  True  : one keyword across every assigned city, then the next keyword -
-#          Private Schools everywhere, then Government Schools everywhere.
-#  False : the older behaviour - one city at a time, all its keywords
-#          before the next city. Both reach the same rows; only the order
-#          differs, and a city is closed only once EVERY keyword is done
-#          either way.
-KEYWORD_FIRST_ORDER = True
-#  Keep a second copy of every FINISHED cycle file in Backup/. The copy is
-#  verified after it is written and is never deleted by any cleanup.
-BACKUP_COMPLETED_CYCLES = True
-
-# --- the official email and phone number -----------------------------------
-#  The official contact columns are filled from a Google Search of the
-#  school's own name and place, not from Gemini. Gemini still fills the
-#  alternate contacts and the rest of the 57 fields.
-#
-#  Nothing is written unless it can be tied to the school itself: an address
-#  on the school's own website, or a number Google Maps already showed for
-#  it. A search snippet on a directory site is not evidence, so an uncertain
-#  field is left BLANK rather than guessed.
-OFFICIAL_CONTACT_SEARCH = True
-#  Seconds between two Google searches, drawn fresh each time. This is the
-#  only pacing the contact searches have; a Maps keyword still ends only on
-#  Google's own end-of-list message, never on a clock.
-CONTACT_LOOKUP_DELAY_SECONDS = (4.0, 9.0)
-#  Between finishing the searches and asking Gemini.
-GEMINI_HANDOVER_DELAY_SECONDS = (3.0, 8.0)
-
-# --- how long to work, and when to stop ------------------------------------
-#  A work period is drawn fresh from this range, counting WORKING time only:
-#  the clock stops during a break, so a 3-hour period means three hours of
-#  actual collecting. At the end of a period the run saves, syncs and waits.
-WORK_PERIOD_MIN_HOURS = 2
-WORK_PERIOD_MAX_HOURS = 6
-#  The break that follows, also drawn fresh each time.
-BREAK_MIN_MINUTES = 30
-BREAK_MAX_MINUTES = 90
-#  A break at least this long closes the browser while it waits.
-PAUSE_CLOSES_BROWSER_SECONDS = 600
-#  The night stop. OFF by default: the hours were not settled in the
-#  meeting, so nothing is assumed - set the hours and turn it on.
-NIGHT_PAUSE_ENABLED = False
-NIGHT_START_HOUR = 23               # collecting stops at this hour
-NIGHT_END_HOUR = 5                  # collecting resumes at this hour
-#  The clock the night stop is read on, so every laptop agrees.
-TIME_ZONE = "Asia/Kolkata"
-
-# --- saving progress to GitHub ---------------------------------------------
-#  OFF by default, and deliberately: turning it on pushes the collected
-#  Excel files and the checkpoint to a remote. Set a remote, check the
-#  branch below, then turn it on.
-#
-#  Only named paths are ever added - no "git add ." - so a browser profile,
-#  a log or a credential file cannot be committed by accident.
-GIT_SYNC_ENABLED = False
-#  Do not sync more often than this, however many milestones pass.
-GIT_SYNC_MINUTES = 5
-#  Each laptop pushes its own branch, so 25 ranks cannot conflict.
-#  rank 1 -> school-data-rank-1. False pushes the current branch instead.
-GIT_BRANCH_PER_RANK = True
-GIT_REMOTE = "origin"
+# --- housekeeping ----------------------------------------------------------
+KEEP_CAPTURED_TEXT = False          # keep a finished keyword's copied text
+LOG_KEEP_DAYS = 10                  # trim find_school.log to this; 0 keeps all
 
 
 # ===========================================================================
@@ -207,7 +149,7 @@ MYLIB_CITY_NAME = "city_by_states"
 MYLIB_KEYWORD_NAME = "SCHOOL_SEARCH_KEYWORDS"
 MYLIB_FIELD_NAME = "SCHOOL_FIELDS"
 
-COUNTRY = "India"
+
 
 
 def set_rank_paths(this_rank=None):
@@ -501,14 +443,41 @@ that Value.
 """
 
 
+def gemini_skips_columns():
+    """Columns Gemini is NOT asked about: Google Search researches them.
+
+    Asking as well would spend an answer on work already done, and invite
+    a second, unverified opinion on the one pair of fields that has to be
+    verifiable. The Excel file still has all 57 columns - only the prompt
+    is shorter. Resolved when called, because the column names are
+    defined further down the file beside the search that owns them.
+    """
+    if not OFFICIAL_CONTACT_SEARCH:
+        return set()
+    return {OFFICIAL_EMAIL_COLUMN, OFFICIAL_PHONE_COLUMN}
+
+
+def gemini_asked_columns():
+    """The columns Gemini is asked about, in the 57-column order."""
+    skip = gemini_skips_columns()
+    return [c for c in SCHOOL_COLUMNS if c not in skip]
+
+
+def gemini_asked_keys():
+    """The answer keys matching gemini_asked_columns()."""
+    skip = gemini_skips_columns()
+    return [key for column, key in zip(SCHOOL_COLUMNS, ANSWER_KEYS)
+            if column not in skip]
+
+
 def requested_fields_text():
-    """The 57 human field names, one per line, in order."""
-    return "\n".join(SCHOOL_COLUMNS)
+    """The field names Gemini is asked for, one per line, in order."""
+    return "\n".join(gemini_asked_columns())
 
 
 def answer_format_text():
-    """The 57 ``Key: Value`` lines Gemini is asked to answer with."""
-    return "\n".join("%s: Value    \\n" % key for key in ANSWER_KEYS)
+    """The ``Key: Value`` lines Gemini is asked to answer with."""
+    return "\n".join("%s: Value    \\n" % key for key in gemini_asked_keys())
 
 
 def build_prompt(record):
@@ -1246,9 +1215,12 @@ def apply_answer(record, values):
         value = tidy_value(column, value)
         if not value:
             continue
-        # The official contacts are searched for, not asked for. What
-        # Gemini offers for them is moved to the matching ALTERNATE
-        # column, which is exactly what it is: a second-hand suggestion.
+        # GEMINI NEVER FILLS THE OFFICIAL CONTACTS.
+        # Google Search owns those two columns, and the prompt no longer
+        # even asks for them. Should an answer mention one anyway, it is
+        # moved to the matching ALTERNATE column - which is what it is: a
+        # second-hand suggestion, kept but not presented as verified. A
+        # blank official column is left blank rather than promoted.
         if OFFICIAL_CONTACT_SEARCH and column in OFFICIAL_CONTACT_COLUMNS:
             column = OFFICIAL_TO_ALTERNATE.get(column, column)
             value = tidy_value(column, value)
@@ -5217,6 +5189,102 @@ def say_status(doing):
     STATUS.set("%s | %s", place, doing)
 
 
+# ===========================================================================
+#  ONE RUN AT A TIME
+# ===========================================================================
+#  Two extractors sharing one checkpoint and one master workbook would
+#  undo each other: both would research the same schools, both would write
+#  the same Excel file, and the one that saved last would win. systemd
+#  keeps a service to a single copy, but nothing stops a second run being
+#  started by hand in a terminal while the service is working.
+#
+#  So the writing commands take an exclusive lock first. fcntl.flock() is
+#  the right tool because the KERNEL holds it, not a file's contents:
+#
+#    * it is released the moment the process ends, however it ends - a
+#      clean exit, a crash, kill -9, or the power going out. There is no
+#      such thing as a stale flock, so nothing has to time out or be
+#      cleared by hand after a power cut.
+#    * it is advisory between processes on this machine, which is exactly
+#      the scope that matters: one project directory, one run.
+#
+#  The lock file lives in the project directory, so two installations in
+#  two different folders - or on two laptops - never collide. It is listed
+#  in .gitignore and is not one of recovery_paths(), so it is never
+#  committed, pushed or backed up.
+#
+#  --status, --dry-run, --self-test, --list-keywords and --check-display
+#  read or work in a temporary folder, so they are NOT blocked: an
+#  operator can always look at a running collection.
+# ---------------------------------------------------------------------------
+
+#: Where the lock lives. Named after the project folder it guards.
+LOCK_FILE = os.path.join(PROJECT_DIR, ".school_extractor.lock")
+
+#: The open file object. Kept for the whole run: closing it, or the
+#: process ending, releases the lock. Never let this be garbage collected.
+RUN_LOCK = {"handle": None, "path": ""}
+
+
+def take_run_lock(path=None):
+    """Claim the right to write this project's data. ``(ok, who)``.
+
+    ``ok`` is False only when another live process holds the lock, and
+    ``who`` then describes it, as recorded by that process. The lock is
+    held until this process ends; nothing has to release it explicitly.
+    """
+    try:
+        import fcntl
+    except ImportError:                                 # not Linux
+        return True, "fcntl is unavailable - no single-instance protection"
+
+    target = path or LOCK_FILE
+    try:
+        handle = open(target, "a+", encoding="utf-8")
+    except OSError as error:
+        # An unwritable directory must not stop a run that would otherwise
+        # work; it only means this protection is unavailable.
+        return True, "the lock file could not be opened (%s)" % error
+
+    try:
+        fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except OSError:
+        try:
+            handle.seek(0)
+            who = handle.read(300).strip()
+        except OSError:
+            who = ""
+        handle.close()
+        return False, who or "another process holds the lock"
+
+    try:
+        handle.seek(0)
+        handle.truncate()
+        handle.write("pid %d on %s, started %s\n"
+                     % (os.getpid(), PROJECT_DIR,
+                        datetime.datetime.now().isoformat(timespec="seconds")))
+        handle.flush()
+        os.fsync(handle.fileno())
+    except OSError:
+        pass
+    RUN_LOCK["handle"] = handle
+    RUN_LOCK["path"] = target
+    return True, ""
+
+
+def release_run_lock():
+    """Let the lock go. Rarely needed - ending the process does it too."""
+    handle = RUN_LOCK.get("handle")
+    if handle is None:
+        return False
+    try:
+        handle.close()                  # closing releases the flock
+    except OSError:
+        pass
+    RUN_LOCK["handle"] = None
+    return True
+
+
 RUNTIME = {"rank_label": "1/1", "stop": False}
 
 
@@ -5237,25 +5305,46 @@ def pause(span, why=""):
     if seconds <= 0 or RUNTIME["stop"]:
         return 0.0
     if why:
-        LOG.debug("   waiting %.1fs %s", seconds, why)
-    time.sleep(seconds)
+        LOG.info("      waiting %.1fs (%.0f-%.0f) %s", seconds, low, high, why)
+    # Taken in slices so Ctrl+C is noticed during the wait rather than
+    # after it: a 16-second pause must not swallow a shutdown request.
+    deadline = time.monotonic() + seconds
+    while True:
+        left = deadline - time.monotonic()
+        if left <= 0 or RUNTIME["stop"]:
+            break
+        time.sleep(min(1.0, left))
     return seconds
 
 
 def _install_stop_handler():
-    """Ctrl+C finishes the current step and saves, instead of tearing down."""
-    def handler(_signum, _frame):
+    """A stop request finishes the current step and saves, rather than
+    tearing the run down where it stands.
+
+    SIGTERM matters as much as SIGINT here. Ctrl+C sends SIGINT, but
+    systemd sends SIGTERM on "systemctl stop", on reboot and on shutdown -
+    and with no handler for it Python ends the process immediately,
+    abandoning the school being researched. Both now set the same flag,
+    so an unattended server shuts down the way an operator's Ctrl+C does.
+    """
+    names = {getattr(signal, "SIGINT", None): "Ctrl+C",
+             getattr(signal, "SIGTERM", None): "SIGTERM (systemd stop)"}
+
+    def handler(signum, _frame):
+        label = names.get(signum, "stop request")
         if RUNTIME["stop"]:
-            LOG.warning("Second Ctrl+C - stopping immediately.")
+            LOG.warning("Second stop request (%s) - stopping immediately.",
+                        label)
             raise KeyboardInterrupt
         RUNTIME["stop"] = True
         LOG.warning("")
-        LOG.warning("Ctrl+C: finishing the current school, saving, then "
-                    "stopping. Press Ctrl+C again to stop at once.")
-    try:
-        signal.signal(signal.SIGINT, handler)
-    except (ValueError, OSError):           # not the main thread
-        pass
+        LOG.warning("%s: finishing the current school, saving, then "
+                    "stopping. Send it again to stop at once.", label)
+    for sig in (signal.SIGINT, signal.SIGTERM):
+        try:
+            signal.signal(sig, handler)
+        except (ValueError, OSError, AttributeError):   # not the main thread
+            pass
 
 
 def use_test_folders():
@@ -5540,55 +5629,81 @@ def run_google_search(browser, query):
     return text, links, ""
 
 
-def read_school_site(browser, url):
-    """Open one page of the school's own site and return its text."""
-    try:
-        page = browser.page()
-        browser.goto(page, url)
-        time.sleep(PAGE_SETTLE_SECONDS)
-        return browser.text_of(page, "body")
-    except (PlaywrightError, PlaywrightTimeout) as error:
-        LOG.debug("      could not read %s: %s", url, str(error)[:120])
-        return ""
+def search_evidence(text, record, value, window=350):
+    """Is this value, in this search result text, this school's?
 
+    Nothing is opened to check - the decision is made on the text Google
+    returned, which is all this workflow is allowed to use. A value is
+    accepted only where it appears in a stretch of text that ALSO names
+    the school and its city or state, because that is what distinguishes
+    "this school's number" from one belonging to the next result down.
 
-def official_site_links(links, record):
-    """The result links that look like the school's own site, best first."""
-    own = [(host, url) for host, url in links
-           if host_belongs_to_school(host, record)]
-    # a /contact page names the contact details more often than the home page
-    own.sort(key=lambda pair: 0 if re.search(
-        r"contact|about|reach|address", pair[1], re.I) else 1)
-    return own
+    A stretch that names a different branch of the same school is
+    refused outright.
+    """
+    body = clean(text)
+    if not body or not value:
+        return False
+    words = name_words(record.get("School Name", ""))
+    city = clean(record.get("City", "")).lower()
+    state = clean(record.get("State", "")).lower()
+    low = body.lower()
+    needle = value.lower()
+    at = low.find(needle)
+    while at != -1:
+        near = low[max(0, at - window):at + len(needle) + window]
+        has_name = any(word in near for word in words) if words else False
+        has_place = (city and city in near) or (state and state in near)
+        if has_name and has_place and not branch_conflict(record, near):
+            return True
+        at = low.find(needle, at + 1)
+    return False
 
 
 def find_official_contacts(director, record):
-    """The school's own email and phone, or blanks.
+    """The school's official email and phone, from GOOGLE SEARCH alone.
 
-    Two searches - one for the email, one for the phone - and, when the
-    results point at the school's own website, that page is read as well,
-    because that is the one place a contact detail is genuinely the
-    school's own. Returns a dict with what could be VERIFIED and where it
-    came from; anything uncertain is simply absent.
+    Two searches - one for the email, one for the phone - and the answer
+    is taken from the results Google returns. NO SCHOOL WEBSITE IS
+    OPENED: not a homepage, not a contact page, nothing. Everything used
+    here comes out of the search results text.
+
+    PRIORITY
+      1. Google Search, when the result can be tied to this school.
+      2. Google Maps - the number already on the record, kept only when
+         the search verified none.
+    Gemini never fills these two columns; it answers the alternate
+    contacts and the other fields instead.
+
+    HOW A RESULT IS TIED TO THE SCHOOL
+      email: its domain belongs to the school, OR the address appears in
+             text that also names the school and its city or state.
+      phone: the number appears in text that names the school and its
+             city or state, or it matches what Google Maps showed.
+    Either way a stretch of text about a different branch is refused, and
+    an address on another country's domain is refused. Anything that
+    cannot be tied to the school is left BLANK rather than guessed.
+
+    Returns ``{"email", "phone", "email_from", "phone_from", "source",
+    "notes"}``, where the "_from" values are "search", "maps" or "".
     """
-    found = {"email": "", "phone": "", "source": "", "notes": []}
+    found = {"email": "", "phone": "", "email_from": "", "phone_from": "",
+             "source": "", "notes": []}
     if not OFFICIAL_CONTACT_SEARCH:
         return found
 
-    # Nothing to look for: both official columns already hold a value, so
-    # two searches and a browser launch would be spent to write nothing -
-    # merge_official_contacts() never overwrites what is already there.
-    # Reached by a resumed school whose contacts were found before.
-    if clean(record.get(OFFICIAL_EMAIL_COLUMN, "")) and \
-            clean(record.get(OFFICIAL_PHONE_COLUMN, "")):
-        found["notes"].append("both official contacts are already known - "
-                              "no search needed")
-        return found
+    have_email = clean(record.get(OFFICIAL_EMAIL_COLUMN, ""))
+    maps_phone_text = clean(record.get(OFFICIAL_PHONE_COLUMN, ""))
+    maps_phone = phone_key(maps_phone_text)
+    if maps_phone_text:
+        found["phone_from"] = "maps"
 
-    maps_phone = phone_key(record.get(OFFICIAL_PHONE_COLUMN, ""))
-    # A director that cannot hand out a search browser is not a failure:
-    # the official columns stay blank and the rest of the school's
-    # research still runs. Nothing here may stop the collection.
+    if have_email and maps_phone_text:
+        # An email is already known and a number is on the record. The
+        # phone search still runs, because a verified search number
+        # outranks the Maps one; the email search does not.
+        pass
+
     opener = getattr(director, "search", None)
     if opener is None:
         found["notes"].append("no search browser available - official "
@@ -5598,14 +5713,14 @@ def find_official_contacts(director, record):
 
     queries = [("email", OFFICIAL_EMAIL_QUERY), ("phone", OFFICIAL_PHONE_QUERY)]
     for number, (what, template) in enumerate(queries):
-        if found["email"] and found["phone"]:
-            break
-        if what == "phone" and found["phone"]:
+        if what == "email" and (have_email or found["email"]):
+            continue
+        if what == "phone" and found["phone_from"] == "search":
             continue
         query = contact_query(template, record)
         LOG.info("      search: %s", query[:96])
         try:
-            text, links, why = run_google_search(browser, query)
+            text, _links, why = run_google_search(browser, query)
         except (PlaywrightError, PlaywrightTimeout) as error:
             found["notes"].append("search failed: %s" % str(error)[:90])
             break
@@ -5613,71 +5728,95 @@ def find_official_contacts(director, record):
             found["notes"].append(why)
             LOG.warning("      %s", why)
             break
+        if not text or branch_conflict(record, text):
+            continue
 
-        # the school's own site is the only page a contact can be taken from
-        for host, url in official_site_links(links, record)[:2]:
-            body = read_school_site(browser, url)
-            if not body or branch_conflict(record, body):
-                continue
-            if not found["email"]:
-                for address in emails_in(body):
-                    if host_belongs_to_school(
-                            address.split("@")[-1], record) or \
-                            address.split("@")[-1] == host:
-                        found["email"] = address
-                        found["source"] = url
-                        break
-            if not found["phone"]:
-                for phone in phones_in(body):
-                    found["phone"] = phone
-                    found["source"] = found["source"] or url
-                    break
-            if found["email"] and found["phone"]:
-                break
-
-        # no reachable site: the one thing still usable is an address on the
-        # school's own mail domain, and a number Maps already showed
-        if not found["email"] and text and not branch_conflict(record, text):
+        # --- the official email, from the results text -----------------
+        if not found["email"] and not have_email:
             for address in emails_in(text):
-                if host_belongs_to_school(address.split("@")[-1], record):
+                domain = address.split("@")[-1]
+                if is_directory_host(domain) or foreign_country_host(domain):
+                    continue
+                own_domain = host_belongs_to_school(domain, record)
+                if own_domain or search_evidence(text, record, address):
                     found["email"] = address
+                    found["email_from"] = "search"
                     found["notes"].append(
-                        "email taken from the school's own mail domain in "
-                        "the results")
+                        "email verified by %s" % ("the school's own mail "
+                                                  "domain" if own_domain
+                                                  else "the school name and "
+                                                       "place beside it"))
                     break
-        if not found["phone"] and maps_phone and text:
+
+        # --- the official phone, from the results text -----------------
+        # A verified search number is PREFERRED over the Maps one, which
+        # is why this can replace a value already on the record.
+        if found["phone_from"] != "search":
             for phone in phones_in(text):
-                if phone_key(phone) == maps_phone:
+                key = phone_key(phone)
+                if not key:
+                    continue
+                if search_evidence(text, record, phone):
                     found["phone"] = phone
+                    found["phone_from"] = "search"
+                    found["notes"].append(
+                        "phone verified by the school name and place "
+                        "beside it in the results")
+                    break
+                if maps_phone and key == maps_phone:
+                    found["phone"] = phone
+                    found["phone_from"] = "search"
                     found["notes"].append(
                         "the number Google Maps showed, confirmed by the "
                         "search")
                     break
 
-        if number == 0 and not (found["email"] and found["phone"]):
-            pause(CONTACT_LOOKUP_DELAY_SECONDS)
+        if number == 0 and found["phone_from"] != "search":
+            pause(GOOGLE_BETWEEN_QUERIES_DELAY_SECONDS,
+                  "between the email and phone searches")
 
-    if not found["email"]:
+    if not found["email"] and not have_email:
         found["notes"].append("no official email could be verified - left blank")
-    if not found["phone"]:
+    if found["phone_from"] == "maps":
+        found["notes"].append("no verified search number - keeping the "
+                              "Google Maps phone")
+    if not found["phone"] and not maps_phone_text:
         found["notes"].append("no official phone could be verified - left blank")
+    found["notes"].append("source - email: %s | phone: %s"
+                          % (found["email_from"] or "none",
+                             found["phone_from"] or "none"))
     return found
 
 
 def merge_official_contacts(record, found):
-    """Write the verified official contacts onto the record.
+    """Write the verified official contacts onto the record, by priority.
 
-    Only the two official columns, and only when they are empty: a number
-    Google Maps already observed is evidence and is never overwritten.
-    Returns how many fields were written.
+    An empty official column is filled by whatever was verified. A column
+    that already holds something is replaced ONLY by a value from the
+    school's own website, which outranks everything: that is how a number
+    Google Maps showed gives way to the one the school publishes itself.
+
+    A search-grade value never replaces an existing one, so a later pass
+    cannot quietly downgrade a website contact. Returns how many fields
+    were written.
     """
     written = 0
-    pairs = ((OFFICIAL_EMAIL_COLUMN, tidy_email(found.get("email", ""))),
-             (OFFICIAL_PHONE_COLUMN, tidy_phone(found.get("phone", ""))))
-    for column, value in pairs:
+    pairs = ((OFFICIAL_EMAIL_COLUMN, tidy_email(found.get("email", "")),
+              found.get("email_from", "")),
+             (OFFICIAL_PHONE_COLUMN, tidy_phone(found.get("phone", "")),
+              found.get("phone_from", "")))
+    for column, value, source in pairs:
         if not value or column not in record:
             continue
-        if clean(record.get(column, "")):
+        already = clean(record.get(column, ""))
+        # Google Search is the highest-priority source now, so a value it
+        # verified replaces what is already in the column - which in
+        # practice means the number Google Maps showed. Nothing else may
+        # overwrite: Maps does not replace a search value, and Gemini
+        # never reaches these two columns at all.
+        if already and source != "search":
+            continue
+        if already == value:
             continue
         record[column] = value
         written += 1
@@ -5732,7 +5871,8 @@ def research_and_save(gemini, checkpoint, state, city, record, position,
                  clean(record.get(OFFICIAL_EMAIL_COLUMN, "")) or "blank",
                  clean(record.get(OFFICIAL_PHONE_COLUMN, "")) or "blank",
                  written)
-        pause(GEMINI_HANDOVER_DELAY_SECONDS, "before asking Gemini")
+        pause(GOOGLE_TO_GEMINI_DELAY_SECONDS,
+              "after the contact research, before Gemini")
 
     if gemini is not None:
         started = time.time()
@@ -5787,6 +5927,54 @@ def research_and_save(gemini, checkpoint, state, city, record, position,
     return "duplicate"
 
 
+def stored_discovery(state, city, keyword):
+    """The schools this keyword already copied from Maps, if they survive.
+
+    A keyword that was interrupted part way through its research keeps its
+    capture file - cleanup only removes it once the keyword COMPLETES - so
+    the whole discovered list is still on disk after a crash or a power
+    cut. Reading it back costs a moment; re-copying it from Google Maps
+    costs the whole scroll again (a Delhi keyword took 38 copies and over
+    three minutes), and asks Google for the same thing twice.
+
+    Returns ``(records, complete, path)``. ``complete`` is True only when
+    the saved text contains Google's own end-of-list message, which is the
+    same test the live collection uses - a half-copied list is not reused,
+    because schools further down were never reached.
+
+    A missing, empty or unparsable file returns no records, and the caller
+    then collects from Maps as it always did. Nothing already saved is at
+    risk either way: the master workbook and the city's working sheet are
+    separate from this.
+    """
+    base = keyword_txt_path(state, city, keyword)
+    for path in (base, base + ".gz"):
+        if not os.path.exists(path):
+            continue
+        try:
+            text = read_capture(path)
+        except (OSError, EOFError, gzip.BadGzipFile) as error:
+            LOG.warning("   the saved list for %r could not be read (%s) - "
+                        "collecting it again", keyword, str(error)[:80])
+            continue
+        if not text.strip():
+            continue
+        low = text.lower()
+        complete = any(marker in low for marker in END_OF_LIST_MARKERS)
+        try:
+            records = records_from_txt(path, state, city)
+        except Exception as error:                      # noqa: BLE001
+            LOG.warning("   the saved list for %r is unreadable (%s) - "
+                        "collecting it again", keyword, str(error)[:80])
+            continue
+        if records and complete:
+            return records, True, path
+        if records and not complete:
+            LOG.info("   a saved list for %r exists but never reached the "
+                     "end of the list - collecting it again", keyword)
+    return [], False, ""
+
+
 def process_keyword(director, gemini, checkpoint, state, city, keyword,
                     position, total, limit=None):
     """One keyword, from the Maps search to the last school saved.
@@ -5807,10 +5995,28 @@ def process_keyword(director, gemini, checkpoint, state, city, keyword,
                   "keywords": total})
     say_status("opening Google Maps")
 
-    LOG.info("")
-    LOG.info("[MAPS COPYING] %s in %s", keyword, city)
-    browser = director.maps()
-    found = collect_search(browser, keyword, state, city, limit=limit)
+    # RESUME WITHOUT ASKING GOOGLE AGAIN.
+    # If this keyword already copied its whole list and was interrupted
+    # during the research, the list is still on disk. Reuse it rather than
+    # scrolling Maps a second time for the same schools.
+    saved_records, saved_complete, saved_path = stored_discovery(
+        state, city, keyword)
+    if saved_complete and saved_records:
+        LOG.info("")
+        LOG.info("[MAPS SKIPPED] reusing the saved list for %s in %s - %d "
+                 "school(s) from %s", keyword, city, len(saved_records),
+                 os.path.basename(saved_path))
+        say_status("reusing %d saved school(s)" % len(saved_records))
+        found = SearchResult(build_query(keyword, city))
+        found.records = saved_records
+        found.complete = True
+        found.txt_path = saved_path
+        found.reason = "reused the saved list (no Maps search needed)"
+    else:
+        LOG.info("")
+        LOG.info("[MAPS COPYING] %s in %s", keyword, city)
+        browser = director.maps()
+        found = collect_search(browser, keyword, state, city, limit=limit)
     report["reason"] = found.reason
     if not found.records:
         # A keyword with no results is finished, not failed - as long as the
@@ -5878,11 +6084,27 @@ def process_keyword(director, gemini, checkpoint, state, city, keyword,
     if before and left_over > 0:
         LOG.info("   including %d school(s) left unresearched by an earlier "
                  "run", left_over)
+    # --limit researches only the first few schools. Whatever it leaves
+    # behind means the keyword is NOT finished, so it must not be marked
+    # complete and its saved list must not be swept away. Collection used
+    # to stop early under a limit, which hid this; now that a saved list
+    # is reused, the limit is the only thing cutting the work short.
+    cut_by_limit = False
     if limit:
+        cut_by_limit = len(todo) > limit
         todo = todo[:limit]
 
     LOG.info("")
     LOG.info("[GEMINI RESEARCH] %s in %s", keyword, city)
+    # The line an operator reads after a restart: how much of this
+    # keyword is already behind us, and which school is next.
+    settled = already + report["duplicates"]
+    LOG.info("   %s in %s: %d discovered, %d completed, %d pending",
+             keyword, city, len(index.records), settled, len(todo))
+    if settled and todo:
+        LOG.info("   resuming the saved %s list: %d completed, %d pending - "
+                 "starting with %s", city, settled, len(todo),
+                 clean(todo[0].get("School Name", ""))[:48])
     LOG.info("   %d school(s) to research, %d already done, %d already in "
              "the master", len(todo), already, report["duplicates"])
 
@@ -5920,7 +6142,15 @@ def process_keyword(director, gemini, checkpoint, state, city, keyword,
             return report
         git_sync("school saved in %s" % city, checkpoint)
         if number < len(todo):
-            pause(SCHOOL_DELAY_SECONDS, "before the next school")
+            # ONE wait between two schools, not two. When the contact
+            # search runs, the next thing the next school does is a Google
+            # search, so its own between-schools setting is the one that
+            # applies; without the search the shorter general pause does.
+            if OFFICIAL_CONTACT_SEARCH:
+                pause(GOOGLE_BETWEEN_SCHOOLS_DELAY_SECONDS,
+                      "before the next school's Google contact research")
+            else:
+                pause(SCHOOL_DELAY_SECONDS, "before the next school")
 
     # this keyword's schools are done, so the Gemini browser goes too. The
     # next keyword opens Maps again, into an empty screen.
@@ -5929,7 +6159,12 @@ def process_keyword(director, gemini, checkpoint, state, city, keyword,
         if not ok:
             LOG.error("   [BROWSER] the Gemini browser would not close: %s",
                       detail)
-    report["complete"] = bool(found.complete) and not report["failed"]
+    report["complete"] = (bool(found.complete) and not report["failed"]
+                          and not cut_by_limit)
+    if cut_by_limit:
+        report["reason"] = ("--limit stopped after %d school(s); the keyword "
+                            "stays open and its saved list is kept" % limit)
+        LOG.info("   %s", report["reason"])
     LOG.info("")
     if report["complete"]:
         checkpoint.mark_keyword_done(state, city, keyword)
@@ -5952,10 +6187,17 @@ def process_keyword(director, gemini, checkpoint, state, city, keyword,
                      + (" and %d more" % (len(gone) - 4) if len(gone) > 4
                         else ""))
     else:
-        LOG.warning("   KEYWORD UNRESOLVED: %s in %s - %s%s", keyword, city,
-                    "" if found.complete else "the list never reached its end",
-                    "; %d school(s) in the retry queue" % report["failed"]
-                    if report["failed"] else "")
+        # Say which of the three reasons it was. A reused complete capture
+        # cut short by --limit used to print a bare dash and no reason.
+        why = []
+        if not found.complete:
+            why.append("the list never reached its end")
+        elif report.get("reason"):
+            why.append(report["reason"])
+        if report["failed"]:
+            why.append("%d school(s) in the retry queue" % report["failed"])
+        LOG.warning("   KEYWORD UNRESOLVED: %s in %s%s", keyword, city,
+                    " - " + "; ".join(why) if why else "")
     return report
 
 
@@ -6688,11 +6930,22 @@ def self_test():
     ok("Source_URLs is a spelling of it, not a 58th column",
        "Source URLs" not in SCHOOL_COLUMNS
        and KEY_SYNONYMS.get("Source_URLs") == "School_Data_Source_URL")
-    ok("the prompt asks for all 57 fields",
-       requested_fields_text().count("\n") == 56)
-    ok("the answer format lists all 57 keys",
-       answer_format_text().count("\n") == 56)
-    ok("a blank record has 57 columns", len(blank_record()) == 57)
+    # The Excel file has 57 columns; the PROMPT asks for the ones Gemini
+    # is responsible for. Google Search owns the two official contacts,
+    # so those are deliberately left out of the prompt - asking as well
+    # would duplicate the work and invite an unverified second opinion.
+    asked = len(gemini_asked_columns())
+    ok("the prompt asks for every field Gemini is responsible for",
+       requested_fields_text().count("\n") == asked - 1,
+       "%d asked" % asked)
+    ok("the answer format lists the same fields",
+       answer_format_text().count("\n") == asked - 1)
+    ok("exactly the two official contacts are left out",
+       sorted(gemini_skips_columns()) == ["School Official Email",
+                                          "School Official Phone Number"]
+       if OFFICIAL_CONTACT_SEARCH else asked == 57,
+       sorted(gemini_skips_columns()))
+    ok("a blank record still has all 57 columns", len(blank_record()) == 57)
 
     # --- 5. the parser ------------------------------------------------------
     answer = ("School_Name: Gupta Public School\n"
@@ -6823,8 +7076,13 @@ def self_test():
                                  **{"School Address": "12 MG Road"}))
     ok("the prompt names the school", "Gupta Public School" in prompt)
     ok("the prompt carries the known address", "12 MG Road" in prompt)
-    ok("the prompt carries all 57 keys",
-       all(("%s: Value" % key) in prompt for key in ANSWER_KEYS))
+    ok("the prompt carries every key Gemini is asked for",
+       all(("%s: Value" % key) in prompt for key in gemini_asked_keys()))
+    ok("and none of the keys Google Search owns",
+       not any(("%s: Value" % key) in prompt
+               for key in ("School_Official_Email",
+                           "School_Official_Phone_Number"))
+       if OFFICIAL_CONTACT_SEARCH else True)
     ok("the prompt forbids inventing a UDISE code",
        "Never invent a UDISE Code" in prompt)
     ok("a missing value is asked for as NO_DATA", NO_DATA in prompt)
@@ -7104,6 +7362,23 @@ def main(argv=None):
         LOG.info("%s has been reset. Nothing already saved to Excel was "
                  "removed.", args.reset_city)
         return 0
+    # From here on the command WRITES this project's data, so it must be
+    # the only one doing so. The read-only commands above are already
+    # past, deliberately: looking at a running collection is always
+    # allowed. --test writes to its own folder but shares the browser
+    # profiles and the lock keeps that honest too.
+    taken, who = take_run_lock()
+    if not taken:
+        LOG.error("Another School Data Extractor instance is already "
+                  "running.")
+        if who:
+            LOG.error("   it is: %s", who)
+        LOG.error("   nothing was read or written. Wait for it to finish, "
+                  "or stop it first.")
+        return 7
+    if who:
+        LOG.warning("   %s", who)
+
     if args.retry_failed:
         return retry_failed(args)
     if args.test and not (args.city or args.state):

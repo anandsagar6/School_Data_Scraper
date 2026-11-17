@@ -1,0 +1,87 @@
+# School Data Extractor - unattended collection on an Ubuntu server.
+#
+# NOT INSTALLED. This file is here for review. The commands to install,
+# enable and start it are at the bottom of this comment block.
+#
+# WHY EACH SETTING IS WHAT IT IS
+#
+#   User=anand          Playwright lives in /home/anand/.local/lib and its
+#                       Chromium in /home/anand/.cache/ms-playwright, so the
+#                       service MUST run as this user. As root it would find
+#                       neither. It also keeps the collected data owned by
+#                       the same account that owns the project.
+#
+#   Environment=HOME    systemd does not set HOME for a system service, and
+#                       without it Python skips the user site-packages and
+#                       Playwright cannot find its browser. This is the one
+#                       setting most likely to be forgotten.
+#
+#   quoted paths        The project directory name contains a space
+#                       ("School_data _extractor"). systemd needs the quotes
+#                       or it splits the path into two arguments.
+#
+#   xvfb-run -a         Chromium runs headful on a private X screen, which is
+#                       what the clipboard copying needs; -a picks a free
+#                       display number so a leftover lock cannot block it.
+#
+#   Restart=on-failure  A crash, a browser that will not start, or a network
+#                       failure brings it back. A clean finish (all cities
+#                       done) does not restart it.
+#   RestartSec=120      Two minutes between attempts: long enough not to
+#                       hammer Google after a block, short enough to recover.
+#   StartLimit*         At most 5 starts an hour. A fault that recurs - a bad
+#                       checkpoint, a missing dependency - stops the unit
+#                       instead of looping for ever.
+#
+#   KillSignal=SIGTERM  The script now treats SIGTERM like Ctrl+C: it
+#   TimeoutStopSec=600  finishes the school it is on, writes the Excel row
+#                       and the checkpoint, then exits. Ten minutes is
+#                       generous because one Gemini answer can take 300s.
+#                       Only after that does systemd use SIGKILL.
+#
+#   ONE INSTANCE        systemd runs one copy of a unit, so enabling this
+#                       cannot produce two services. It does NOT stop you
+#                       starting a second copy by hand in a terminal - see
+#                       the report for that.
+#
+# INSTALL (only when you have approved it):
+#   sudo cp "/home/anand/School_data _extractor/school-extractor.service" \
+#           /etc/systemd/system/school-extractor.service
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable school-extractor.service     # start at boot
+#   sudo systemctl start school-extractor.service      # start now
+#   systemctl status school-extractor.service
+#   journalctl -u school-extractor.service -f
+
+[Unit]
+Description=School Data Extractor (rank 1 of 5)
+# %% escapes the percent: systemd reads a bare % as a specifier and
+# rejected the URL-encoded space.
+Documentation=file:///home/anand/School_data%%20_extractor/README.md
+# Collecting needs a working network, not merely a configured interface.
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=3600
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=anand
+Group=anand
+WorkingDirectory=/home/anand/School_data _extractor
+Environment=HOME=/home/anand
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/usr/bin/xvfb-run -a /usr/bin/python3 "/home/anand/School_data _extractor/find_school.py"
+Restart=on-failure
+RestartSec=120
+KillSignal=SIGTERM
+TimeoutStopSec=600
+# every process in the unit gets the signal, so python itself is asked to
+# stop rather than only the xvfb-run wrapper
+KillMode=control-group
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=school-extractor
+
+[Install]
+WantedBy=multi-user.target

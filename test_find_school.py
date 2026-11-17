@@ -92,8 +92,9 @@ class Sandbox:
               "KEEP_CAPTURED_TEXT", "COMPRESS_CAPTURE_FILES",
               "LOG_KEEP_DAYS",
               # the new settings, so a test never waits for real
-              "CONTACT_LOOKUP_DELAY_SECONDS",
-              "GEMINI_HANDOVER_DELAY_SECONDS",
+              "GOOGLE_BETWEEN_SCHOOLS_DELAY_SECONDS",
+              "GOOGLE_BETWEEN_QUERIES_DELAY_SECONDS",
+              "GOOGLE_TO_GEMINI_DELAY_SECONDS",
               "BACKUP_DIR", "BACKUP_COMPLETED_CYCLES",
               "GIT_SYNC_ENABLED", "NIGHT_PAUSE_ENABLED",
               "WORK_PERIOD_MIN_HOURS", "WORK_PERIOD_MAX_HOURS",
@@ -121,8 +122,9 @@ class Sandbox:
                      "WINDOW_CHECK_POLL_SECONDS"):
             setattr(fs, name, 0)
         for name in ("SCHOOL_DELAY_SECONDS", "CITY_DELAY_SECONDS",
-                     "CONTACT_LOOKUP_DELAY_SECONDS",
-                     "GEMINI_HANDOVER_DELAY_SECONDS"):
+                     "GOOGLE_BETWEEN_SCHOOLS_DELAY_SECONDS",
+                     "GOOGLE_BETWEEN_QUERIES_DELAY_SECONDS",
+                     "GOOGLE_TO_GEMINI_DELAY_SECONDS"):
             setattr(fs, name, (0, 0))
         fs.BACKUP_DIR = os.path.join(self.folder, "Backup")
         # Nothing in the suite may push to a remote or sit out a night
@@ -1201,8 +1203,15 @@ class GeminiTests(SandboxTest):
         self.assertIn("Gupta Public School", prompt)
         self.assertIn("12 MG Road", prompt)
         self.assertIn("https://gupta.example.edu.in", prompt)
-        for key in fs.ANSWER_KEYS:
+        # Every key Gemini is asked for - which is all 57 minus the two
+        # official contacts, because Google Search researches those and
+        # asking Gemini as well would duplicate the work.
+        for key in fs.gemini_asked_keys():
             self.assertIn("%s: Value" % key, prompt)
+        self.assertNotIn("School_Official_Email: Value", prompt)
+        self.assertNotIn("School_Official_Phone_Number: Value", prompt)
+        self.assertIn("School_Alternate_Email: Value", prompt)
+        self.assertIn("School_Alternate_Phone_Number: Value", prompt)
 
 
 # ===========================================================================
@@ -3019,6 +3028,12 @@ class UserSettingsTests(unittest.TestCase):
             "GEMINI_RETRIES", "CYCLE_SIZE", "KEEP_CAPTURED_TEXT",
             "LOG_KEEP_DAYS")
 
+    #: The contact-search pacing, which sits in its own block directly
+    #: below the imports - above the USER SETTINGS block, not inside it.
+    PACING = ("GOOGLE_BETWEEN_SCHOOLS_DELAY_SECONDS",
+              "GOOGLE_BETWEEN_QUERIES_DELAY_SECONDS",
+              "GOOGLE_TO_GEMINI_DELAY_SECONDS")
+
     TECHNICAL = ("PAGE_SETTLE_SECONDS", "BROWSER_TIMEOUT_MS",
                  "CLICK_SETTLE_SECONDS", "TYPING_SETTLE_SECONDS",
                  "COPY_KEY_PAUSE_SECONDS", "COPY_CLIPBOARD_PAUSE_SECONDS",
@@ -3064,10 +3079,41 @@ class UserSettingsTests(unittest.TestCase):
             self.assertIn(name, where, "%s is not a plain top-level value"
                           % name)
             lines.append(where[name])
-        self.assertLess(max(lines), 120,
+        # 150, not 120: the three contact-search pacing settings sit in
+        # their own block directly below the imports, which moved the
+        # USER SETTINGS block down by about twenty lines. What this test
+        # is really about - the settings being near the top and together -
+        # is still checked, by this bound and the span below.
+        self.assertLess(max(lines), 150,
                         "a user setting is far down the file")
         self.assertLess(max(lines) - min(lines), 60,
                         "the user settings are not in one block")
+
+    def test_the_pacing_settings_are_right_below_the_imports(self):
+        """The three Google-search delays, each a (min, max) pair."""
+        where = self.positions()
+        for name in self.PACING:
+            self.assertIn(name, where, "%s is not a top-level value" % name)
+            value = getattr(fs, name)
+            self.assertIsInstance(value, tuple, name)
+            self.assertEqual(len(value), 2, name)
+            self.assertLess(value[0], value[1], name)
+        # The settings now sit in ONE block, ordered by how likely they
+        # are to be changed, so the pacing values live inside that block
+        # rather than above it. What still matters is that they are near
+        # the top with everything else an operator edits.
+        lines = [where[name] for name in self.PACING]
+        self.assertLess(max(lines), 150,
+                        "the pacing settings are not near the top")
+        user_lines = [where[name] for name in self.USER]
+        self.assertLess(abs(max(lines) - max(user_lines)), 60,
+                        "the pacing settings are not in the settings block")
+
+    def test_the_old_delay_settings_are_gone(self):
+        """One authoritative setting per wait, not two."""
+        for name in ("CONTACT_LOOKUP_DELAY_SECONDS",
+                     "GEMINI_HANDOVER_DELAY_SECONDS"):
+            self.assertFalse(hasattr(fs, name), "%s still exists" % name)
 
     def test_the_technical_ones_are_not_in_that_block(self):
         where = self.positions()

@@ -16,3 +16,6 @@ rank.json
 
 __pycache__/
 *.pyc
+
+# the single-instance lock: a live process, never data
+.school_extractor.lock
