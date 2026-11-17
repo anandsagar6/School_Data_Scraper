@@ -7,6 +7,10 @@ Test_Run/
 Excel_Data/
 Temp_Data/
 find_school.log
+# The resume point. Ignored so a stray "git add ." cannot put collected
+# progress into the source history - the automatic sync still commits it
+# deliberately, by name, with "git add -f" (see recovery_paths()).
+checkpoint.json
 state/
 rank.json
 

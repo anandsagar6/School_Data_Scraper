@@ -5979,6 +5979,12 @@ def run(args):
         LOG.error("%s", error)
         return 2
     RUNTIME["rank_label"] = "%d/%d" % (value_rank, value_num)
+    # The RESOLVED rank, not the constant at the top of the file. The
+    # per-rank branch name is built from this, and a laptop that takes its
+    # rank from rank.json, SCHOOL_RANK or --rank would otherwise push to
+    # school-data-rank-1 and overwrite rank 1's data.
+    RUNTIME["rank"] = value_rank
+    RUNTIME["num_sys"] = value_num
     set_rank_paths(value_rank)
     reconcile_master_and_cycles()
 
@@ -6191,7 +6197,10 @@ def print_run_summary(reports, checkpoint):
 
 def retry_failed(args):
     """Research the schools that failed before, then save them."""
-    value_rank, _value_num, _source = resolve_rank(args.rank, args.num_sys)
+    value_rank, value_num, _source = resolve_rank(args.rank, args.num_sys)
+    RUNTIME["rank_label"] = "%d/%d" % (value_rank, value_num)
+    RUNTIME["rank"] = value_rank
+    RUNTIME["num_sys"] = value_num
     set_rank_paths(value_rank)
     reconcile_master_and_cycles()
     checkpoint = Checkpoint()
