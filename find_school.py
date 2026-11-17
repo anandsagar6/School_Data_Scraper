@@ -2718,6 +2718,69 @@ class Checkpoint:
         self.data["plan_fingerprint"] = fingerprint
         self.data["city_fingerprint"] = city_fingerprint()
 
+    # -------------------------------------------------- changing num_sys
+    def cities_with_progress(self):
+        """Every city this checkpoint knows anything about.
+
+        Splitting the work across more laptops moves cities between ranks.
+        A city this rank has touched must still belong to this rank
+        afterwards, or its saved progress would be stranded in a copy that
+        no longer searches it. These are the places progress can hide.
+        """
+        keys = set()
+        for field in ("committed", "enriched", "discovery_done",
+                      "keywords_done"):
+            keys.update(self.data.get(field) or {})
+        keys.update(self.data.get("completed_cities") or [])
+        current = self.data.get("current_city") or []
+        if len(current) == 2:
+            keys.add(self.key(current[0], current[1]))
+        for item in self.data.get("failed") or []:
+            if isinstance(item, dict):
+                state = item.get("State") or item.get("state")
+                city = item.get("City") or item.get("city")
+                if state and city:
+                    keys.add(self.key(state, city))
+        return sorted(k for k in keys if k)
+
+    def plan_migration(self, value_rank, value_num):
+        """Can this checkpoint move to ``value_rank`` of ``value_num``?
+
+        Returns ``(ok, lines)``. It is safe only when every city this
+        checkpoint has touched is still assigned to ``value_rank`` under
+        the new split - then the rank keeps exactly the work it already
+        did. If any touched city moves to a different rank, migrating
+        would strand that city's records, so this refuses and names the
+        city and the rank it moved to. Nothing is written either way.
+        """
+        mine = set(get_cities_by_rank(ALL_CITIES, value_rank, value_num))
+        lines, stranded = [], []
+        for key in self.cities_with_progress():
+            # the key is "State|City"; the split returns both, and it is the
+            # city name that the rank slices are made of
+            _state, city = city_of_checkpoint_key(key)
+            if city in mine:
+                lines.append("   %s - stays with rank %d" % (key, value_rank))
+                continue
+            owner = None
+            for other in range(1, value_num + 1):
+                if city in get_cities_by_rank(ALL_CITIES, other, value_num):
+                    owner = other
+                    break
+            stranded.append((key, owner))
+            lines.append("   %s - MOVES to rank %s" % (key, owner or "none"))
+        return not stranded, lines
+
+    def migrate_plan(self, value_rank, value_num, fingerprint):
+        """Adopt the new rank/laptop count, keeping every saved record.
+
+        Only the plan fields change: the committed and enriched keys, the
+        completed cities, the counters and the retry queue are untouched.
+        Call it only after :meth:`plan_migration` has approved the move.
+        """
+        self.adopt_plan(value_rank, value_num, fingerprint)
+        self.save()
+
     # ------------------------------------------------------------ cities
     @staticmethod
     def key(state, city):
@@ -7279,6 +7342,89 @@ def _excel_self_test():
 #  COMMAND LINE
 # ===========================================================================
 
+def master_row_count():
+    """Rows in the master workbook, or None when there is no workbook yet."""
+    path = master_path()
+    if not os.path.exists(path):
+        return None
+    try:
+        book = openpyxl.load_workbook(path, read_only=True)
+        sheet = book.active
+        rows = max(sheet.max_row - 1, 0)
+        book.close()
+        return rows
+    except Exception:                                   # noqa: BLE001
+        return None
+
+
+def migrate_plan_command(args):
+    """Move a checkpoint to a new laptop count, or refuse and say why.
+
+    Splitting the work across more laptops re-cuts the city list, so a
+    rank's slice changes. This writes the new rank and laptop count into
+    the checkpoint ONLY when every city the checkpoint has touched still
+    belongs to this rank; otherwise that city's saved rows would sit in a
+    copy that no longer searches it. Nothing else in the checkpoint is
+    altered, and a refusal changes nothing at all.
+    """
+    value_rank, value_num, source = resolve_rank(args.rank, args.num_sys)
+    set_rank_paths(value_rank)
+    checkpoint = Checkpoint()
+    stored_rank = checkpoint.data.get("rank")
+    stored_num = checkpoint.data.get("num_sys")
+
+    LOG.info("")
+    LOG.info("CHECKPOINT PLAN MIGRATION")
+    LOG.info("   file          : %s", CHECKPOINT_FILE)
+    LOG.info("   saved under   : rank %s of %s", stored_rank, stored_num)
+    LOG.info("   this run wants: rank %s of %s (from %s)",
+             value_rank, value_num, source)
+
+    if not os.path.exists(CHECKPOINT_FILE):
+        LOG.info("   there is no checkpoint here yet - nothing to migrate")
+        return 0
+    if (stored_rank, stored_num) == (value_rank, value_num):
+        LOG.info("   already on this plan - nothing to migrate")
+        return 0
+    if stored_rank != value_rank:
+        LOG.error("   REFUSED: this checkpoint was written by rank %s, not "
+                  "rank %s. Migrating it would mix two ranks' work.",
+                  stored_rank, value_rank)
+        return 3
+
+    touched = checkpoint.cities_with_progress()
+    LOG.info("   cities with saved progress: %d", len(touched))
+    ok, lines = checkpoint.plan_migration(value_rank, value_num)
+    for line in lines:
+        LOG.info("%s", line)
+    if not ok:
+        LOG.error("   REFUSED: a city with saved progress changes rank under "
+                  "%s laptops. Its records would be stranded.", value_num)
+        LOG.error("   Nothing was written. Keep this rank on %s laptops, or "
+                  "move that city's rows by hand first.", stored_num)
+        return 3
+
+    kept = {
+        "rows in the master workbook": master_row_count(),
+        "committed keys": sum(len(v) for v in
+                              (checkpoint.data.get("committed") or {}).values()),
+        "enriched keys": sum(len(v) for v in
+                             (checkpoint.data.get("enriched") or {}).values()),
+        "completed cities": len(checkpoint.data.get("completed_cities") or []),
+        "retry queue": len(checkpoint.data.get("failed") or []),
+    }
+    checkpoint.migrate_plan(value_rank, value_num, dataset_fingerprint())
+    again = Checkpoint()
+    LOG.info("   MIGRATED to rank %s of %s", again.data.get("rank"),
+             again.data.get("num_sys"))
+    for label, value in kept.items():
+        if value is not None:
+            LOG.info("      kept %-24s %s", label + ":", value)
+    LOG.info("   cities this rank now searches: %d",
+             len(get_cities_by_rank(ALL_CITIES, value_rank, value_num)))
+    return 0
+
+
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(
         description="Collect Indian school data city by city.",
@@ -7314,6 +7460,9 @@ def parse_args(argv=None):
                         help="report which screen --show would use, then exit")
     parser.add_argument("--reset-city", metavar="CITY",
                         help="forget one city's progress so it runs again")
+    parser.add_argument("--migrate-plan", action="store_true",
+                        help="move saved progress to this rank's new laptop "
+                             "count, only if no touched city changes rank")
     parser.add_argument("--ignore-plan-change", action="store_true",
                         help="resume although the rank or keyword list changed")
     parser.add_argument("--verbose", "-v", action="store_true",
@@ -7354,6 +7503,8 @@ def main(argv=None):
         return print_dry_run(args)
     if args.status:
         return print_status(args)
+    if args.migrate_plan:
+        return migrate_plan_command(args)
     if args.reset_city:
         set_rank_paths(resolve_rank(args.rank, args.num_sys)[0])
         checkpoint = Checkpoint()

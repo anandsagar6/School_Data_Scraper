@@ -4115,3 +4115,98 @@ class ContactDuplicateTests(SandboxTest):
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
+
+
+class PlanMigrationTests(SandboxTest):
+    """Moving a rank from one laptop count to another must never strand a
+    city's saved rows in a copy that no longer searches that city."""
+
+    def a_checkpoint_on(self, rank, num, cities=("Delhi",)):
+        point = fs.Checkpoint()
+        point.adopt_plan(rank, num, "old-fingerprint")
+        for city in cities:
+            state = fs.CITY_TO_STATE.get(city, "Delhi NCR")
+            point.mark_enriched(state, city, "email:head@example.ac.in")
+        point.save()
+        return fs.Checkpoint()
+
+    def test_a_city_that_keeps_its_rank_migrates(self):
+        # Delhi is the first city in the list, so it belongs to rank 1
+        # whatever the laptop count is.
+        point = self.a_checkpoint_on(1, 5)
+        ok, lines = point.plan_migration(1, 10)
+        self.assertTrue(ok, lines)
+        self.assertTrue(any("stays with rank 1" in l for l in lines), lines)
+
+    def test_a_city_that_changes_rank_is_refused(self):
+        # a city in the second half of rank 1's old slice moves to rank 2
+        old_slice = fs.get_cities_by_rank(fs.ALL_CITIES, 1, 5)
+        new_slice = fs.get_cities_by_rank(fs.ALL_CITIES, 1, 10)
+        moved = [c for c in old_slice if c not in new_slice]
+        self.assertTrue(moved, "the 5->10 split should move some cities")
+        point = self.a_checkpoint_on(1, 5, cities=(moved[0],))
+        ok, lines = point.plan_migration(1, 10)
+        self.assertFalse(ok, lines)
+        self.assertTrue(any("MOVES to rank" in l for l in lines), lines)
+
+    def test_a_refused_migration_writes_nothing(self):
+        old_slice = fs.get_cities_by_rank(fs.ALL_CITIES, 1, 5)
+        new_slice = fs.get_cities_by_rank(fs.ALL_CITIES, 1, 10)
+        moved = [c for c in old_slice if c not in new_slice][0]
+        point = self.a_checkpoint_on(1, 5, cities=(moved,))
+        with open(fs.CHECKPOINT_FILE, encoding="utf-8") as handle:
+            before = handle.read()
+        ok, _lines = point.plan_migration(1, 10)
+        self.assertFalse(ok)
+        with open(fs.CHECKPOINT_FILE, encoding="utf-8") as handle:
+            self.assertEqual(handle.read(), before)
+
+    def test_migrating_keeps_every_saved_record(self):
+        point = self.a_checkpoint_on(1, 5)
+        point.data["completed_cities"] = []
+        point.data["saved"] = 9
+        point.data["duplicates"] = 2
+        point.data["failed"] = []
+        point.save()
+        point = fs.Checkpoint()
+        kept_enriched = dict(point.data["enriched"])
+        point.migrate_plan(1, 10, "new-fingerprint")
+        again = fs.Checkpoint()
+        self.assertEqual(again.data["rank"], 1)
+        self.assertEqual(again.data["num_sys"], 10)
+        self.assertEqual(again.data["enriched"], kept_enriched)
+        self.assertEqual(again.data["saved"], 9)
+        self.assertEqual(again.data["duplicates"], 2)
+
+    def test_the_migrated_checkpoint_resumes_without_the_guard(self):
+        point = self.a_checkpoint_on(1, 5)
+        self.assertTrue(point.check_plan(1, 10, fs.dataset_fingerprint()))
+        point.migrate_plan(1, 10, fs.dataset_fingerprint())
+        self.assertEqual(fs.Checkpoint().check_plan(1, 10,
+                                                    fs.dataset_fingerprint()),
+                         "")
+
+    def test_progress_is_looked_for_everywhere_it_can_hide(self):
+        point = fs.Checkpoint()
+        point.data["committed"] = {"A|Alpha": ["email:a@a.in"]}
+        point.data["enriched"] = {"B|Beta": ["email:b@b.in"]}
+        point.data["discovery_done"] = {"C|Gamma": True}
+        point.data["keywords_done"] = {"D|Delta": ["Private Schools"]}
+        point.data["completed_cities"] = ["E|Epsilon"]
+        point.data["current_city"] = ["F", "Zeta"]
+        point.data["failed"] = [{"State": "G", "City": "Eta"}]
+        point.save()
+        found = fs.Checkpoint().cities_with_progress()
+        for key in ("A|Alpha", "B|Beta", "C|Gamma", "D|Delta", "E|Epsilon",
+                    "F|Zeta", "G|Eta"):
+            self.assertIn(key, found)
+
+    def test_every_city_belongs_to_exactly_one_of_the_ten_ranks(self):
+        seen = {}
+        for rank in range(1, 11):
+            for city in fs.get_cities_by_rank(fs.ALL_CITIES, rank, 10):
+                self.assertNotIn(city, seen,
+                                 "%s is in rank %s and rank %s"
+                                 % (city, seen.get(city), rank))
+                seen[city] = rank
+        self.assertEqual(len(seen), len(set(fs.ALL_CITIES)))
