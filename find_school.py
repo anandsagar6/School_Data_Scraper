@@ -77,7 +77,7 @@ BACKUP_COMPLETED_CYCLES = True      # keep a verified copy in Backup/
 
 # --- GitHub sync -----------------------------------------------------------
 GIT_SYNC_ENABLED = True             # push recovery files to a remote
-GIT_REMOTE = "localtest"            # "origin" is the public repo - careful
+GIT_REMOTE = "origin"               # rank.json "git_remote" overrides
 GIT_SYNC_MINUTES = 5                # never sync more often than this
 GIT_BRANCH_PER_RANK = True          # rank 1 -> school-data-rank-1
 
@@ -569,6 +569,31 @@ def dataset_fingerprint():
     payload = "\n".join(["%s|%s" % pair for pair in CITY_ROWS]
                         + ["KEYWORD|%s" % k for k in enabled_keywords()])
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def resolve_git_remote():
+    """``(remote, where_it_came_from)`` for the sync destination.
+
+    Same ladder as the rank: the setting at the top of this file, then
+    rank.json beside it, then SCHOOL_GIT_REMOTE in the environment. A
+    production install therefore points at its own remote WITHOUT editing
+    this file, so `git pull` of a source update never conflicts with a
+    local edit and never has to touch the data branches.
+    """
+    value, source = GIT_REMOTE, "the top of this file"
+    if os.path.exists(RANK_FILE):
+        try:
+            with open(RANK_FILE, encoding="utf-8") as handle:
+                data = json.load(handle)
+            if data.get("git_remote"):
+                value = str(data["git_remote"])
+                source = os.path.basename(RANK_FILE)
+        except (OSError, ValueError, TypeError):
+            pass
+    from_env = os.environ.get("SCHOOL_GIT_REMOTE")
+    if from_env:
+        value, source = from_env, "the environment"
+    return value, source
 
 
 def resolve_rank(cli_rank=None, cli_num_sys=None):
@@ -1819,6 +1844,18 @@ def night_pause_status():
     return "%02d:00-%02d:00 %s%s" % (start, end, TIME_ZONE, inside)
 
 
+def git_remote_now():
+    """The remote this run pushes to, resolved on first use and kept.
+
+    run() resolves it at startup, but git_sync() must not depend on having
+    been reached through run(): any other entry point would otherwise fall
+    back to the setting at the top of this file and ignore rank.json.
+    """
+    if not RUNTIME.get("git_remote_from"):
+        RUNTIME["git_remote"], RUNTIME["git_remote_from"] = resolve_git_remote()
+    return RUNTIME["git_remote"]
+
+
 def git_run(args, timeout=120, index=None):
     """One git command in the project directory. Never raises.
 
@@ -1878,9 +1915,10 @@ def git_usable():
                             % PROJECT_DIR)
         return False, GIT_STATE["why"]
     ok, remotes = git_run(["remote"])
-    if not ok or GIT_REMOTE not in (remotes or "").split():
+    remote = git_remote_now()
+    if not ok or remote not in (remotes or "").split():
         GIT_STATE["why"] = ("no %r remote - add one with: git remote add %s "
-                            "<url>" % (GIT_REMOTE, GIT_REMOTE))
+                            "<url>" % (remote, remote))
         return False, GIT_STATE["why"]
     branch = git_branch_name()
     if not branch:
@@ -1888,7 +1926,7 @@ def git_usable():
         return False, GIT_STATE["why"]
     GIT_STATE["branch"] = branch
     GIT_STATE["usable"] = True
-    GIT_STATE["why"] = "on, pushing %s to %s" % (branch, GIT_REMOTE)
+    GIT_STATE["why"] = "on, pushing %s to %s" % (branch, git_remote_now())
     return True, GIT_STATE["why"]
 
 
@@ -2035,7 +2073,8 @@ def git_sync(reason, checkpoint=None, force=False):
     if not ok:
         return fail("update-ref", out)
 
-    ok, out = git_run(["push", GIT_REMOTE, "%s:%s" % (ref, ref)],
+    ok, out = git_run(["push", git_remote_now(),
+                       "%s:%s" % (ref, ref)],
                       timeout=180)
     if not ok:
         GIT_STATE["pending"] = True
@@ -2049,7 +2088,7 @@ def git_sync(reason, checkpoint=None, force=False):
     GIT_STATE["last_error"] = ""
     GIT_STATE["last_ok"] = time.time()
     LOG.info("   [GIT] pushed %d file(s) to %s/%s - %s",
-             len(paths), GIT_REMOTE, branch, reason)
+             len(paths), git_remote_now(), branch, reason)
     git_note_state(checkpoint)
     return True
 
@@ -5348,7 +5387,8 @@ def release_run_lock():
     return True
 
 
-RUNTIME = {"rank_label": "1/1", "stop": False}
+RUNTIME = {"rank_label": "1/1", "stop": False,
+           "git_remote": GIT_REMOTE}
 
 
 def pause(span, why=""):
@@ -6414,6 +6454,9 @@ def run(args):
     # school-data-rank-1 and overwrite rank 1's data.
     RUNTIME["rank"] = value_rank
     RUNTIME["num_sys"] = value_num
+    # resolved once per run, so every sync in this run pushes to the same
+    # remote even if rank.json is edited while it works
+    RUNTIME["git_remote"], RUNTIME["git_remote_from"] = resolve_git_remote()
     set_rank_paths(value_rank)
     reconcile_master_and_cycles()
 
@@ -6650,6 +6693,9 @@ def retry_failed(args):
     RUNTIME["rank_label"] = "%d/%d" % (value_rank, value_num)
     RUNTIME["rank"] = value_rank
     RUNTIME["num_sys"] = value_num
+    # resolved once per run, so every sync in this run pushes to the same
+    # remote even if rank.json is edited while it works
+    RUNTIME["git_remote"], RUNTIME["git_remote_from"] = resolve_git_remote()
     set_rank_paths(value_rank)
     reconcile_master_and_cycles()
     checkpoint = Checkpoint()

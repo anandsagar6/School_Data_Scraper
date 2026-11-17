@@ -11,6 +11,7 @@ data.
 
 import importlib.util
 import datetime
+import inspect
 import json
 import logging
 import os
@@ -98,6 +99,9 @@ class Sandbox:
               "BACKUP_DIR", "BACKUP_COMPLETED_CYCLES",
               "GIT_SYNC_ENABLED", "NIGHT_PAUSE_ENABLED",
               "WORK_PERIOD_MIN_HOURS", "WORK_PERIOD_MAX_HOURS",
+              # rank.json: without this a test writing one would land in
+              # the real project folder and change the live rank
+              "RANK_FILE",
               )
 
     def __init__(self):
@@ -113,6 +117,7 @@ class Sandbox:
         fs.LOG_FILE = os.path.join(self.folder, "find_school.log")
         fs.BROWSER_PROFILE_DIR = os.path.join(self.folder, "profile")
         fs.CHECKPOINT_FILE = os.path.join(self.folder, "checkpoint.json")
+        fs.RANK_FILE = os.path.join(self.folder, "rank.json")
         for name in ("SCROLL_PAUSE_SECONDS", "PAGE_SETTLE_SECONDS",
                      "GEMINI_FIRST_READ_SECONDS", "GEMINI_SETTLE_SECONDS",
                      "GEMINI_POLL_SECONDS", "RETRY_BACKOFF_SECONDS",
@@ -4210,3 +4215,59 @@ class PlanMigrationTests(SandboxTest):
                                  % (city, seen.get(city), rank))
                 seen[city] = rank
         self.assertEqual(len(seen), len(set(fs.ALL_CITIES)))
+
+
+class GitRemotePerInstallTests(SandboxTest):
+    """A production install points at its own remote through rank.json, so
+    the source file is never edited per laptop and `git pull` of a source
+    update cannot conflict with a local change."""
+
+    def write_rank_file(self, data):
+        with open(fs.RANK_FILE, "w", encoding="utf-8") as handle:
+            json.dump(data, handle)
+
+    def test_the_default_is_the_setting_at_the_top_of_the_file(self):
+        os.environ.pop("SCHOOL_GIT_REMOTE", None)
+        if os.path.exists(fs.RANK_FILE):
+            os.remove(fs.RANK_FILE)
+        remote, source = fs.resolve_git_remote()
+        self.assertEqual(remote, fs.GIT_REMOTE)
+        self.assertIn("this file", source)
+
+    def test_rank_json_overrides_the_setting(self):
+        os.environ.pop("SCHOOL_GIT_REMOTE", None)
+        self.write_rank_file({"rank": 2, "num_sys": 10,
+                              "git_remote": "production"})
+        remote, source = fs.resolve_git_remote()
+        self.assertEqual(remote, "production")
+        self.assertEqual(source, "rank.json")
+
+    def test_the_environment_wins_over_rank_json(self):
+        self.write_rank_file({"git_remote": "from-file"})
+        os.environ["SCHOOL_GIT_REMOTE"] = "from-env"
+        try:
+            remote, source = fs.resolve_git_remote()
+        finally:
+            os.environ.pop("SCHOOL_GIT_REMOTE", None)
+        self.assertEqual(remote, "from-env")
+        self.assertEqual(source, "the environment")
+
+    def test_an_unreadable_rank_file_falls_back_quietly(self):
+        os.environ.pop("SCHOOL_GIT_REMOTE", None)
+        with open(fs.RANK_FILE, "w", encoding="utf-8") as handle:
+            handle.write("{ this is not json")
+        remote, _source = fs.resolve_git_remote()
+        self.assertEqual(remote, fs.GIT_REMOTE)
+
+    def test_rank_json_can_carry_rank_and_remote_together(self):
+        os.environ.pop("SCHOOL_GIT_REMOTE", None)
+        self.write_rank_file({"rank": 7, "num_sys": 10,
+                              "git_remote": "origin"})
+        value_rank, value_num, _source = fs.resolve_rank()
+        self.assertEqual((value_rank, value_num), (7, 10))
+        self.assertEqual(fs.resolve_git_remote()[0], "origin")
+
+    def test_the_push_uses_the_resolved_remote_not_the_global(self):
+        source = inspect.getsource(fs.git_sync)
+        self.assertIn('RUNTIME["git_remote"]', source)
+        self.assertNotIn("GIT_REMOTE,", source)
