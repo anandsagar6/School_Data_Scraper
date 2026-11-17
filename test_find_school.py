@@ -16,6 +16,7 @@ import json
 import logging
 import os
 import shutil
+import subprocess
 import sys
 import tempfile
 import types
@@ -4281,3 +4282,144 @@ class GitRemotePerInstallTests(SandboxTest):
         os.environ.pop("SCHOOL_GIT_REMOTE", None)
         self.assertEqual(fs.git_remote_now(), "set-in-rank-file")
         self.assertEqual(fs.RUNTIME["git_remote_from"], "rank.json")
+
+
+class DataBranchAlreadyOnRemoteTests(unittest.TestCase):
+    """A fresh install of a rank whose data branch already exists on the
+    remote must continue that branch. Building on HEAD makes the push a
+    non-fast-forward, and since git_sync() only marks the sync pending and
+    retries, such a rank would never sync at all."""
+
+    def setUp(self):
+        self.folders = []
+        self.kept = {name: getattr(fs, name) for name in
+                     ("PROJECT_DIR", "OUTPUT_DIR", "EXCEL_DIR", "TEMP_DIR",
+                      "BACKUP_DIR", "CHECKPOINT_FILE", "RANK_FILE",
+                      "GIT_SYNC_ENABLED")}
+        self.kept_state = dict(fs.GIT_STATE)
+        self.kept_runtime = dict(fs.RUNTIME)
+
+    def tearDown(self):
+        for name, value in self.kept.items():
+            setattr(fs, name, value)
+        fs.GIT_STATE.clear(); fs.GIT_STATE.update(self.kept_state)
+        fs.RUNTIME.clear(); fs.RUNTIME.update(self.kept_runtime)
+        for folder in self.folders:
+            shutil.rmtree(folder, ignore_errors=True)
+
+    def temp(self, prefix):
+        folder = tempfile.mkdtemp(prefix=prefix)
+        self.folders.append(folder)
+        return folder
+
+    def git(self, where, *args):
+        return subprocess.run(["git", "-C", where] + list(args),
+                              capture_output=True, text=True)
+
+    def use(self, folder, rank):
+        """Point the module's paths at `folder` and resolve its rank."""
+        fs.PROJECT_DIR = fs.OUTPUT_DIR = folder
+        fs.EXCEL_DIR = os.path.join(folder, "Excel_Data")
+        fs.TEMP_DIR = os.path.join(folder, "Temp_Data")
+        fs.BACKUP_DIR = os.path.join(folder, "Backup")
+        fs.CHECKPOINT_FILE = os.path.join(folder, "checkpoint.json")
+        fs.RANK_FILE = os.path.join(folder, "rank.json")
+        with open(fs.RANK_FILE, "w", encoding="utf-8") as handle:
+            json.dump({"rank": rank, "num_sys": 10, "git_remote": "origin"},
+                      handle)
+        fs.ensure_dirs()
+        fs.GIT_SYNC_ENABLED = True
+        fs.RUNTIME.update({"rank": rank, "num_sys": 10,
+                           "rank_label": "%d/10" % rank})
+        fs.RUNTIME.pop("git_remote_from", None)
+        fs.RUNTIME.pop("git_remote", None)
+        fs.GIT_STATE.update({"checked": False, "usable": False,
+                             "last_attempt": 0.0, "pending": False,
+                             "last_error": ""})
+
+    def an_install(self, remote, rank):
+        folder = self.temp("branch_install_")
+        shutil.rmtree(folder)
+        subprocess.run(["git", "clone", "-q", remote, folder], check=True)
+        for args in (("config", "user.email", "t@example.invalid"),
+                     ("config", "user.name", "T")):
+            self.git(folder, *args)
+        self.use(folder, rank)
+        return folder
+
+    def save_a_school(self, name, phone):
+        record = fs.blank_record()
+        record.update({"School Name": name, "City": "Delhi",
+                       "State": "Delhi NCR", "Country": "India",
+                       "PIN Code": "110009", "School Address": "1 Road",
+                       "School Official Phone Number": phone})
+        fs.append_records([record])
+        point = fs.Checkpoint(fs.CHECKPOINT_FILE)
+        point.adopt_plan(1, 10, fs.dataset_fingerprint())
+        point.save()
+        return point
+
+    def a_remote_with_a_source_commit(self):
+        remote = self.temp("branch_remote_")
+        subprocess.run(["git", "init", "--bare", "-q", remote], check=True)
+        seed = self.temp("branch_seed_")
+        subprocess.run(["git", "init", "-q", seed], check=True)
+        for args in (("config", "user.email", "t@example.invalid"),
+                     ("config", "user.name", "T")):
+            self.git(seed, *args)
+        with open(os.path.join(seed, "README.md"), "w", encoding="utf-8") as h:
+            h.write("source\n")
+        self.git(seed, "add", "README.md")
+        self.git(seed, "commit", "-q", "-m", "source")
+        self.git(seed, "remote", "add", "origin", remote)
+        self.git(seed, "push", "-q", "origin", "HEAD:refs/heads/master")
+        return remote, seed
+
+    def test_a_reinstalled_rank_continues_its_existing_data_branch(self):
+        remote, seed = self.a_remote_with_a_source_commit()
+
+        self.an_install(remote, 1)
+        first = self.save_a_school("First School", "9800000001")
+        self.assertTrue(fs.git_sync("first", first, force=True),
+                        fs.GIT_STATE.get("last_error"))
+        tip = self.git(remote, "rev-parse",
+                       "refs/heads/school-data-rank-1").stdout.strip()
+        self.assertTrue(tip)
+
+        # the source branch moves on, as a source update does
+        with open(os.path.join(seed, "NOTE.md"), "w", encoding="utf-8") as h:
+            h.write("later\n")
+        self.git(seed, "add", "NOTE.md")
+        self.git(seed, "commit", "-q", "-m", "later source commit")
+        self.git(seed, "push", "-q", "origin", "HEAD:refs/heads/master")
+
+        # a fresh install of the SAME rank: no local data branch
+        folder = self.an_install(remote, 1)
+        self.assertNotEqual(
+            self.git(folder, "rev-parse", "--verify", "--quiet",
+                     "refs/heads/school-data-rank-1").returncode, 0)
+        second = self.save_a_school("Second School", "9800000002")
+        self.assertTrue(fs.git_sync("after re-image", second, force=True),
+                        fs.GIT_STATE.get("last_error"))
+        self.assertEqual(fs.GIT_STATE.get("last_error"), "")
+
+        # the branch advanced and the first install's commit is still there
+        moved = self.git(remote, "rev-parse",
+                         "refs/heads/school-data-rank-1").stdout.strip()
+        self.assertNotEqual(moved, tip)
+        self.assertEqual(subprocess.run(
+            ["git", "-C", remote, "merge-base", "--is-ancestor", tip, moved]
+        ).returncode, 0)
+
+    def test_the_source_branch_never_receives_a_data_commit(self):
+        remote, _seed = self.a_remote_with_a_source_commit()
+        before = self.git(remote, "rev-parse", "refs/heads/master").stdout
+        self.an_install(remote, 1)
+        point = self.save_a_school("Only School", "9800000003")
+        self.assertTrue(fs.git_sync("only", point, force=True),
+                        fs.GIT_STATE.get("last_error"))
+        self.assertEqual(self.git(remote, "rev-parse",
+                                  "refs/heads/master").stdout, before)
+        listing = self.git(remote, "ls-tree", "-r", "--name-only",
+                           "master").stdout.split()
+        self.assertFalse([f for f in listing if f.startswith("Excel_Data/")])

@@ -2019,7 +2019,28 @@ def git_sync(reason, checkpoint=None, force=False):
     has_ref, parent_sha = git_run(["rev-parse", "--verify", "--quiet", ref])
     parent_sha = parent_sha.strip() if has_ref else ""
     if not parent_sha:
-        # first sync of this rank: build on the source commit instead
+        # A FRESH CLONE OF A RANK THAT HAS SYNCED BEFORE.
+        #
+        # The data branch exists on the remote but not in this clone - a
+        # re-imaged laptop, or a new install directory for an existing
+        # rank. Building on HEAD here would make the push a
+        # non-fast-forward, which is REJECTED, and the retry builds on
+        # HEAD again, so the rank would never sync at all.
+        #
+        # So bring the branch down first and build on its tip. A remote
+        # that has no such branch fails this harmlessly and the first
+        # sync starts from the source commit as before.
+        got, _out = git_run(["fetch", git_remote_now(),
+                             "%s:%s" % (ref, ref)], timeout=180)
+        if got:
+            has_ref, parent_sha = git_run(["rev-parse", "--verify",
+                                           "--quiet", ref])
+            parent_sha = parent_sha.strip() if has_ref else ""
+            if parent_sha:
+                LOG.info("   [GIT] %s already existed on %s - continuing "
+                         "that branch", branch, git_remote_now())
+    if not parent_sha:
+        # first sync of this rank anywhere: build on the source commit
         ok_head, head_sha = git_run(["rev-parse", "--verify", "--quiet",
                                      "HEAD"])
         parent_sha = head_sha.strip() if ok_head else ""
