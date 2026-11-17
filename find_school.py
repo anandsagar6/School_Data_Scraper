@@ -5562,6 +5562,15 @@ GOOGLE_SEARCH_URL = "https://www.google.com/search?q=%s&hl=en&gl=in"
 OFFICIAL_EMAIL_QUERY = "Official email address of %s in %s"
 OFFICIAL_PHONE_QUERY = "Official contact phone number of %s in %s"
 
+#: How firmly a found number is tied to the school. A higher tie replaces a
+#: lower one, so the number the phone search itself verifies beats one that
+#: merely appeared while searching for the email, which beats a repeat of
+#: what Google Maps already showed.
+PHONE_TIE_NONE = 0
+PHONE_TIE_MAPS_CONFIRMED = 1
+PHONE_TIE_EMAIL_SEARCH = 2
+PHONE_TIE_PHONE_SEARCH = 3
+
 #: Columns this feature owns. Gemini is not allowed to fill them.
 OFFICIAL_EMAIL_COLUMN = "School Official Email"
 OFFICIAL_PHONE_COLUMN = "School Official Phone Number"
@@ -5691,11 +5700,16 @@ def emails_in(text):
     return found
 
 
+#: A phone number as it appears in result text: spaces, dashes, brackets
+#: and a +91 or leading 0 all allowed. Both phones_in() and
+#: phone_evidence() use it, so what is extracted is what gets verified.
+PHONE_IN_TEXT = re.compile(r"(?:\+91[\s-]*)?(?:0)?\d[\d\s().-]{8,16}\d")
+
+
 def phones_in(text):
     """Every usable Indian phone number in some text, de-duplicated by key."""
     found, seen = [], set()
-    for raw in re.findall(r"(?:\+91[\s-]*)?(?:0)?\d[\d\s().-]{8,16}\d",
-                          clean(text)):
+    for raw in PHONE_IN_TEXT.findall(clean(text)):
         number = tidy_phone(raw)
         key = phone_key(raw)
         if not number or not key or key in seen:
@@ -5703,6 +5717,39 @@ def phones_in(text):
         seen.add(key)
         found.append(number)
     return found
+
+
+def phone_evidence(text, record, phone, window=350):
+    """Is THIS number, in this result text, this school's?
+
+    search_evidence() looks for the value as a literal run of characters,
+    which works for an email address but not for a phone number: the text
+    says "080 4444 9999" while the number in hand has been tidied to
+    "08044449999", so the literal search never matched and a number could
+    only ever be accepted when Google happened to print it unseparated.
+
+    So the text is searched the way the number was found - by the same
+    pattern - and each match whose digits are this number is judged on the
+    words around it, exactly as search_evidence() would.
+    """
+    body = clean(text)
+    key = phone_key(phone)
+    if not body or not key:
+        return False
+    words = name_words(record.get("School Name", ""))
+    city = clean(record.get("City", "")).lower()
+    state = clean(record.get("State", "")).lower()
+    low = body.lower()
+    for match in PHONE_IN_TEXT.finditer(body):
+        if phone_key(match.group(0)) != key:
+            continue
+        start, end = match.span()
+        near = low[max(0, start - window):end + window]
+        has_name = any(word in near for word in words) if words else False
+        has_place = (city and city in near) or (state and state in near)
+        if has_name and has_place and not branch_conflict(record, near):
+            return True
+    return False
 
 
 def school_place(record):
@@ -5787,17 +5834,19 @@ def search_evidence(text, record, value, window=350):
 def find_official_contacts(director, record):
     """The school's official email and phone, from GOOGLE SEARCH alone.
 
-    Two searches - one for the email, one for the phone - and the answer
-    is taken from the results Google returns. NO SCHOOL WEBSITE IS
-    OPENED: not a homepage, not a contact page, nothing. Everything used
-    here comes out of the search results text.
+    TWO SEARCHES, ONE EACH, FOR EVERY SCHOOL: one asking Google for the
+    official email, one asking for the official phone number. Both run on
+    their own; the phone is never left to whatever the email search
+    happened to show. NO SCHOOL WEBSITE IS OPENED: not a homepage, not a
+    contact page, nothing. Everything used here comes out of the search
+    results text.
 
     PRIORITY
       1. Google Search, when the result can be tied to this school.
       2. Google Maps - the number already on the record, kept only when
          the search verified none.
-    Gemini never fills these two columns; it answers the alternate
-    contacts and the other fields instead.
+    Gemini never fills these two columns. It answers the ALTERNATE email
+    and the ALTERNATE phone, and the other fields.
 
     HOW A RESULT IS TIED TO THE SCHOOL
       email: its domain belongs to the school, OR the address appears in
@@ -5808,11 +5857,21 @@ def find_official_contacts(director, record):
     an address on another country's domain is refused. Anything that
     cannot be tied to the school is left BLANK rather than guessed.
 
+    WHICH NUMBER WINS
+    Both searches are read for a phone, so one school can yield more than
+    one candidate. The number the PHONE search ties to the school wins;
+    below it, one the email search tied to the school; below that, a
+    repeat of what Google Maps already showed. A firmer tie found later
+    replaces a weaker one found earlier.
+
     Returns ``{"email", "phone", "email_from", "phone_from", "source",
-    "notes"}``, where the "_from" values are "search", "maps" or "".
+    "notes", "queries", "phone_tie"}``, where the "_from" values are
+    "search", "maps" or "", and "queries" lists the searches that ran.
     """
     found = {"email": "", "phone": "", "email_from": "", "phone_from": "",
-             "source": "", "notes": []}
+             "source": "", "notes": [], "queries": [],
+             # how firmly the chosen number is tied to this school
+             "phone_tie": PHONE_TIE_NONE}
     if not OFFICIAL_CONTACT_SEARCH:
         return found
 
@@ -5822,11 +5881,6 @@ def find_official_contacts(director, record):
     if maps_phone_text:
         found["phone_from"] = "maps"
 
-    if have_email and maps_phone_text:
-        # An email is already known and a number is on the record. The
-        # phone search still runs, because a verified search number
-        # outranks the Maps one; the email search does not.
-        pass
 
     opener = getattr(director, "search", None)
     if opener is None:
@@ -5835,12 +5889,24 @@ def find_official_contacts(director, record):
         return found
     browser = opener()
 
+    # EVERY SCHOOL GETS ITS OWN PHONE SEARCH.
+    #
+    # Each query's results are read for both an email and a phone, so the
+    # email search sometimes shows a usable number. That is a bonus, never
+    # a substitute: the phone search below runs for every school either
+    # way, and a number it ties to the school replaces one that merely
+    # turned up while looking for the address. Only the email search is
+    # skipped, and only when the record already holds an official email.
     queries = [("email", OFFICIAL_EMAIL_QUERY), ("phone", OFFICIAL_PHONE_QUERY)]
-    for number, (what, template) in enumerate(queries):
+    ran = 0
+    for _number, (what, template) in enumerate(queries):
         if what == "email" and (have_email or found["email"]):
             continue
-        if what == "phone" and found["phone_from"] == "search":
-            continue
+        if ran:
+            pause(GOOGLE_BETWEEN_QUERIES_DELAY_SECONDS,
+                  "between the email and phone searches")
+        ran += 1
+        found["queries"].append(what)
         query = contact_query(template, record)
         LOG.info("      search: %s", query[:96])
         try:
@@ -5875,29 +5941,32 @@ def find_official_contacts(director, record):
         # --- the official phone, from the results text -----------------
         # A verified search number is PREFERRED over the Maps one, which
         # is why this can replace a value already on the record.
-        if found["phone_from"] != "search":
-            for phone in phones_in(text):
-                key = phone_key(phone)
-                if not key:
-                    continue
-                if search_evidence(text, record, phone):
-                    found["phone"] = phone
-                    found["phone_from"] = "search"
-                    found["notes"].append(
-                        "phone verified by the school name and place "
-                        "beside it in the results")
-                    break
-                if maps_phone and key == maps_phone:
-                    found["phone"] = phone
-                    found["phone_from"] = "search"
-                    found["notes"].append(
-                        "the number Google Maps showed, confirmed by the "
-                        "search")
-                    break
-
-        if number == 0 and found["phone_from"] != "search":
-            pause(GOOGLE_BETWEEN_QUERIES_DELAY_SECONDS,
-                  "between the email and phone searches")
+        # --- the official phone, from the results text -----------------
+        # How firmly a number is tied to THIS school decides which wins, so
+        # a better-tied one later replaces an earlier one rather than being
+        # dropped because a number was already in hand.
+        for phone in phones_in(text):
+            key = phone_key(phone)
+            if not key:
+                continue
+            if phone_evidence(text, record, phone):
+                rank = (PHONE_TIE_PHONE_SEARCH if what == "phone"
+                        else PHONE_TIE_EMAIL_SEARCH)
+                why = ("phone verified by the school name and place beside "
+                       "it in the %s results" % what)
+            elif maps_phone and key == maps_phone:
+                rank = PHONE_TIE_MAPS_CONFIRMED
+                why = ("the number Google Maps showed, confirmed by the "
+                       "search")
+            else:
+                continue
+            if rank > found["phone_tie"]:
+                found["phone"] = phone
+                found["phone_from"] = "search"
+                found["phone_tie"] = rank
+                found["notes"].append(why)
+            if found["phone_tie"] >= PHONE_TIE_PHONE_SEARCH:
+                break           # nothing can be tied more firmly
 
     if not found["email"] and not have_email:
         found["notes"].append("no official email could be verified - left blank")
@@ -6562,7 +6631,7 @@ def run(args):
              + (" ..." if len(pending) > 12 else ""))
     LOG.info("Searches queued: %d", len(pending) * len(keywords))
     LOG.info("Official contacts: %s",
-             "Google Search, verified against the school's own site"
+             "Google Search, one email and one phone query per school"
              if OFFICIAL_CONTACT_SEARCH else "off (Gemini only)")
     # the clock starts here, so the first period is drawn before any work
     reset_work_timer()
@@ -6830,8 +6899,8 @@ def print_status(args):
     print("  checkpoint updated  : %s" % (checkpoint.data["updated"] or "never"))
     print("  cycle size          : %d records per file" % CYCLE_SIZE)
     print("  official contacts   : %s"
-          % ("Google Search, verified" if OFFICIAL_CONTACT_SEARCH
-             else "off (Gemini only)"))
+          % ("Google Search - an email query and a phone query per school"
+             if OFFICIAL_CONTACT_SEARCH else "off (Gemini only)"))
     print("  work / break        : %s" % work_break_status())
     print("  night stop          : %s" % night_pause_status())
     print("  github sync         : %s" % git_status_line())

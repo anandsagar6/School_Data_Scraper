@@ -4423,3 +4423,177 @@ class DataBranchAlreadyOnRemoteTests(unittest.TestCase):
         listing = self.git(remote, "ls-tree", "-r", "--name-only",
                            "master").stdout.split()
         self.assertFalse([f for f in listing if f.startswith("Excel_Data/")])
+
+
+class PhoneIsSearchedForEverySchoolTests(SandboxTest):
+    """Google is asked for the official phone number of EVERY school, the
+    same way it is asked for the email. A number that merely turned up in
+    the email search's results is a bonus, never a reason to skip the
+    phone search."""
+
+    class Page:
+        def __init__(self, body=""):
+            self.body = body
+
+        def eval_on_selector_all(self, selector, script):
+            return []
+
+        def close(self):
+            pass
+
+    class Browser:
+        """Serves a body per search and records every URL asked for."""
+
+        def __init__(self, bodies):
+            self.bodies = list(bodies)
+            self.asked = []
+            self.page_obj = PhoneIsSearchedForEverySchoolTests.Page(
+                self.bodies[0])
+
+        def page(self):
+            return self.page_obj
+
+        def goto(self, page, url, wait=None):
+            self.asked.append(url)
+            if "google.com/search" in url:
+                page.body = self.bodies[min(len(self.asked) - 1,
+                                            len(self.bodies) - 1)]
+            else:                      # pragma: no cover - must never happen
+                page.body = "A SCHOOL WEBSITE WAS OPENED"
+            return page
+
+        def text_of(self, page, selector="body"):
+            return page.body
+
+    class Director:
+        def __init__(self, browser):
+            self.browser = browser
+
+        def search(self):
+            return self.browser
+
+    def setUp(self):
+        super().setUp()
+        fs.OFFICIAL_CONTACT_SEARCH = True
+        fs.PAGE_SETTLE_SECONDS = 0
+        fs.GOOGLE_BETWEEN_QUERIES_DELAY_SECONDS = (0, 0)
+
+    def a_school(self, **extra):
+        record = fs.blank_record()
+        record.update({"School Name": "Sunrise Public School",
+                       "City": "Bengaluru", "State": "Karnataka",
+                       "Country": "India",
+                       "School Address": "MG Road, Bengaluru"})
+        record.update(extra)
+        return record
+
+    def run_with(self, bodies, record):
+        browser = self.Browser(bodies)
+        found = fs.find_official_contacts(self.Director(browser), record)
+        searches = [u for u in browser.asked if "google.com/search" in u]
+        return found, searches
+
+    # the body of an email-search result that also shows the Maps number
+    EMAIL_RESULTS_WITH_MAPS_NUMBER = (
+        "Sunrise Public School, MG Road, Bengaluru, Karnataka 560011. "
+        "Email office@sunriseschool.edu.in  Phone 080 2222 1111")
+    # the body of the phone search, naming a different, better-tied number
+    PHONE_RESULTS = (
+        "Sunrise Public School, Bengaluru, Karnataka - office telephone "
+        "080 4444 9999 for admissions enquiries")
+
+    def test_the_phone_search_runs_even_when_the_email_search_showed_one(self):
+        record = self.a_school(**{"School Official Phone Number":
+                                  "080 2222 1111"})
+        _found, searches = self.run_with(
+            [self.EMAIL_RESULTS_WITH_MAPS_NUMBER, self.PHONE_RESULTS], record)
+        self.assertEqual(len(searches), 2,
+                         "both an email and a phone search must run")
+        self.assertIn("email", searches[0].lower())
+        self.assertIn("phone", searches[1].lower())
+
+    def test_both_searches_are_reported(self):
+        record = self.a_school()
+        found, _searches = self.run_with(
+            [self.EMAIL_RESULTS_WITH_MAPS_NUMBER, self.PHONE_RESULTS], record)
+        self.assertEqual(found["queries"], ["email", "phone"])
+
+    def test_the_phone_search_number_beats_the_maps_number(self):
+        record = self.a_school(**{"School Official Phone Number":
+                                  "080 2222 1111"})
+        found, _searches = self.run_with(
+            [self.EMAIL_RESULTS_WITH_MAPS_NUMBER, self.PHONE_RESULTS], record)
+        self.assertEqual(fs.phone_key(found["phone"]),
+                         fs.phone_key("080 4444 9999"))
+        self.assertEqual(found["phone_from"], "search")
+        self.assertEqual(found["phone_tie"], fs.PHONE_TIE_PHONE_SEARCH)
+
+    def test_the_maps_number_is_kept_when_the_phone_search_verifies_none(self):
+        nothing = "Some unrelated directory listing with no usable contact."
+        record = self.a_school(**{"School Official Phone Number":
+                                  "080 2222 1111"})
+        found, searches = self.run_with(
+            [self.EMAIL_RESULTS_WITH_MAPS_NUMBER, nothing], record)
+        self.assertEqual(len(searches), 2)
+        # the email results name the school and city beside the number, so
+        # it is tied to the school, not merely a repeat of the Maps value
+        self.assertEqual(fs.phone_key(found["phone"]),
+                         fs.phone_key("080 2222 1111"))
+        self.assertEqual(found["phone_tie"], fs.PHONE_TIE_EMAIL_SEARCH)
+
+    def test_a_number_only_matching_maps_is_the_weakest_tie(self):
+        # the number is there but nothing near it names the school, so the
+        # only reason to trust it is that Google Maps showed it too
+        bare = ("Schools directory - listings near you. 080 2222 1111. "
+                "Browse more results.")
+        record = self.a_school(**{"School Official Phone Number":
+                                  "080 2222 1111"})
+        found, _searches = self.run_with([bare, bare], record)
+        self.assertEqual(fs.phone_key(found["phone"]),
+                         fs.phone_key("080 2222 1111"))
+        self.assertEqual(found["phone_tie"], fs.PHONE_TIE_MAPS_CONFIRMED)
+        self.assertEqual(found["phone_from"], "search")
+
+    def test_a_number_tied_to_no_school_at_all_is_left_blank(self):
+        other = ("Riverside Academy, Mumbai, Maharashtra - telephone "
+                 "022 1234 5678 for enquiries")
+        record = self.a_school()
+        found, _searches = self.run_with([other, other], record)
+        self.assertEqual(found["phone"], "")
+        self.assertEqual(found["phone_tie"], fs.PHONE_TIE_NONE)
+
+    def test_the_phone_search_still_runs_when_an_email_is_already_known(self):
+        record = self.a_school(**{"School Official Email":
+                                  "already@sunriseschool.edu.in"})
+        found, searches = self.run_with([self.PHONE_RESULTS], record)
+        self.assertEqual(found["queries"], ["phone"],
+                         "the email search is skipped, the phone search is not")
+        self.assertEqual(len(searches), 1)
+        self.assertIn("phone", searches[0].lower())
+        self.assertEqual(fs.phone_key(found["phone"]),
+                         fs.phone_key("080 4444 9999"))
+
+    def test_no_school_website_is_opened_by_either_search(self):
+        record = self.a_school()
+        browser = self.Browser([self.EMAIL_RESULTS_WITH_MAPS_NUMBER,
+                                self.PHONE_RESULTS])
+        fs.find_official_contacts(self.Director(browser), record)
+        for url in browser.asked:
+            self.assertIn("google.com/search", url)
+
+    def test_gemini_answers_the_alternate_phone_not_the_official_one(self):
+        self.assertIn(fs.OFFICIAL_PHONE_COLUMN, fs.OFFICIAL_CONTACT_COLUMNS)
+        self.assertEqual(fs.OFFICIAL_TO_ALTERNATE[fs.OFFICIAL_PHONE_COLUMN],
+                         "School Alternate Phone Number")
+        self.assertIn("School Alternate Phone Number",
+                      fs.gemini_asked_columns())
+        self.assertNotIn(fs.OFFICIAL_PHONE_COLUMN, fs.gemini_asked_columns())
+
+    def test_a_gemini_official_phone_is_written_to_the_alternate_column(self):
+        record = self.a_school(**{"School Official Phone Number":
+                                  "080 2222 1111"})
+        fs.apply_answer(record, {fs.OFFICIAL_PHONE_COLUMN: "080 7777 0000"})
+        self.assertEqual(fs.phone_key(record[fs.OFFICIAL_PHONE_COLUMN]),
+                         fs.phone_key("080 2222 1111"))
+        self.assertEqual(fs.phone_key(record["School Alternate Phone Number"]),
+                         fs.phone_key("080 7777 0000"))
