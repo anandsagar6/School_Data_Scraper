@@ -1,0 +1,9 @@
+# School Data Extractor - everything find_school.py needs.
+#
+#   python3 -m pip install -r requirements.txt
+#   python3 -m playwright install chromium
+#
+# Nothing else is required: no API key, no account, no second Python file.
+
+playwright>=1.40
+openpyxl>=3.1

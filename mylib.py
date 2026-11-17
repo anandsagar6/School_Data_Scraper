@@ -1,0 +1,331 @@
+"""Shared data for the School Data Extractor.
+
+find_school.py reads exactly three names out of this file, and it PARSES
+the file rather than importing it, so nothing here is ever executed:
+
+    city_by_states           the cities, grouped
+    SCHOOL_SEARCH_KEYWORDS   the Google Maps search keywords
+    SCHOOL_FIELDS            the 57 (Excel column, Gemini answer key) pairs
+
+WHY THIS FILE HOLDS NOTHING ELSE
+--------------------------------
+It began as a copy of another project's library, which also carried mail
+accounts - addresses and app passwords - in a `file_langs` dictionary, plus
+helpers for Levenshtein matching, JSON, file reading and text-to-speech.
+This project uses none of that, and a file that is committed to Git must
+not carry a password. Everything except the three datasets above has been
+removed. The original is kept outside the repository.
+
+The other project's own copy of mylib.py is untouched and still has its
+full contents; nothing here affects it.
+
+The three datasets below are byte-for-byte the ones that were here before.
+"""
+
+SCHOOL_FIELDS = (
+    ("School Name",                                   'School_Name'),
+    ("School Short Name",                             'School_Short_Name'),
+    ("School Website",                                'School_Website'),
+    ("School Official Email",                         'School_Official_Email'),
+    ("School Alternate Email",                        'School_Alternate_Email'),
+    ("School Official Phone Number",                  'School_Official_Phone_Number'),
+    ("School Alternate Phone Number",                 'School_Alternate_Phone_Number'),
+    ("UDISE Code",                                    'UDISE_Code'),
+    ("School Type",                                   'School_Type'),
+    ("School Management Type",                        'School_Management_Type'),
+    ("School Category",                               'School_Category'),
+    ("Affiliation Board",                             'Affiliation_Board'),
+    ("Affiliation Number",                            'Affiliation_Number'),
+    ("School Registration Number",                    'School_Registration_Number'),
+    ("Year of Establishment",                         'Year_of_Establishment'),
+    ("Classes Offered",                               'Classes_Offered'),
+    ("Education Medium",                              'Education_Medium'),
+    ("Co-Educational Status",                         'Co_Educational_Status'),
+    ("Residential School Status",                     'Residential_School_Status'),
+    ("Total Student Strength",                        'Total_Student_Strength'),
+    ("Number of Boys",                                'Number_of_Boys'),
+    ("Number of Girls",                               'Number_of_Girls'),
+    ("Number of Teaching Staff",                      'Number_of_Teaching_Staff'),
+    ("Number of Non-Teaching Staff",                  'Number_of_Non_Teaching_Staff'),
+    ("School Address",                                'School_Address'),
+    ("Area / Locality",                               'Area_Locality'),
+    ("Village / Town",                                'Village_Town'),
+    ("City",                                          'City'),
+    ("Block / Tehsil",                                'Block_Tehsil'),
+    ("District",                                      'District'),
+    ("State",                                         'State'),
+    ("PIN Code",                                      'PIN_Code'),
+    ("Country",                                       'Country'),
+    ("Principal Name",                                'Principal_Name'),
+    ("Principal Official Email",                      'Principal_Official_Email'),
+    ("Principal Office Phone Number",                 'Principal_Office_Phone_Number'),
+    ("Vice Principal Name",                           'Vice_Principal_Name'),
+    ("School Administrator Name",                     'School_Administrator_Name'),
+    ("School Google Maps Link",                       'School_Google_Maps_Link'),
+    ("School Latitude",                               'School_Latitude'),
+    ("School Longitude",                              'School_Longitude'),
+    ("School Working Days",                           'School_Working_Days'),
+    ("School Office Hours",                           'School_Office_Hours'),
+    ("School Academic Session",                       'School_Academic_Session'),
+    ("Available Streams (Science / Commerce / Arts)", 'Available_Streams'),
+    ("Computer Science Offered",                      'Computer_Science_Offered'),
+    ("Computer Lab Available",                        'Computer_Lab_Available'),
+    ("Number of Computers",                           'Number_of_Computers'),
+    ("Internet Available",                            'Internet_Available'),
+    ("Smart Classroom Available",                     'Smart_Classroom_Available'),
+    ("Science Lab Available",                         'Science_Lab_Available'),
+    ("Library Available",                             'Library_Available'),
+    ("Auditorium / Seminar Hall Available",           'Auditorium_Seminar_Hall_Available'),
+    ("Existing IT / Coding / AI Programs",            'Existing_IT_Coding_AI_Programs'),
+    ("School Official Social Media Links",            'School_Official_Social_Media_Links'),
+    ("School Data Source URL",                        'School_Data_Source_URL'),
+    ("Additional School Notes",                       'Additional_School_Notes'),
+)
+
+
+city_by_states = {
+    "Delhi NCR": ['Delhi', 'Gurugram', 'Noida', 'Greater Noida',
+                  'Ballabgarh', 'Bhiwadi', 'Manesar', 'Jhajjar',
+                  'Tauru', 'Khurja'],
+    
+    "Andhra Pradesh": [
+        "Visakhapatnam", "Vijayawada", "Guntur", "Nellore", "Kurnool",
+        "Tirupati", "Rajahmundry", "Kakinada", "Kadapa", "Anantapur",
+        "Eluru", "Ongole", "Machilipatnam", "Chittoor", "Hindupur",
+        "Bhimavaram", "Tadepalligudem", "Proddatur", "Adoni", "Amalapuram",
+        "Madanapalle", "Dharmavaram", "Markapur", "Nandyal", "Srikakulam",
+        "Rajampet", "Peddapuram", "Rayachoti", "Bapatla",
+        "Nellore", "Palnadu", "Kovur", "Tadipatri", "Punganur", "Chilakaluripet",
+        "Sattenapalli", "Bobbili", "Peddapalli", "Anakapalle", "Addanki",
+        "Chintapalli", "Peddagummadiv", "Brahmanapalli", "Tuni", "Tanuku",
+        "Vinukonda", "Amadalavalasa", "Srikalahasti", "Mummidivaram",
+    ],
+    "Arunachal Pradesh": [
+        "Itanagar", "Tawang", "Ziro", "Pasighat", "Roing",
+        "Tezu", "Bomdila", "Naharlagun", "Changlang", "Seppa",
+        "Yingkiong", "Namsai", "Hawai", "Aalo", "Raga", "Tali", 
+        "Joram", "Dirang", "Nirjuli", "Sangdupota", "Koloriang",
+    ],
+    "Assam": [
+        "Guwahati", "Silchar", "Dibrugarh", "Jorhat", "Nagaon",
+        "Tinsukia", "Tezpur", "Bongaigaon", "North Lakhimpur",
+        "Karimganj", "Goalpara", "Dhubri", "Haflong", "Sibsagar",
+        "Sonari", "Nalbari", "Jorhat", "Barpeta", "Hojai", "Bajali",
+        "Dibrugarh", "Dhemaji", "Morigaon", "Golaghat", "Kamrup", "Barpeta",
+        "Mangaldoi", "Bilasipara", "Lakhimpur", "Charaideo", "Majuli",
+        "Moran", "Darrang", "Hailakandi", "Haflong", "Tihu", "Bongaigaon",
+    ],
+    "Bihar": [
+        "Patna", "Gaya", "Bhagalpur", "Muzaffarpur", "Purnia",
+        "Darbhanga", "Begusarai", "Ara", "Katihar", "Munger",
+        "Chhapra", "Saharsa", "Samastipur", "Bettiah", "Siwan",
+        "Motihari", "Kishanganj", "Nalanda", "Buxar", "Nawada",
+        "Lakhisarai", "Khagaria", "Sheikhpura", "Jamui", "Jahanabad",
+        "Supaul", "Vaishali", "Rohtas", "Aurangabad", "Banka",
+        "Bhabhua", "Chapra", "Buxar", "Chhapra", "Dehri", "Rajgir",
+        "Patna City", "Phulwari Sharif", "Bihar Sharif",
+    ],
+    "Chhattisgarh": [
+        "Raipur", "Bhilai", "Bilaspur", "Korba", "Durg",
+        "Rajnandgaon", "Jagdalpur", "Ambikapur", "Raigarh", "Mahasamund",
+        "Kanker", "Dhamtari", "Dalli-Rajhara", "Champa", "Janjgir",
+        "Bemetara", "Kondagaon", "Balod", "Raipur City", "Bijapur",
+        "Narayanpur", "Balodabazar", "Mungeli", "Surguja", "Jashpur", "Kabirdham",
+        "Surajpur", "Korba District", "Sarguja", "Dongargarh", "Kawardha", 
+    ],
+    "Goa": [
+        "Panaji", "Margao", "Vasco da Gama", "Mapusa", "Ponda",
+        "Bicholim", "Curchorem", "Sanguem", "Valpoi", "Quepem",
+        "Canacona", "Sanquelim", "Cortalim", "Assagao", "Aldona",
+        "Baga", "Calangute", "Candolim", "Anjuna", "Colva", "Benaulim",
+        "Varca", "Majorda", "Navelim", "Raia", "Mormugao", "Verem",
+        "Ribandar", "Sirsaim", "Taleigao", "Porvorim", "Assagao",
+    ],
+    "Gujarat": [
+        "Ahmedabad", "Surat", "Vadodara", "Rajkot", "Bhavnagar",
+        "Jamnagar", "Junagadh", "Gandhinagar", "Anand", "Nadiad",
+        "Morbi", "Porbandar", "Navsari", "Bharuch", "Patan",
+        "Godhra", "Mehsana", "Vapi", "Valsad", "Himmatnagar",
+        "Dahod", "Bhuj", "Veraval", "Wankaner", "Gandhinagar",
+        "Surendranagar", "Unjha", "Rajpipla", "Visnagar", "Palanpur",
+        "Modasa", "Kalol", "Viramgam", "Borsad", "Kheda", "Kadi", 
+        "Dholka", "Mansa", "Chhota Udepur", "Dahej", "Udhna", "Ankleshwar", 
+        "Navsari", "Tapi", "Daman", "Diu",
+    ],
+    "Haryana": [
+        "Gurgaon", "Faridabad", "Panipat", "Ambala", "Karnal",
+        "Sonipat", "Rohtak", "Hisar", "Yamunanagar", "Panchkula",
+        "Bhiwani", "Bahadurgarh", "Sirsa", "Jind", "Kaithal",
+        "Palwal", "Fatehabad", "Mahendragarh", "Rewari", "Narnaul",
+        "Barwala", "Ratia", "Hansi", "Tosham", "Bawani Khera", 
+        "Pinjore", "Shahbad", "Nuh", "Samalkha", "Rohat",
+    ],
+    "Himachal Pradesh": [
+        "Shimla", "Manali", "Dharamshala", "Mandi", "Kullu",
+        "Chamba", "Solan", "Bilaspur", "Hamirpur", "Una",
+        "Palampur", "Nahan", "Paonta Sahib", "Keylong", "Sundernagar",
+        "Kangra", "Narkanda", "Kullu", "Bhuntar", "Arki", "Reckong Peo",
+        "Jubbal", "Chintpurni", "Tissa", "Nagrota Surian", "Ghumarwin",
+    ],
+    "Jharkhand": [
+        "Ranchi", "Jamshedpur", "Dhanbad", "Bokaro Steel City",
+        "Hazaribagh", "Deoghar", "Giridih", "Ramgarh", "Phusro",
+        "Chakradharpur", "Gumla", "Lohardaga", "Chaibasa", "Seraikela",
+        "Dumka", "Godda", "Pakur", "Koderma", "Simdega", "Latehar",
+        "Khunti", "Sahibganj", "Palamu", "Chatra", "Bermo", "Jamtara",
+        "Ramgarh", "Madhupur", "Barkagaon", "Mandar", "Tundi", "Tata Nagar",
+    ],
+    "Karnataka": [
+        "Bengaluru", "Mysuru", "Mangaluru", "Hubballi", "Belagavi",
+        "Davanagere", "Ballari", "Shivamogga", "Tumakuru", "Udupi",
+        "Mandya", "Chikkamagaluru", "Hassan", "Bijapur", "Bidar",
+        "Gadag", "Chitradurga", "Raichur", "Karwar", "Hospet",
+        "Kolar", "Bagalkot", "Gulbarga", "Hubli", "Vijayapura", "Hampi",
+        "Sirsi", "Yadgir", "Bhadravati", "Sagar", "Channarayapatna", 
+        "Chikkaballapur", "Haveri", "Ramanagara", "Humnabad", "Puttur", 
+        "Karwar", "Karkala", "Alur", "Mudigere", "Kunigal", "Kadur",
+    ],
+    "Kerala": [
+        "Thiruvananthapuram", "Kochi", "Kozhikode", "Kannur", "Kottayam",
+        "Alappuzha", "Palakkad", "Thrissur", "Malappuram", "Muvattupuzha",
+        "Vypin", "Varkala", "Pathanamthitta", "Ernakulam", "Punalur",
+        "Kasaragod", "Payyanur", "Neyyattinkara", "Kalpetta", "Perumbavoor",
+        "Thalassery", "Manjeri", "Kasargod", "Kollam", "Anchal", "Aluva",
+        "Muvattupuzha", "Kanhangad", "Pattambi", "Perinthalmanna", "Sreekariyam",
+        "Azhikkal", "Chalakudy", "Edappal", "Kollam", "Ponnani", "Edathala",
+        "Cochin", "Irinjalakuda", "Kunnamkulam", "Changanassery", "Chirakkal",
+    ],
+    "Madhya Pradesh": [
+        "Bhopal", "Indore", "Gwalior", "Jabalpur", "Ujjain",
+        "Sagar", "Ratlam", "Rewa", "Satna", "Dewas",
+        "Chhindwara", "Murwara", "Vidisha", "Shivpuri", "Neemuch",
+        "Khandwa", "Balaghat", "Mandla", "Damoh", "Betul", "Hoshangabad",
+        "Shahdol", "Burhanpur", "Tikamgarh", "Panna", "Seoni", "Raisen",
+        "Katni", "Alirajpur", "Anuppur", "Ashoknagar", "Mandsaur", "Rajgarh",
+        "Narsinghpur", "Chhatarpur", "Shivpuri", "Datia", "Chhindwara", 
+        "Bhilai", "Guna", "Pichhore", "Chhattarpur", "Dhar", "Jhabua",
+    ],
+    "Maharashtra": [
+        "Mumbai", "Pune", "Nagpur", "Thane", "Nashik", "Aurangabad", 
+        "Solapur", "Kolhapur", "Amravati", "Sangli", "Latur", "Akola", 
+        "Jalgaon", "Nanded", "Ratnagiri", "Chandrapur", "Dhule", 
+        "Malegaon", "Ichalkaranji", "Jalna", "Ambarnath", "Badlapur", 
+        "Panvel", "Ulhasnagar", "Kalyan", "Dombivli", "Vasai", 
+        "Virar", "Satara", "Beed", "Alibag", "Baramati", "Shirdi", 
+        "Pandharpur", "Chiplun", "Osmanabad", "Gondia", "Hingoli", 
+        "Washim", "Yavatmal", "Karad", "Mahabaleshwar", "Palghar", 
+        "Talegaon", "Lonavala", "Vita", "Malkapur", "Dahanu", "Manmad", 
+        "Uran", "Sinnar", "Akluj", "Khamgaon", "Wai", "Pusad", 
+        "Shrirampur", "Sangamner", "Pathardi", "Digras", "Barshi", 
+        "Buldhana", "Kinwat", "Nandurbar", "Tumsar", "Gadchiroli", 
+        "Vijayapura", "Achalpur", "Murtijapur", "Rajgurunagar", 
+        "Parli", "Ambajogai", "Chandrapur", "Nagpur", "Bhandara", 
+        "Wardha", "Navi Mumbai", "Aurangabad",
+    ],
+    "Manipur": [
+        "Imphal", "Bishnupur", "Thoubal", "Churachandpur", "Kakching",
+        "Jiribam", "Senapati", "Tamenglong", "Ukhrul", "Noney", 
+        "Chandel", "Kangpokpi", "Moirang", "Lamlai", "Tengnoupal",
+    ],
+    "Meghalaya": [
+        "Shillong", "Tura", "Nongpoh", "Cherrapunji", "Jowai", 
+        "Mawkyrwat", "Bojan", "Nartiang", "Mairang", "Baghmara", 
+        "Williamnagar", "Resubelpara", "Nongstoin", "Pynursla", 
+        "Khasi Hills", "Garo Hills", "Ri Bhoi", "East Khasi Hills",
+    ],
+    "Mizoram": [
+        "Aizawl", "Lunglei", "Serchhip", "Champhai", "Kolasib", 
+        "Mamit", "Saiha", "Lawngtlai", "Hnahthial", "Kolasib", 
+        "Khawzawl", "Vairengte", "Zohmun", "Tlabung", "Darlawn", 
+        "Ngopa", "Thenzawl", "Bungkawn", "Siaha",
+    ],
+    "Nagaland": [
+        "Kohima", "Dimapur", "Mokokchung", "Tuensang", "Wokha", 
+        "Mon", "Phek", "Zunheboto", "Kiphire", "Longleng", 
+        "Tseminyu", "Chümoukedima", "Peren", "Jalukie", 
+        "Lotha", "Kohima Town", "Dimapur Town",
+    ],
+    "Odisha": [
+        "Bhubaneswar", "Cuttack", "Rourkela", "Berhampur", "Sambalpur",
+        "Puri", "Balasore", "Baripada", "Bhadrak", "Angul",
+        "Dhenkanal", "Jagatsinghpur", "Jeypore", "Khordha", "Nayagarh",
+        "Balangir", "Bargarh", "Kendrapara", "Koraput", "Malkangiri",
+        "Sundargarh", "Nimapara", "Khariar", "Rayagada", "Pattamundai",
+        "Boudh", "Deogarh", "Ganjam", "Kendujhar", "Mayurbhanj",
+    ],
+    "Punjab": [
+        "Chandigarh", "Ludhiana", "Amritsar", "Jalandhar", "Patiala",
+        "Bathinda", "Hoshiarpur", "Mohali", "Pathankot", "Ferozepur",
+        "Moga", "Rupnagar", "Kapurthala", "Faridkot", "Mansa", 
+        "Sri Muktsar Sahib", "Tarn Taran", "Fatehgarh Sahib", "Nawanshahr",
+        "Zira", "Phagwara", "Sultanpur Lodhi", "Malerkotla", 
+        "Samrala", "Ajnala", "Dera Baba Nanak", "Moga", "Rampura Phul",
+    ],
+    "Rajasthan": [
+        "Jaipur", "Jodhpur", "Udaipur", "Kota", "Ajmer",
+        "Bikaner", "Alwar", "Bharatpur", "Sikar", "Jaisalmer",
+        "Pali", "Churu", "Sawai Madhopur", "Nagaur", "Barmer",
+        "Tonk", "Banswara", "Dungarpur", "Jhunjhunu", "Sri Ganganagar",
+        "Hanumangarh", "Jhalawar", "Karauli", "Ratangarh", "Chittorgarh",
+        "Rajsamand", "Kishangarh", "Beawar", "Mandawa", "Shahpura", 
+        "Merta City", "Pali", "Sirohi", "Kota", "Bhilwara", 
+    ],
+    "Sikkim": [
+        "Gangtok", "Namchi", "Geyzing", "Mangan", "Rangpo",
+        "Singtam", "Jorethang", "Rabong", "Sichey", "Tadong",
+    ],
+    "Tamil Nadu": [
+        "Chennai", "Coimbatore", "Madurai", "Tiruchirappalli", "Salem",
+        "Vellore", "Tiruppur", "Thoothukudi", "Dindigul", "Kanchipuram",
+        "Tirunelveli", "Karur", "Erode", "Vikramshila", "Pollachi",
+        "Puducherry", "Nagercoil", "Ramanathapuram", "Tanjore", "Kumbakonam",
+        "Virudhunagar", "Dharmapuri", "Perambalur", "Sivakasi", "Namakkal",
+        "Cuddalore", "Arakkonam", "Nagapattinam", "Vellore", "Chidambaram",
+        "Tiruvallur", "Hosur", "Bargur", "Chengalpattu", "Ranipet", 
+    ],
+    "Telangana": [
+        "Hyderabad", "Warangal", "Nizamabad", "Karimnagar", "Ramagundam",
+        "Khammam", "Mahbubnagar", "Mancherial", "Adilabad", "Miryalaguda",
+        "Siddipet", "Jagtial", "Suryapet", "Nirmal", "Peddapalli",
+        "Bhadrachalam", "Bhainsa", "Kothagudem", "Jagitial", "Wanaparthy",
+        "Jangaon", "Nagarkurnool", "Medak", "Vikarabad", "Peddapalli",
+    ],
+    "Tripura": [
+        "Agartala", "Udaipur", "Kailashahar", "Dharmanagar", "Khowai",
+        "Sabroom", "Belonia", "Bishalgarh", "Jirania", "Melaghar",
+        "Sonamura", "Amarpur", "Madhupur", "Gakulpur", "Bagma",
+    ],
+    "Uttar Pradesh": [
+        "Lucknow", "Kanpur", "Varanasi", "Agra", "Meerut",
+        "Allahabad", "Bareilly", "Ghaziabad", "Moradabad", "Aligarh",
+        "Firozabad", "Mathura", "Shahjahanpur", "Rampur", "Saharanpur",
+        "Muzaffarnagar", "Bijnor", "Jaunpur", "Raebareli", "Azamgarh",
+        "Prayagraj", "Etawah", "Hapur", "Gorakhpur", "Sitapur",
+        "Deoria", "Budaun", "Ballia", "Hardoi", "Amroha",
+        "Basti", "Kushinagar", "Chandauli", "Jalaun", "Farrukhabad",
+        "Sambhal", "Unnao", "Kanshiram Nagar", "Sonbhadra", "Shahabad",
+        "Tanda", "Lakhimpur Kheri", "Mirzapur", "Pilibhit", "Raebareli",
+    ],
+    "Uttarakhand": [
+        "Dehradun", "Haridwar", "Roorkee", "Nainital", "Haldwani",
+        "Rudrapur", "Almora", "Kashipur", "Pithoragarh", "Bageshwar",
+        "Kotdwar", "Champawat", "Ranikhet", "Bharatpur", "Mussoorie",
+        "Khatima", "Dhanaulti", "Tehri", "Lohaghat", "Kedarnath",
+    ],
+    "West Bengal": [
+        "Kolkata", "Howrah", "Asansol", "Durgapur", "Siliguri",
+        "Darjeeling", "Hooghly", "Kharagpur", "Haldia", "Jalpaiguri",
+        "Malda", "Raiganj", "Cooch Behar", "Medinipur", "Balurghat",
+        "Alipurduar", "Suri", "Krishnanagar", "Tamluk", "Baharampur",
+        "Chinsurah", "Rampurhat", "Santipur", "Kandi", "Bongaon",
+        "Basirhat", "Habra", "Barrackpore", "Nabadwip", "Katwa",
+        "Bolpur", "Uluberia", "Sainthia", "Jaynagar-Majilpur", "Budge Budge",
+    ],
+}
+
+
+SCHOOL_SEARCH_KEYWORDS = [
+    "Private Schools",
+    "Government Schools"
+  
+]

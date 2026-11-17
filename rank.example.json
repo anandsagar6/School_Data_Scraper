@@ -1,0 +1,5 @@
+{
+    "_comment": "Optional. Copy to rank.json to set this laptop's rank without editing find_school.py. The values at the top of the script are used when this file is absent.",
+    "rank": 1,
+    "num_sys": 25
+}

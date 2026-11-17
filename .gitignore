@@ -1,0 +1,14 @@
+# the two Chromium profiles - hundreds of MB of cache, rebuilt on demand
+browser_profile/
+browser_profile_gemini/
+Test_Run/
+
+# collected data and progress
+Excel_Data/
+Temp_Data/
+find_school.log
+state/
+rank.json
+
+__pycache__/
+*.pyc
