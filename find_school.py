@@ -1949,11 +1949,22 @@ def git_usable():
 def recovery_paths():
     """Exactly the files a fresh clone needs to carry on. Nothing else.
 
-    Named one by one on purpose. The capture text and the per-school raw
-    answers are left out: they are evidence, they can be large, and a
-    resume does not need them. The temporary workbook and the resume file
+    Named one by one on purpose. The temporary workbook and the resume file
     of an UNFINISHED city are included, because without them a half-done
     city would start again from its first keyword.
+
+    THE MAPS CAPTURE IS INCLUDED TOO. stored_discovery() reads
+    <State>_<City>_<keyword>.txt[.gz] to reuse a keyword's discovered list
+    instead of scrolling Google Maps for it a second time, and cleanup
+    removes that file the moment the keyword completes - so at most one or
+    two exist at a time and they are small (29 KB for a 27-school city).
+    Leaving them out meant a restore on another machine lost nothing and
+    duplicated nothing, but still had to ask Google for a list it already
+    had: for a large city that is the expensive part of the work.
+
+    The per-school Gemini answers (<State>_<City>_gemini_<school>.txt) stay
+    out. They are evidence of one school's reply, there is one per school,
+    and a school that was never saved is simply asked again.
     """
     paths = [CHECKPOINT_FILE]
     for folder, pattern in ((EXCEL_DIR, "*.xlsx"), (BACKUP_DIR, "*.xlsx")):
@@ -1962,6 +1973,11 @@ def recovery_paths():
     if os.path.isdir(TEMP_DIR):
         for pattern in ("*_temporary_schools.xlsx", "*_schools.json"):
             paths.extend(sorted(glob.glob(os.path.join(TEMP_DIR, pattern))))
+        # the keyword captures, but never a per-school Gemini answer
+        for pattern in ("*.txt", "*.txt.gz"):
+            paths.extend(sorted(
+                path for path in glob.glob(os.path.join(TEMP_DIR, pattern))
+                if "_gemini_" not in os.path.basename(path)))
     here = os.path.abspath(PROJECT_DIR)
     keep = []
     for path in paths:
@@ -6786,6 +6802,15 @@ def print_status(args):
     except RankError as error:
         print("RANK ERROR: %s" % error)
         return 2
+    # The RESOLVED rank, exactly as run() records it. Without this the sync
+    # line below reports school-data-rank-1 on EVERY laptop, because
+    # git_branch_name() falls back to the constant at the top of the file -
+    # so the one command an operator uses to confirm the push destination
+    # named the wrong branch. The collection path was always correct; only
+    # this display was wrong.
+    RUNTIME["rank_label"] = "%d/%d" % (value_rank, value_num)
+    RUNTIME["rank"] = value_rank
+    RUNTIME["num_sys"] = value_num
     set_rank_paths(value_rank)
     checkpoint = Checkpoint()
     try:
