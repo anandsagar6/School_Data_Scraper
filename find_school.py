@@ -97,9 +97,15 @@ NIGHT_END_HOUR = 5
 TIME_ZONE = "Asia/Kolkata"          # the clock the night stop is read on
 
 # --- pacing: every wait is a fresh random draw from its range --------------
-GOOGLE_BETWEEN_SCHOOLS_DELAY_SECONDS = (8, 16)   # between two schools
-GOOGLE_BETWEEN_QUERIES_DELAY_SECONDS = (3, 7)    # email search -> phone search
+GOOGLE_BETWEEN_SCHOOLS_DELAY_SECONDS = (45, 90)  # between two schools
+GOOGLE_BETWEEN_QUERIES_DELAY_SECONDS = (15, 25)  # email search -> phone search
 GOOGLE_TO_GEMINI_DELAY_SECONDS = (5, 12)         # searches -> Gemini
+#: After Google serves a CAPTCHA, stop ASKING GOOGLE for this long. The run
+#: carries on - Maps discovery and Gemini enrichment are untouched, and the
+#: schools whose searches were skipped are remembered in the checkpoint so
+#: they can be searched again later. Asking again immediately is what earns
+#: a longer block, so the only sane answer to a challenge is to stop asking.
+GOOGLE_CHALLENGE_COOLDOWN_MINUTES = (15, 30)
 PAUSE_CLOSES_BROWSER_SECONDS = 600  # a break this long closes the browser
 
 # --- Google Maps scrolling -------------------------------------------------
@@ -2679,6 +2685,18 @@ def empty_checkpoint():
         "enriched": {},                # "State|City" -> [match key strings]
         "completed_cities": [],        # ["State|City", ...]
         "failed": [],                  # [{record, reason, when}]
+        #: Schools that were SAVED but whose official email/phone searches
+        #: could not be run, because Google was in its CAPTCHA cooldown or
+        #: the search browser failed. Their rows are already in the master
+        #: from Maps and Gemini; only the Google-verified official pair is
+        #: outstanding, so this is a list of searches owed, not of failures.
+        #:
+        #: Added WITHOUT bumping CHECKPOINT_VERSION on purpose: load() does
+        #: empty_checkpoint() then update(stored), so an older checkpoint
+        #: simply picks up the default. Bumping the version would make every
+        #: live checkpoint "written by an older version" and set it aside -
+        #: which would throw away the progress of every running rank.
+        "contacts_pending": [],        # [{school, state, city, reason, when}]
         "duplicates": 0,
         "saved": 0,
         "cycle": 0,
@@ -2885,6 +2903,42 @@ class Checkpoint:
         self.data["failed"] = []
         self.save()
         return failures
+
+    #: Enough to find the school again without storing a second copy of it.
+    CONTACTS_PENDING_LIMIT = 5000
+
+    def note_contacts_pending(self, state, city, record, reason=""):
+        """Remember that a saved school still owes its Google searches.
+
+        Called when a CAPTCHA cooldown or a browser failure meant the
+        official email/phone searches never ran. The school's row is
+        already saved, so nothing here is about to be lost - this is the
+        list of searches to come back to.
+
+        Written by name, de-duplicated, and capped: a long block must not
+        grow the checkpoint without limit.
+        """
+        name = clean(record.get("School Name", ""))
+        if not name:
+            return False
+        pending = self.data.setdefault("contacts_pending", [])
+        key = (name.lower(), (state or "").lower(), (city or "").lower())
+        for entry in pending:
+            if (str(entry.get("school", "")).lower(),
+                    str(entry.get("state", "")).lower(),
+                    str(entry.get("city", "")).lower()) == key:
+                return False
+        if len(pending) >= self.CONTACTS_PENDING_LIMIT:
+            return False
+        pending.append({
+            "school": name,
+            "state": state or "",
+            "city": city or "",
+            "reason": (reason or "")[:120],
+            "when": datetime.datetime.now().isoformat(timespec="seconds"),
+        })
+        self.save()
+        return True
 
     def forget_city(self, state, city):
         key = self.key(state, city)
@@ -5716,6 +5770,60 @@ def contact_query(template, record):
                        school_place(record))
 
 
+#: Whether Google is currently willing to serve searches. Process-wide,
+#: because one rank has one search browser and one Google reputation: a
+#: challenge on one school's search means the next school's would be
+#: challenged too.
+GOOGLE_SEARCH_STATE = {
+    "blocked_until": 0.0,       # time.time() when searching may resume
+    "challenges": 0,            # challenges seen this run
+    "cooldowns": 0,             # cooldowns started this run
+    "deferred": 0,              # schools whose searches were skipped
+}
+
+
+def google_cooldown_left():
+    """Seconds of CAPTCHA cooldown still to run; 0.0 when searching is free."""
+    left = GOOGLE_SEARCH_STATE["blocked_until"] - time.time()
+    return left if left > 0 else 0.0
+
+
+def start_google_cooldown():
+    """Stop asking Google after a challenge, and say for how long.
+
+    NOT a way around the challenge. The run keeps going - Maps collection
+    and Gemini enrichment never touch Google Search - and the schools whose
+    searches are skipped are recorded for a later retry rather than being
+    marked as having no contact.
+
+    The window is a fresh random draw so ten ranks sharing one address do
+    not come back at the same instant and earn a second block together.
+    """
+    low, high = (float(GOOGLE_CHALLENGE_COOLDOWN_MINUTES[0]),
+                 float(GOOGLE_CHALLENGE_COOLDOWN_MINUTES[1]))
+    if high < low:
+        low, high = high, low
+    minutes = random.uniform(low, high)
+    GOOGLE_SEARCH_STATE["blocked_until"] = time.time() + minutes * 60.0
+    GOOGLE_SEARCH_STATE["challenges"] += 1
+    GOOGLE_SEARCH_STATE["cooldowns"] += 1
+    LOG.warning("      Google served a challenge - no more Google searches "
+                "for %.0f minute(s) (%.0f-%.0f). Collection carries on; the "
+                "schools skipped meanwhile are kept for a later retry.",
+                minutes, low, high)
+    return minutes
+
+
+def google_cooldown_note():
+    """The note put on a school whose searches were skipped, or ''."""
+    left = google_cooldown_left()
+    if left <= 0:
+        return ""
+    return ("Google searching is in its CAPTCHA cooldown for another %d "
+            "minute(s) - the official email and phone searches were NOT run "
+            "and are kept for a later retry" % int(left // 60 + 1))
+
+
 def run_google_search(browser, query):
     """Open one Google search and hand back its text and its result links.
 
@@ -5817,7 +5925,10 @@ def find_official_contacts(director, record):
     found = {"email": "", "phone": "", "email_from": "", "phone_from": "",
              "source": "", "notes": [], "queries": [],
              # how firmly the chosen number is tied to this school
-             "phone_tie": PHONE_TIE_NONE}
+             "phone_tie": PHONE_TIE_NONE,
+             # True when a search that should have run did not, so the
+             # school is owed another attempt rather than being settled
+             "deferred": False}
     if not OFFICIAL_CONTACT_SEARCH:
         return found
 
@@ -5827,6 +5938,17 @@ def find_official_contacts(director, record):
     if maps_phone_text:
         found["phone_from"] = "maps"
 
+    # IN COOLDOWN: ask Google nothing at all.
+    # Not even the browser is opened. The Maps phone already on the record
+    # stays, Gemini still runs for this school, and the school is marked
+    # deferred so the checkpoint remembers it needs searching later.
+    waiting = google_cooldown_note()
+    if waiting:
+        found["deferred"] = True
+        found["notes"].append(waiting)
+        GOOGLE_SEARCH_STATE["deferred"] += 1
+        LOG.info("      %s", waiting)
+        return found
 
     opener = getattr(director, "search", None)
     if opener is None:
@@ -5858,11 +5980,22 @@ def find_official_contacts(director, record):
         try:
             text, _links, why = run_google_search(browser, query)
         except (PlaywrightError, PlaywrightTimeout) as error:
+            # The browser failed, not Google. No cooldown - but the search
+            # did not happen, so the school is still owed one.
             found["notes"].append("search failed: %s" % str(error)[:90])
+            found["deferred"] = True
+            GOOGLE_SEARCH_STATE["deferred"] += 1
             break
         if why:
+            # run_google_search() returns a reason only when Google refused
+            # to serve the page - a sign-in, consent or bot challenge. The
+            # right answer is to stop asking, not to ask again: the queries
+            # still owed (here, the phone search) are left for the retry.
             found["notes"].append(why)
             LOG.warning("      %s", why)
+            found["deferred"] = True
+            GOOGLE_SEARCH_STATE["deferred"] += 1
+            start_google_cooldown()
             break
         if not text or branch_conflict(record, text):
             continue
@@ -6001,8 +6134,19 @@ def research_and_save(gemini, checkpoint, state, city, record, position,
             LOG.warning("      the contact search failed: %s",
                         str(error)[:120])
             found = {"email": "", "phone": "", "source": "",
-                     "notes": ["the search could not be completed"]}
+                     "notes": ["the search could not be completed"],
+                     "deferred": True}
         written = merge_official_contacts(record, found)
+        # A search that never ran is a search still owed. Remembered here,
+        # after the row itself is safe, so the school can be searched again
+        # once Google is serving requests - rather than being left looking
+        # like a school with no published contact.
+        if found.get("deferred") and checkpoint is not None:
+            if checkpoint.note_contacts_pending(
+                    state, city, record,
+                    reason=(found.get("notes") or [""])[-1]):
+                LOG.info("      kept for a later contact retry (%d owed)",
+                         len(checkpoint.data.get("contacts_pending", [])))
         for note in found.get("notes", [])[:3]:
             LOG.info("      %s", note)
         LOG.info("      official email %s | official phone %s | %d field(s) "
@@ -6852,6 +6996,9 @@ def print_status(args):
     print("  schools saved       : %d" % checkpoint.data["saved"])
     print("  duplicates merged   : %d" % checkpoint.data["duplicates"])
     print("  retry queue         : %d" % len(checkpoint.data["failed"]))
+    print("  contact searches owed: %d (saved schools whose Google email/"
+          "phone search was skipped)"
+          % len(checkpoint.data.get("contacts_pending", []) or []))
     print("  plan fingerprint    : %s" % (dataset_fingerprint()[:16]))
     print("  checkpoint updated  : %s" % (checkpoint.data["updated"] or "never"))
     print("  cycle size          : %d records per file" % CYCLE_SIZE)
