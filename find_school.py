@@ -665,6 +665,89 @@ def resolve_rank(cli_rank=None, cli_num_sys=None):
     return value_rank, value_num, source
 
 
+#: Where the night stop's values came from, for --status to report.
+SCHEDULE_SOURCE = {"night": "the top of this file"}
+
+
+def apply_rank_file_schedule():
+    """Let the per-machine rank.json set the night stop. Returns a note.
+
+    WHY NOT JUST EDIT THE BLOCK AT THE TOP. That block is TRACKED. A later
+    `git pull`, and certainly the `git reset --hard origin/master` that a
+    redeploy uses, would quietly take the night stop away again - and the
+    laptops would go back to collecting at 2am with nothing in the log to
+    explain it. rank.json is in .gitignore, so a value set there survives
+    every source update, which is exactly why `rank` and `num_sys` already
+    live in it.
+
+    Recognised keys, all optional:
+        night_pause_enabled   true / false
+        night_start_hour      0-23
+        night_end_hour        0-23
+        time_zone             e.g. "Asia/Kolkata"
+
+    A missing file, an unreadable one or a bad value leaves the built-in
+    settings alone and says so, rather than failing the run.
+    """
+    global NIGHT_PAUSE_ENABLED, NIGHT_START_HOUR, NIGHT_END_HOUR, TIME_ZONE
+    if not os.path.exists(RANK_FILE):
+        return ""
+    try:
+        with open(RANK_FILE, encoding="utf-8") as handle:
+            data = json.load(handle)
+    except (OSError, ValueError):
+        return "%s could not be read - the built-in night stop is in use" % (
+            os.path.basename(RANK_FILE))
+    if not isinstance(data, dict):
+        return ""
+
+    # VALIDATE EVERYTHING FIRST, THEN APPLY. All of it or none of it.
+    # Applying as we go meant a typo in one hour left the other keys in
+    # force while --status still said the values came from the top of the
+    # file - a half-applied schedule that misreported itself.
+    name = os.path.basename(RANK_FILE)
+    pending = {}
+    changed = []
+
+    if "night_pause_enabled" in data:
+        pending["NIGHT_PAUSE_ENABLED"] = bool(data["night_pause_enabled"])
+        changed.append("enabled=%s" % pending["NIGHT_PAUSE_ENABLED"])
+    for key, const in (("night_start_hour", "NIGHT_START_HOUR"),
+                       ("night_end_hour", "NIGHT_END_HOUR")):
+        if key not in data:
+            continue
+        try:
+            hour = int(data[key])
+        except (TypeError, ValueError):
+            return ("%s in %s is not a whole hour - NOTHING from %s was "
+                    "applied, the built-in night stop is in use"
+                    % (key, name, name))
+        if not 0 <= hour <= 23:
+            return ("%s in %s must be 0-23 - NOTHING from %s was applied, "
+                    "the built-in night stop is in use" % (key, name, name))
+        pending[const] = hour
+        changed.append("%s=%02d" % (key.replace("night_", ""), hour))
+    if "time_zone" in data:
+        zone = str(data["time_zone"]).strip()
+        try:
+            # imported here, as local_now() does: the stdlib module is
+            # only needed when a zone is actually being checked
+            import zoneinfo
+            zoneinfo.ZoneInfo(zone)
+        except Exception:                                   # noqa: BLE001
+            return ("time_zone %r in %s is not a known zone - NOTHING from "
+                    "%s was applied, the built-in night stop is in use"
+                    % (zone, name, name))
+        pending["TIME_ZONE"] = zone
+        changed.append("zone=%s" % zone)
+
+    if not changed:
+        return ""
+    globals().update(pending)
+    SCHEDULE_SOURCE["night"] = name
+    return "night stop from %s: %s" % (name, ", ".join(changed))
+
+
 class RankError(ValueError):
     """A rank that cannot be run, reported rather than silently ignored."""
 
@@ -7482,7 +7565,8 @@ def print_status(args):
           % ("Google Search - an email query and a phone query per school"
              if OFFICIAL_CONTACT_SEARCH else "off (Gemini only)"))
     print("  work / break        : %s" % work_break_status())
-    print("  night stop          : %s" % night_pause_status())
+    print("  night stop          : %s (from %s)"
+          % (night_pause_status(), SCHEDULE_SOURCE["night"]))
     print("  github sync         : %s" % git_status_line())
     saved_git = checkpoint.data.get("git") or {}
     if saved_git.get("last_ok") or saved_git.get("last_error"):
@@ -8150,6 +8234,12 @@ def main(argv=None):
                 else "ERROR" if args.quiet
                 else "INFO" if getattr(args, "show", False)
                 else "WARNING"))
+
+    # Before anything consults the schedule. Applied for EVERY command, so
+    # --status reports the same night stop that a run will actually take.
+    note = apply_rank_file_schedule()
+    if note:
+        LOG.info("%s", note)
 
     problem = shared_lists_problem()
     if problem and not args.self_test:
