@@ -81,6 +81,13 @@ class PacingBase(unittest.TestCase):
             "output": fs.OUTPUT_DIR,
             "temp": fs.TEMP_DIR,
             "excel": fs.EXCEL_DIR,
+            # BACKUP_DIR matters as much as the rest: the retry takes a
+            # pre-update copy of every workbook it touches, and without
+            # this the suite wrote three files into the REAL Backup/ of
+            # whichever install it was run in. It did that on all ten
+            # ranks before this was caught.
+            "backup": fs.BACKUP_DIR,
+            "project": fs.PROJECT_DIR,
         }
         # no test may ever actually wait
         fs.GOOGLE_BETWEEN_QUERIES_DELAY_SECONDS = (0, 0)
@@ -92,6 +99,11 @@ class PacingBase(unittest.TestCase):
         fs.TEMP_DIR = os.path.join(self.folder, "Temp_Data")
         fs.EXCEL_DIR = os.path.join(self.folder, "Excel_Data")
         fs.CHECKPOINT_FILE = os.path.join(self.folder, "checkpoint.json")
+        fs.BACKUP_DIR = os.path.join(self.folder, "Backup")
+        # the cooldown share file lives one level above PROJECT_DIR, so
+        # this keeps the suite out of the real install base too
+        fs.PROJECT_DIR = os.path.join(self.folder, "rank_test")
+        os.makedirs(fs.PROJECT_DIR, exist_ok=True)
 
     def tearDown(self):
         fs.GOOGLE_SEARCH_STATE.update(self._kept["state"])
@@ -104,7 +116,23 @@ class PacingBase(unittest.TestCase):
         fs.OUTPUT_DIR = self._kept["output"]
         fs.TEMP_DIR = self._kept["temp"]
         fs.EXCEL_DIR = self._kept["excel"]
+        fs.BACKUP_DIR = self._kept["backup"]
+        fs.PROJECT_DIR = self._kept["project"]
         shutil.rmtree(self.folder, ignore_errors=True)
+
+    def reset_google_state(self):
+        """Clear BOTH the in-process cooldown and the shared file.
+
+        Setting GOOGLE_SEARCH_STATE alone is not enough: google_cooldown_left()
+        deliberately adopts the longest window any rank on the laptop
+        published, so a leftover share file puts the cooldown straight back.
+        """
+        fs.GOOGLE_SEARCH_STATE.update({"blocked_until": 0.0, "challenges": 0,
+                                       "cooldowns": 0, "deferred": 0,
+                                       "streak": 0})
+        path = fs.cooldown_share_path()
+        if path and os.path.exists(path):
+            os.remove(path)
 
     def answer_with(self, answers):
         """Replace run_google_search with a scripted one; record the queries."""
@@ -244,7 +272,8 @@ class CooldownBehaviour(PacingBase):
     def test_searching_resumes_when_the_cooldown_expires(self):
         fs.start_google_cooldown()
         self.assertGreater(fs.google_cooldown_left(), 0)
-        fs.GOOGLE_SEARCH_STATE["blocked_until"] = time.time() - 1
+        # the window elapses, locally and in the shared file
+        self.reset_google_state()
         self.assertEqual(fs.google_cooldown_left(), 0.0)
         self.answer_with([
             ("Test Public School Udupi Karnataka info@testschool.in", [], ""),
@@ -356,6 +385,44 @@ class PendingContactsAreRemembered(PacingBase):
 # 5. the new key must not disturb a checkpoint written before it existed
 # ---------------------------------------------------------------------------
 
+class TheSuiteStaysInsideItsOwnFolder(PacingBase):
+    """Regression: this suite wrote into ten production Backup/ folders.
+
+    PacingBase isolated OUTPUT_DIR, TEMP_DIR, EXCEL_DIR and CHECKPOINT_FILE
+    but NOT BACKUP_DIR, so the retry's pre-update copies landed in the real
+    install's Backup/ on every rank the suite was run in. Three files per
+    rank, on all ten. Nothing was damaged - they were new files beside no
+    genuine backups - but recovery_paths() globs Backup/*.xlsx, so a sync
+    would have carried test fixtures off as if they were real backups.
+    """
+
+    def test_every_written_path_is_under_the_temporary_folder(self):
+        for name in ("OUTPUT_DIR", "TEMP_DIR", "EXCEL_DIR", "BACKUP_DIR",
+                     "CHECKPOINT_FILE", "PROJECT_DIR"):
+            value = getattr(fs, name)
+            self.assertTrue(os.path.abspath(value).startswith(
+                os.path.abspath(self.folder)),
+                "%s points outside the test folder: %s" % (name, value))
+
+    def test_a_retry_backup_lands_in_the_test_folder(self):
+        os.makedirs(fs.EXCEL_DIR, exist_ok=True)
+        rec = school(name="Backup Path School", phone="")
+        rec["City"] = "Udupi"
+        fs.write_records(fs.master_path(), [rec])
+        kept = fs.backup_before_contact_update(fs.master_path())
+        self.assertTrue(kept)
+        self.assertTrue(os.path.abspath(kept).startswith(
+            os.path.abspath(self.folder)),
+            "the pre-update backup escaped the test folder: %s" % kept)
+
+    def test_the_cooldown_share_file_lands_in_the_test_folder(self):
+        fs.write_shared_cooldown(time.time() + 60, 1)
+        path = fs.cooldown_share_path()
+        self.assertTrue(os.path.abspath(path).startswith(
+            os.path.abspath(self.folder)),
+            "the shared cooldown file escaped the test folder: %s" % path)
+
+
 class OlderCheckpointsStillLoad(PacingBase):
     """The eight running ranks have checkpoints with no contacts_pending."""
 
@@ -421,7 +488,12 @@ class BoundedBackoff(PacingBase):
     def test_the_streak_climbs_with_each_challenge(self):
         self.answer_with([("", [], "challenge")] * 3)
         for expected in (1, 2, 3):
+            # clear the window but KEEP the streak - that is what a
+            # cooldown expiring looks like
             fs.GOOGLE_SEARCH_STATE["blocked_until"] = 0.0
+            path = fs.cooldown_share_path()
+            if path and os.path.exists(path):
+                os.remove(path)
             fs.find_official_contacts(FakeDirector(FakeBrowser([])), school())
             self.assertEqual(fs.GOOGLE_SEARCH_STATE["streak"], expected)
 
@@ -443,14 +515,11 @@ class BoundedBackoff(PacingBase):
     def test_the_cooldown_is_published_for_the_other_ranks(self):
         fs.PROJECT_DIR = os.path.join(self.folder, "rank_3")
         os.makedirs(fs.PROJECT_DIR, exist_ok=True)
-        try:
-            fs.start_google_cooldown()
-            until, streak = fs.read_shared_cooldown()
-            self.assertGreater(until, time.time() + 59 * 60)
-            self.assertEqual(streak, 1)
-            self.assertTrue(os.path.exists(fs.cooldown_share_path()))
-        finally:
-            fs.PROJECT_DIR = fs.PROJECT_DIR
+        fs.start_google_cooldown()
+        until, streak = fs.read_shared_cooldown()
+        self.assertGreater(until, time.time() + 59 * 60)
+        self.assertEqual(streak, 1)
+        self.assertTrue(os.path.exists(fs.cooldown_share_path()))
 
     def test_a_rank_honours_another_rank_s_longer_cooldown(self):
         fs.PROJECT_DIR = os.path.join(self.folder, "rank_4")
