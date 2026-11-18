@@ -135,8 +135,11 @@ class PacingSettings(unittest.TestCase):
     def test_google_to_gemini_is_5_to_12(self):
         self.assertEqual(fs.GOOGLE_TO_GEMINI_DELAY_SECONDS, (5, 12))
 
-    def test_cooldown_is_15_to_30_minutes(self):
-        self.assertEqual(fs.GOOGLE_CHALLENGE_COOLDOWN_MINUTES, (15, 30))
+    def test_cooldown_is_60_to_120_minutes(self):
+        self.assertEqual(fs.GOOGLE_CHALLENGE_COOLDOWN_MINUTES, (60, 120))
+
+    def test_cooldown_ceiling_is_four_hours(self):
+        self.assertEqual(fs.GOOGLE_CHALLENGE_COOLDOWN_MAX_MINUTES, 240)
 
     def test_every_pacing_setting_is_a_range_not_a_fixed_number(self):
         for name in ("GOOGLE_BETWEEN_SCHOOLS_DELAY_SECONDS",
@@ -171,16 +174,16 @@ class RandomnessWithinTheRange(unittest.TestCase):
         finally:
             fs.RUNTIME["stop"] = False
 
-    def test_cooldown_minutes_vary_and_stay_inside_the_range(self):
+    def test_cooldown_minutes_vary_and_stay_inside_the_first_band(self):
         starts = []
         for _ in range(60):
             fs.GOOGLE_SEARCH_STATE["blocked_until"] = 0.0
-            before = time.time()
-            minutes = fs.start_google_cooldown()
+            fs.GOOGLE_SEARCH_STATE["streak"] = 0
+            minutes, low, high = fs.cooldown_window_minutes(1)
             starts.append(minutes)
-            left = fs.GOOGLE_SEARCH_STATE["blocked_until"] - before
-            self.assertGreaterEqual(left, 15 * 60 - 1)
-            self.assertLessEqual(left, 30 * 60 + 1)
+            self.assertGreaterEqual(minutes, 60)
+            self.assertLessEqual(minutes, 120)
+            self.assertEqual((low, high), (60.0, 120.0))
         self.assertGreater(len(set(round(m, 3) for m in starts)), 40,
                            "each cooldown must be a fresh random draw so ten "
                            "ranks do not resume together")
@@ -396,6 +399,295 @@ class OlderCheckpointsStillLoad(PacingBase):
     def test_the_version_was_not_bumped(self):
         """Bumping it would set aside every live rank's progress."""
         self.assertEqual(fs.CHECKPOINT_VERSION, 3)
+
+
+# ---------------------------------------------------------------------------
+# 6. bounded exponential backoff, and sharing it between ranks
+# ---------------------------------------------------------------------------
+
+class BoundedBackoff(PacingBase):
+
+    def test_each_consecutive_challenge_doubles_the_band(self):
+        self.assertEqual(fs.cooldown_window_minutes(1)[1:], (60.0, 120.0))
+        self.assertEqual(fs.cooldown_window_minutes(2)[1:], (120.0, 240.0))
+
+    def test_the_band_is_capped_at_four_hours(self):
+        for streak in (3, 4, 8, 50):
+            minutes, low, high = fs.cooldown_window_minutes(streak)
+            self.assertEqual((low, high), (240.0, 240.0),
+                             "streak %d must be capped" % streak)
+            self.assertLessEqual(minutes, 240.0)
+
+    def test_the_streak_climbs_with_each_challenge(self):
+        self.answer_with([("", [], "challenge")] * 3)
+        for expected in (1, 2, 3):
+            fs.GOOGLE_SEARCH_STATE["blocked_until"] = 0.0
+            fs.find_official_contacts(FakeDirector(FakeBrowser([])), school())
+            self.assertEqual(fs.GOOGLE_SEARCH_STATE["streak"], expected)
+
+    def test_a_served_search_resets_the_streak(self):
+        fs.GOOGLE_SEARCH_STATE["streak"] = 3
+        fs.note_google_search_served()
+        self.assertEqual(fs.GOOGLE_SEARCH_STATE["streak"], 0)
+
+    def test_a_normal_search_run_resets_the_streak(self):
+        fs.GOOGLE_SEARCH_STATE["streak"] = 2
+        self.answer_with([
+            ("Test Public School Udupi Karnataka info@testschool.in", [], ""),
+            ("Test Public School Udupi Karnataka 011 2345 6789", [], ""),
+        ])
+        fs.find_official_contacts(FakeDirector(FakeBrowser([])),
+                                  school(phone=""))
+        self.assertEqual(fs.GOOGLE_SEARCH_STATE["streak"], 0)
+
+    def test_the_cooldown_is_published_for_the_other_ranks(self):
+        fs.PROJECT_DIR = os.path.join(self.folder, "rank_3")
+        os.makedirs(fs.PROJECT_DIR, exist_ok=True)
+        try:
+            fs.start_google_cooldown()
+            until, streak = fs.read_shared_cooldown()
+            self.assertGreater(until, time.time() + 59 * 60)
+            self.assertEqual(streak, 1)
+            self.assertTrue(os.path.exists(fs.cooldown_share_path()))
+        finally:
+            fs.PROJECT_DIR = fs.PROJECT_DIR
+
+    def test_a_rank_honours_another_rank_s_longer_cooldown(self):
+        fs.PROJECT_DIR = os.path.join(self.folder, "rank_4")
+        os.makedirs(fs.PROJECT_DIR, exist_ok=True)
+        far = time.time() + 3 * 3600
+        fs.write_shared_cooldown(far, 3)
+        fs.GOOGLE_SEARCH_STATE["blocked_until"] = 0.0
+        fs.GOOGLE_SEARCH_STATE["streak"] = 0
+        left = fs.google_cooldown_left()
+        self.assertGreater(left, 2.9 * 3600,
+                           "a rank must adopt the longer shared window")
+        self.assertEqual(fs.GOOGLE_SEARCH_STATE["streak"], 3,
+                         "and the shared streak, so its own backoff starts "
+                         "from the right place")
+
+    def test_a_shorter_shared_cooldown_never_shortens_our_own(self):
+        fs.PROJECT_DIR = os.path.join(self.folder, "rank_5")
+        os.makedirs(fs.PROJECT_DIR, exist_ok=True)
+        mine = time.time() + 2 * 3600
+        fs.GOOGLE_SEARCH_STATE["blocked_until"] = mine
+        fs.write_shared_cooldown(time.time() + 60, 1)
+        self.assertGreater(fs.google_cooldown_left(), 1.9 * 3600)
+
+    def test_an_unusable_shared_file_is_survivable(self):
+        fs.PROJECT_DIR = os.path.join(self.folder, "rank_6")
+        os.makedirs(fs.PROJECT_DIR, exist_ok=True)
+        with open(fs.cooldown_share_path(), "w", encoding="utf-8") as handle:
+            handle.write("{not json at all")
+        self.assertEqual(fs.read_shared_cooldown(), (0.0, 0))
+        self.assertEqual(fs.google_cooldown_left(), 0.0)
+
+
+# ---------------------------------------------------------------------------
+# 7. the contact retry: filling blanks in real workbooks
+# ---------------------------------------------------------------------------
+
+class ContactRetryWorkbooks(PacingBase):
+
+    def setUp(self):
+        super().setUp()
+        os.makedirs(fs.EXCEL_DIR, exist_ok=True)
+        self.a = school(name="Blank Contacts School", phone="")
+        self.a["City"] = "Udupi"
+        self.b = school(name="Full Contacts School", phone="011 1111 2222")
+        self.b["City"] = "Udupi"
+        self.b[fs.OFFICIAL_EMAIL_COLUMN] = "already@there.in"
+        fs.write_records(fs.master_path(), [self.a, self.b])
+        fs.write_records(fs.cycle_path(0), [self.a, self.b])
+        fs.write_records(fs.cycle_path(1), [self.a])
+
+    def _master(self):
+        return {fs.stable_identity(r): r
+                for r in fs.read_records(fs.master_path())}
+
+    def test_a_blank_column_is_filled_in_every_workbook(self):
+        update = {"identity": fs.stable_identity(self.a),
+                  "school": "Blank Contacts School",
+                  "email": "found@school.in", "phone": "011 3333 4444"}
+        files, fields = fs.apply_contact_update(update, backups=set())
+        self.assertEqual(files, 3, "master, current and cycle1 all hold it")
+        self.assertEqual(fields, 6, "two blank columns in each of three files")
+        got = self._master()[fs.stable_identity(self.a)]
+        self.assertEqual(got[fs.OFFICIAL_EMAIL_COLUMN], "found@school.in")
+        self.assertIn("3333", got[fs.OFFICIAL_PHONE_COLUMN])
+
+    def test_an_existing_value_is_never_overwritten(self):
+        update = {"identity": fs.stable_identity(self.b),
+                  "school": "Full Contacts School",
+                  "email": "intruder@elsewhere.in", "phone": "099 9999 9999"}
+        fs.apply_contact_update(update, backups=set())
+        got = self._master()[fs.stable_identity(self.b)]
+        self.assertEqual(got[fs.OFFICIAL_EMAIL_COLUMN], "already@there.in")
+        self.assertIn("1111", got[fs.OFFICIAL_PHONE_COLUMN])
+
+    def test_all_57_columns_survive_the_update(self):
+        update = {"identity": fs.stable_identity(self.a),
+                  "school": "Blank Contacts School",
+                  "email": "found@school.in", "phone": ""}
+        fs.apply_contact_update(update, backups=set())
+        import openpyxl
+        for path in (fs.master_path(), fs.cycle_path(0), fs.cycle_path(1)):
+            book = openpyxl.load_workbook(path, read_only=True)
+            self.assertEqual(book.active.max_column, 57, path)
+            book.close()
+
+    def test_no_row_is_added_or_removed(self):
+        before = [len(fs.read_records(p)) for p in
+                  (fs.master_path(), fs.cycle_path(0), fs.cycle_path(1))]
+        fs.apply_contact_update({"identity": fs.stable_identity(self.a),
+                                 "school": "Blank Contacts School",
+                                 "email": "found@school.in", "phone": ""},
+                                backups=set())
+        after = [len(fs.read_records(p)) for p in
+                 (fs.master_path(), fs.cycle_path(0), fs.cycle_path(1))]
+        self.assertEqual(before, after, "a retry must never add a duplicate")
+
+    def test_applying_twice_changes_nothing_the_second_time(self):
+        update = {"identity": fs.stable_identity(self.a),
+                  "school": "Blank Contacts School",
+                  "email": "found@school.in", "phone": "011 3333 4444"}
+        first = fs.apply_contact_update(update, backups=set())
+        second = fs.apply_contact_update(update, backups=set())
+        self.assertGreater(first[1], 0)
+        self.assertEqual(second, (0, 0),
+                         "the update must be idempotent so the journal can "
+                         "be replayed safely")
+
+    def test_an_unknown_school_changes_nothing(self):
+        files, fields = fs.apply_contact_update(
+            {"identity": "no-such-school|nowhere", "school": "Ghost",
+             "email": "x@y.z", "phone": "1"}, backups=set())
+        self.assertEqual((files, fields), (0, 0))
+
+    def test_the_journal_is_replayed_after_a_crash(self):
+        update = {"identity": fs.stable_identity(self.a),
+                  "school": "Blank Contacts School",
+                  "email": "recovered@school.in", "phone": ""}
+        fs.write_contact_journal(update)          # crash happened here
+        self.assertTrue(os.path.exists(fs.contact_journal_path()))
+        fs.replay_contact_journal()
+        got = self._master()[fs.stable_identity(self.a)]
+        self.assertEqual(got[fs.OFFICIAL_EMAIL_COLUMN], "recovered@school.in")
+        self.assertFalse(os.path.exists(fs.contact_journal_path()))
+
+    def test_an_unreadable_journal_is_removed_not_fatal(self):
+        os.makedirs(fs.EXCEL_DIR, exist_ok=True)
+        with open(fs.contact_journal_path(), "w", encoding="utf-8") as handle:
+            handle.write("{broken")
+        self.assertFalse(fs.replay_contact_journal())
+        self.assertFalse(os.path.exists(fs.contact_journal_path()))
+
+
+class ContactRetryPass(PacingBase):
+
+    def setUp(self):
+        super().setUp()
+        os.makedirs(fs.EXCEL_DIR, exist_ok=True)
+        self.rec = school(name="Owed Search School", phone="")
+        self.rec["City"] = "Udupi"
+        fs.write_records(fs.master_path(), [self.rec])
+        self.checkpoint = fs.Checkpoint()
+        self.checkpoint.note_contacts_pending("Karnataka", "Udupi", self.rec,
+                                              reason="cooldown")
+
+    def test_a_verified_contact_is_persisted_and_the_entry_dropped(self):
+        self.answer_with([
+            ("Owed Search School Udupi Karnataka info@owed.in", [], ""),
+            ("Owed Search School Udupi Karnataka 011 5555 6666", [], ""),
+        ])
+        report = fs.retry_contacts_pass(FakeDirector(FakeBrowser([])),
+                                        self.checkpoint)
+        self.assertEqual(report["searched"], 1)
+        self.assertEqual(report["remaining"], 0,
+                         "the entry goes only once the result is on disk")
+        saved = fs.read_records(fs.master_path())[0]
+        self.assertEqual(saved[fs.OFFICIAL_EMAIL_COLUMN], "info@owed.in")
+
+    def test_a_captcha_leaves_the_entry_pending_and_stops_the_pass(self):
+        self.answer_with([("", [], "Google served a challenge")])
+        report = fs.retry_contacts_pass(FakeDirector(FakeBrowser([])),
+                                        self.checkpoint)
+        self.assertTrue(report["blocked"])
+        self.assertEqual(report["remaining"], 1,
+                         "a CAPTCHA is not a result - the entry must stay")
+        self.assertGreater(fs.google_cooldown_left(), 0)
+
+    def test_nothing_is_asked_while_a_cooldown_runs(self):
+        self.answer_with([("text", [], "")])
+        fs.start_google_cooldown()
+        report = fs.retry_contacts_pass(FakeDirector(FakeBrowser([])),
+                                        self.checkpoint)
+        self.assertTrue(report["blocked"])
+        self.assertEqual(report["searched"], 0)
+        self.assertEqual(self.queries, [])
+        self.assertEqual(report["remaining"], 1)
+
+    def test_a_school_no_longer_in_the_master_is_dropped(self):
+        fs.write_records(fs.master_path(), [])
+        self.answer_with([("text", [], "")])
+        report = fs.retry_contacts_pass(FakeDirector(FakeBrowser([])),
+                                        self.checkpoint)
+        self.assertEqual(report["missing"], 1)
+        self.assertEqual(report["remaining"], 0)
+        self.assertEqual(self.queries, [], "no point searching for it")
+
+    def test_a_school_with_both_contacts_already_is_dropped_unsearched(self):
+        full = dict(self.rec)
+        full[fs.OFFICIAL_EMAIL_COLUMN] = "a@b.c"
+        full[fs.OFFICIAL_PHONE_COLUMN] = "011 2222 3333"
+        fs.write_records(fs.master_path(), [full])
+        self.answer_with([("text", [], "")])
+        report = fs.retry_contacts_pass(FakeDirector(FakeBrowser([])),
+                                        self.checkpoint)
+        self.assertEqual(report["already"], 1)
+        self.assertEqual(report["remaining"], 0)
+        self.assertEqual(self.queries, [])
+
+    def test_a_genuine_blank_is_a_definitive_outcome(self):
+        self.answer_with([("nothing relevant here", [], ""),
+                          ("nothing relevant here either", [], "")])
+        report = fs.retry_contacts_pass(FakeDirector(FakeBrowser([])),
+                                        self.checkpoint)
+        self.assertEqual(report["no_contact"], 1)
+        self.assertEqual(report["remaining"], 0,
+                         "Google answered and published nothing - that is an "
+                         "answer, so the entry is finished")
+
+    def test_the_batch_limit_is_respected(self):
+        """A bounded pass must leave the rest of the backlog alone.
+
+        Every school is in the master, so each one genuinely costs a search
+        from the budget - a school that is NOT in the master is dropped
+        without searching and deliberately costs nothing (covered by
+        test_a_school_no_longer_in_the_master_is_dropped).
+        """
+        everyone = [self.rec]
+        for n in range(5):
+            extra = school(name="Extra School %d" % n, phone="")
+            extra["City"] = "Udupi"
+            everyone.append(extra)
+            self.checkpoint.note_contacts_pending("Karnataka", "Udupi", extra)
+        fs.write_records(fs.master_path(), everyone)
+        self.answer_with([("nothing relevant", [], "")] * 40)
+        report = fs.retry_contacts_pass(FakeDirector(FakeBrowser([])),
+                                        self.checkpoint, limit=2)
+        self.assertEqual(report["searched"], 2,
+                         "exactly the budget, no more")
+        self.assertEqual(report["remaining"], 4,
+                         "the other four stay owed for the next pass")
+
+    def test_an_empty_backlog_is_not_an_error(self):
+        self.checkpoint.data["contacts_pending"] = []
+        self.checkpoint.save()
+        report = fs.retry_contacts_pass(FakeDirector(FakeBrowser([])),
+                                        self.checkpoint)
+        self.assertEqual(report["searched"], 0)
+        self.assertEqual(report["remaining"], 0)
 
 
 if __name__ == "__main__":

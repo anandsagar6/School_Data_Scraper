@@ -100,12 +100,12 @@ TIME_ZONE = "Asia/Kolkata"          # the clock the night stop is read on
 GOOGLE_BETWEEN_SCHOOLS_DELAY_SECONDS = (45, 90)  # between two schools
 GOOGLE_BETWEEN_QUERIES_DELAY_SECONDS = (15, 25)  # email search -> phone search
 GOOGLE_TO_GEMINI_DELAY_SECONDS = (5, 12)         # searches -> Gemini
-#: After Google serves a CAPTCHA, stop ASKING GOOGLE for this long. The run
-#: carries on - Maps discovery and Gemini enrichment are untouched, and the
-#: schools whose searches were skipped are remembered in the checkpoint so
-#: they can be searched again later. Asking again immediately is what earns
-#: a longer block, so the only sane answer to a challenge is to stop asking.
-GOOGLE_CHALLENGE_COOLDOWN_MINUTES = (15, 30)
+#: After a CAPTCHA, stop asking Google for this long; each further
+#: challenge doubles it to the ceiling. See start_google_cooldown().
+GOOGLE_CHALLENGE_COOLDOWN_MINUTES = (60, 120)
+GOOGLE_CHALLENGE_COOLDOWN_MAX_MINUTES = 240
+#: Where the ranks on ONE laptop publish a cooldown to each other.
+GOOGLE_COOLDOWN_SHARE_NAME = "google_cooldown.json"
 PAUSE_CLOSES_BROWSER_SECONDS = 600  # a break this long closes the browser
 
 # --- Google Maps scrolling -------------------------------------------------
@@ -5779,13 +5779,113 @@ GOOGLE_SEARCH_STATE = {
     "challenges": 0,            # challenges seen this run
     "cooldowns": 0,             # cooldowns started this run
     "deferred": 0,              # schools whose searches were skipped
+    "streak": 0,                # consecutive challenges, for the backoff
 }
 
 
+def cooldown_share_path():
+    """The file every rank on THIS laptop uses to agree on a cooldown.
+
+    WHY IT EXISTS. All ten ranks leave through one external address, so a
+    challenge served to one of them is a challenge waiting for the rest.
+    Each rank publishes its cooldown here and honours the longest window it
+    can see, which stops two ranks on a laptop taking turns to re-earn the
+    same block.
+
+    One directory above the rank folder, which is the install base - so
+    rank_3 and rank_4 on the same laptop see the same file, and a rank on
+    another laptop sees nothing. Cross-LAPTOP coordination would need
+    storage all five can reach; there is none today, and this is the
+    "where practical" part.
+
+    Returns "" if the base is not usable, and every caller then simply
+    works on its own.
+    """
+    base = os.path.dirname(os.path.abspath(PROJECT_DIR))
+    if not base or not os.path.isdir(base):
+        return ""
+    return os.path.join(base, GOOGLE_COOLDOWN_SHARE_NAME)
+
+
+def read_shared_cooldown():
+    """``(blocked_until, streak)`` from the shared file; zeros if unusable.
+
+    Never raises: a missing, half-written or hand-edited file simply means
+    this rank falls back to what it knows itself.
+    """
+    path = cooldown_share_path()
+    if not path or not os.path.exists(path):
+        return 0.0, 0
+    try:
+        with open(path, encoding="utf-8") as handle:
+            data = json.load(handle)
+        return float(data.get("blocked_until") or 0.0), int(data.get("streak") or 0)
+    except (OSError, ValueError, TypeError):
+        return 0.0, 0
+
+
+def write_shared_cooldown(blocked_until, streak):
+    """Publish this cooldown to the other ranks on this laptop. Atomic."""
+    path = cooldown_share_path()
+    if not path:
+        return False
+    payload = {
+        "blocked_until": float(blocked_until),
+        "streak": int(streak),
+        "written_by": "rank %s" % (RUNTIME.get("rank") or rank),
+        "written_at": datetime.datetime.now().isoformat(timespec="seconds"),
+    }
+    temporary = "%s.%d.tmp" % (path, os.getpid())
+    try:
+        with open(temporary, "w", encoding="utf-8") as handle:
+            json.dump(payload, handle)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary, path)
+        return True
+    except OSError:
+        try:
+            os.remove(temporary)
+        except OSError:
+            pass
+        return False
+
+
 def google_cooldown_left():
-    """Seconds of CAPTCHA cooldown still to run; 0.0 when searching is free."""
+    """Seconds of CAPTCHA cooldown still to run; 0.0 when searching is free.
+
+    Takes the LONGER of this rank's own window and the one any other rank
+    on this laptop published, because they share one external address: a
+    challenge served to one of them is a challenge waiting for the rest.
+    """
+    shared_until, shared_streak = read_shared_cooldown()
+    if shared_until > GOOGLE_SEARCH_STATE["blocked_until"]:
+        GOOGLE_SEARCH_STATE["blocked_until"] = shared_until
+    if shared_streak > GOOGLE_SEARCH_STATE["streak"]:
+        GOOGLE_SEARCH_STATE["streak"] = shared_streak
     left = GOOGLE_SEARCH_STATE["blocked_until"] - time.time()
     return left if left > 0 else 0.0
+
+
+def cooldown_window_minutes(streak):
+    """The window for the Nth consecutive challenge: doubling, then capped.
+
+    streak 1 -> 60-120, 2 -> 120-240, 3 and beyond -> 240 (the ceiling).
+    A fresh random draw inside the band, so ranks that were blocked together
+    do not all come back at the same instant and earn the next block
+    together.
+    """
+    low, high = (float(GOOGLE_CHALLENGE_COOLDOWN_MINUTES[0]),
+                 float(GOOGLE_CHALLENGE_COOLDOWN_MINUTES[1]))
+    if high < low:
+        low, high = high, low
+    ceiling = float(GOOGLE_CHALLENGE_COOLDOWN_MAX_MINUTES)
+    factor = 2 ** max(0, int(streak) - 1)
+    low = min(low * factor, ceiling)
+    high = min(high * factor, ceiling)
+    if high < low:
+        high = low
+    return random.uniform(low, high), low, high
 
 
 def start_google_cooldown():
@@ -5796,22 +5896,45 @@ def start_google_cooldown():
     searches are skipped are recorded for a later retry rather than being
     marked as having no contact.
 
-    The window is a fresh random draw so ten ranks sharing one address do
-    not come back at the same instant and earn a second block together.
+    Each consecutive challenge doubles the window to a four-hour ceiling,
+    and the window is published to the other ranks on this laptop.
+
+    The doubling exists because a block that survives a two-hour silence
+    will not clear in another twenty minutes, and every refused attempt
+    makes the next one likelier to be refused. The streak resets the moment
+    a search is served normally, so the backoff climbs only while Google is
+    actually saying no.
     """
-    low, high = (float(GOOGLE_CHALLENGE_COOLDOWN_MINUTES[0]),
-                 float(GOOGLE_CHALLENGE_COOLDOWN_MINUTES[1]))
-    if high < low:
-        low, high = high, low
-    minutes = random.uniform(low, high)
+    GOOGLE_SEARCH_STATE["streak"] += 1
+    streak = GOOGLE_SEARCH_STATE["streak"]
+    minutes, low, high = cooldown_window_minutes(streak)
     GOOGLE_SEARCH_STATE["blocked_until"] = time.time() + minutes * 60.0
     GOOGLE_SEARCH_STATE["challenges"] += 1
     GOOGLE_SEARCH_STATE["cooldowns"] += 1
-    LOG.warning("      Google served a challenge - no more Google searches "
-                "for %.0f minute(s) (%.0f-%.0f). Collection carries on; the "
-                "schools skipped meanwhile are kept for a later retry.",
-                minutes, low, high)
+    shared = write_shared_cooldown(GOOGLE_SEARCH_STATE["blocked_until"], streak)
+    LOG.warning("      Google served a challenge (%d in a row) - no more "
+                "Google searches for %.0f minute(s) (band %.0f-%.0f, ceiling "
+                "%d). Collection carries on; the schools skipped meanwhile "
+                "are kept for a later retry.%s",
+                streak, minutes, low, high,
+                GOOGLE_CHALLENGE_COOLDOWN_MAX_MINUTES,
+                " Shared with the other ranks on this laptop."
+                if shared else "")
     return minutes
+
+
+def note_google_search_served():
+    """A search came back normally: the challenge streak is over.
+
+    Called only when Google actually served a results page, so the backoff
+    climbs while it is refusing and resets the moment it stops.
+    """
+    if GOOGLE_SEARCH_STATE["streak"]:
+        LOG.info("      Google served a search normally - the challenge "
+                 "streak (%d) is reset", GOOGLE_SEARCH_STATE["streak"])
+    GOOGLE_SEARCH_STATE["streak"] = 0
+    if read_shared_cooldown()[1]:
+        write_shared_cooldown(0.0, 0)
 
 
 def google_cooldown_note():
@@ -5997,6 +6120,9 @@ def find_official_contacts(director, record):
             GOOGLE_SEARCH_STATE["deferred"] += 1
             start_google_cooldown()
             break
+        # Served normally. Whatever the page turned out to contain, Google
+        # is answering again, so the backoff streak starts over.
+        note_google_search_served()
         if not text or branch_conflict(record, text):
             continue
 
@@ -6098,6 +6224,284 @@ def merge_official_contacts(record, found):
         record["School Data Source URL"] = source
         written += 1
     return written
+
+
+# ===========================================================================
+#  GOING BACK FOR THE CONTACTS A CAPTCHA COST US
+# ===========================================================================
+#  A school whose Google searches never ran is already SAVED - its row is in
+#  the master and in a cycle file, built from Google Maps and Gemini. Only
+#  the two Google-verified official columns are outstanding, and they are
+#  BLANK rather than wrong, which is what makes coming back for them safe:
+#  there is nothing to correct, only a gap to fill.
+#
+#  THE RULES THIS OBEYS
+#    * only a blank official column is ever written; a value already there
+#      is never touched, whatever the new search says
+#    * every workbook holding that school is updated, so the master and the
+#      cycle files cannot disagree
+#    * each workbook write is atomic, and a journal makes the multi-file
+#      update replayable after a crash - the update is idempotent, so
+#      replaying it is always safe
+#    * a pending entry is dropped only once its outcome is on disk
+#    * a CAPTCHA is never a result: the entry stays pending and the pass
+#      stops rather than asking again
+# ---------------------------------------------------------------------------
+
+#: Written before the workbooks are touched, removed after. Its presence on
+#: start-up means a pass died part way through a multi-file update.
+CONTACT_UPDATE_JOURNAL = "pending_contact_update.json"
+
+#: Retry at most this many schools in one automatic pass, so a long backlog
+#: never stalls collection. --retry-contacts with no limit does all of them.
+CONTACT_RETRY_BATCH = 10
+
+#: Whether a normal run also works through the backlog between cities.
+CONTACT_RETRY_AUTOMATIC = True
+
+
+def contact_journal_path():
+    return os.path.join(EXCEL_DIR, CONTACT_UPDATE_JOURNAL)
+
+
+def write_contact_journal(update):
+    os.makedirs(EXCEL_DIR, exist_ok=True)
+    temporary = contact_journal_path() + ".tmp"
+    with open(temporary, "w", encoding="utf-8") as handle:
+        json.dump(update, handle, ensure_ascii=False)
+        handle.flush()
+        os.fsync(handle.fileno())
+    os.replace(temporary, contact_journal_path())
+
+
+def clear_contact_journal():
+    try:
+        os.remove(contact_journal_path())
+    except OSError:
+        pass
+
+
+def backup_before_contact_update(path):
+    """One copy of a workbook before this pass first changes it.
+
+    Separate from the completed-cycle backups, and taken once per file per
+    pass: the point is a way back if an update goes wrong, not a history.
+    """
+    if not BACKUP_COMPLETED_CYCLES or not os.path.exists(path):
+        return ""
+    os.makedirs(BACKUP_DIR, exist_ok=True)
+    stamp = datetime.datetime.now().strftime("%Y%m%d")
+    target = os.path.join(BACKUP_DIR, "pre_contact_retry_%s_%s" % (
+        stamp, os.path.basename(path)))
+    if os.path.exists(target):
+        return target                   # already taken in this pass
+    try:
+        shutil.copy2(path, target)
+        return target
+    except OSError as error:
+        LOG.warning("   the pre-retry backup of %s failed (%s) - the update "
+                    "was NOT applied", os.path.basename(path), str(error)[:80])
+        return ""
+
+
+def apply_contact_update(update, backups=None):
+    """Fill the blank official columns of one school in every workbook.
+
+    ``update`` is ``{"identity", "school", "email", "phone"}``. Returns
+    ``(files_changed, fields_written)``. Writing nothing is a normal
+    outcome - it means every column it could have filled was already full.
+
+    Idempotent on purpose: replaying the journal after a crash reaches the
+    same state, because a column that now holds the value is simply left
+    alone the second time.
+    """
+    identity = update.get("identity", "")
+    email = tidy_email(update.get("email", "") or "")
+    phone = tidy_phone(update.get("phone", "") or "")
+    if not identity or (not email and not phone):
+        return 0, 0
+    files_changed = 0
+    fields_written = 0
+    for path in [master_path()] + all_cycle_paths():
+        if not os.path.exists(path):
+            continue
+        records = read_records(path)
+        touched = 0
+        for record in records:
+            if stable_identity(record) != identity:
+                continue
+            for column, value in ((OFFICIAL_EMAIL_COLUMN, email),
+                                  (OFFICIAL_PHONE_COLUMN, phone)):
+                if not value or column not in record:
+                    continue
+                # ONLY A BLANK COLUMN. Never a correction.
+                if clean(record.get(column, "")):
+                    continue
+                record[column] = value
+                touched += 1
+        if not touched:
+            continue
+        if backups is not None and path not in backups:
+            kept = backup_before_contact_update(path)
+            if not kept:
+                continue            # no backup, no write
+            backups.add(path)
+        write_records(path, records)
+        files_changed += 1
+        fields_written += touched
+    return files_changed, fields_written
+
+
+def replay_contact_journal():
+    """Finish a multi-file contact update that a crash interrupted."""
+    path = contact_journal_path()
+    if not os.path.exists(path):
+        return False
+    try:
+        with open(path, encoding="utf-8") as handle:
+            update = json.load(handle)
+    except (OSError, ValueError):
+        LOG.warning("   a contact-update journal was unreadable and has been "
+                    "removed; nothing already saved is affected")
+        clear_contact_journal()
+        return False
+    LOG.info("   finishing an interrupted contact update for %r",
+             str(update.get("school", ""))[:48])
+    files, fields = apply_contact_update(update, backups=set())
+    clear_contact_journal()
+    LOG.info("   replayed: %d file(s), %d field(s)", files, fields)
+    return True
+
+
+def pending_record_lookup():
+    """``{stable identity: record}`` for every school in the master."""
+    return {stable_identity(record): record
+            for record in read_records(master_path())}
+
+
+def retry_contacts_pass(director, checkpoint, limit=None):
+    """Search again for the official contacts a CAPTCHA cost us.
+
+    Returns a report dict. Stops early - WITHOUT dropping anything - the
+    moment Google refuses a search, because the entries it has not reached
+    are still owed their searches.
+    """
+    report = {"considered": 0, "searched": 0, "updated": 0, "fields": 0,
+              "no_contact": 0, "missing": 0, "already": 0, "blocked": False,
+              "remaining": 0}
+    pending = list(checkpoint.data.get("contacts_pending") or [])
+    report["remaining"] = len(pending)
+    if not pending:
+        return report
+
+    replay_contact_journal()
+
+    left = google_cooldown_left()
+    if left > 0:
+        LOG.info("   contact retries wait for the cooldown: %d minute(s) left",
+                 int(left // 60 + 1))
+        report["blocked"] = True
+        return report
+
+    known = pending_record_lookup()
+    backups = set()
+    done_keys = []
+    budget = len(pending) if limit is None else max(0, int(limit))
+
+    for entry in pending:
+        if budget <= 0 or RUNTIME["stop"]:
+            break
+        if google_cooldown_left() > 0:
+            report["blocked"] = True
+            break
+        name = clean(entry.get("school", ""))
+        city = clean(entry.get("city", ""))
+        state = clean(entry.get("state", ""))
+        if not name:
+            done_keys.append(id(entry))
+            continue
+        report["considered"] += 1
+        identity = stable_identity({"School Name": name, "City": city})
+        record = known.get(identity)
+        if record is None:
+            # Not in the master any more - nothing to fill. A definitive
+            # outcome, so the entry goes.
+            LOG.info("   %s (%s) is not in the master - dropping the pending "
+                     "search", name[:40], city)
+            report["missing"] += 1
+            done_keys.append(id(entry))
+            continue
+        have_email = clean(record.get(OFFICIAL_EMAIL_COLUMN, ""))
+        have_phone = clean(record.get(OFFICIAL_PHONE_COLUMN, ""))
+        if have_email and have_phone:
+            report["already"] += 1
+            done_keys.append(id(entry))
+            continue
+
+        budget -= 1
+        LOG.info("")
+        LOG.info("   [CONTACT RETRY] %s - %s, %s", name[:44], city, state)
+        # A copy, so a failed pass cannot leave a half-filled record behind.
+        attempt = dict(record)
+        found = find_official_contacts(director, attempt)
+        report["searched"] += 1
+
+        if found.get("deferred"):
+            # A CAPTCHA is not a result. The entry stays exactly where it is.
+            LOG.info("   Google would not serve it - %s stays pending",
+                     name[:40])
+            report["blocked"] = True
+            break
+
+        email = "" if have_email else tidy_email(found.get("email", "") or "")
+        phone = "" if have_phone else tidy_phone(found.get("phone", "") or "")
+        # A number that only repeats what Google Maps already showed is not
+        # new information, and the column it would fill is blank only when
+        # Maps had nothing.
+        if not email and not phone:
+            LOG.info("   nothing could be verified for %s - the blanks are "
+                     "genuine, dropping the pending search", name[:40])
+            report["no_contact"] += 1
+            done_keys.append(id(entry))
+            pause(GOOGLE_BETWEEN_SCHOOLS_DELAY_SECONDS,
+                  "between contact retries")
+            continue
+
+        update = {"identity": identity, "school": name,
+                  "email": email, "phone": phone}
+        write_contact_journal(update)
+        files, fields = apply_contact_update(update, backups=backups)
+        clear_contact_journal()
+        if fields:
+            report["updated"] += 1
+            report["fields"] += fields
+            LOG.info("   filled %d blank field(s) in %d workbook(s): "
+                     "email %s | phone %s", fields, files,
+                     email or "(kept)", phone or "(kept)")
+        else:
+            LOG.info("   nothing left to fill for %s", name[:40])
+        # Only now, with the result on disk, is the entry finished.
+        done_keys.append(id(entry))
+        pause(GOOGLE_BETWEEN_SCHOOLS_DELAY_SECONDS,
+              "between contact retries")
+
+    if done_keys:
+        keep = [e for e in checkpoint.data.get("contacts_pending") or []
+                if id(e) not in set(done_keys)]
+        checkpoint.data["contacts_pending"] = keep
+        checkpoint.save()
+    report["remaining"] = len(checkpoint.data.get("contacts_pending") or [])
+    return report
+
+
+def log_contact_retry_report(report):
+    LOG.info("   contact retries: %d searched, %d school(s) updated "
+             "(%d field(s)), %d with nothing published, %d no longer in the "
+             "master, %d already complete, %d still owed%s",
+             report["searched"], report["updated"], report["fields"],
+             report["no_contact"], report["missing"], report["already"],
+             report["remaining"],
+             " - stopped by a CAPTCHA" if report["blocked"] else "")
 
 
 def research_and_save(gemini, checkpoint, state, city, record, position,
@@ -6818,6 +7222,27 @@ def run(args):
             reports.append(report)
             if not report["complete"]:
                 exit_code = exit_code or 1
+            # BETWEEN CITIES is the safe place to work through the backlog:
+            # no city's keyword is half done, so a CAPTCHA here costs
+            # nothing but the batch. Bounded, and skipped entirely while a
+            # cooldown is running, so it can never become the thing that
+            # stops collection.
+            if (CONTACT_RETRY_AUTOMATIC and not RUNTIME["stop"]
+                    and checkpoint.data.get("contacts_pending")
+                    and google_cooldown_left() <= 0):
+                try:
+                    back = retry_contacts_pass(director, checkpoint,
+                                               limit=CONTACT_RETRY_BATCH)
+                    if back["searched"] or back["updated"]:
+                        log_contact_retry_report(back)
+                except AccessBlocked:
+                    raise
+                except (PlaywrightError, PlaywrightTimeout,
+                        ExcelUnavailable, OSError) as error:
+                    # The backlog is a bonus, never the job. Collection
+                    # must not stop because catching up went wrong.
+                    LOG.warning("   the contact retries were skipped: %s",
+                                str(error)[:120])
             if position < len(visits) and not RUNTIME["stop"]:
                 pause(CITY_DELAY_SECONDS, "before the next city")
     except DesktopUnavailable as error:
@@ -6870,6 +7295,57 @@ def print_run_summary(reports, checkpoint):
     for path in all_cycle_paths():
         announce("  %-28s %d record(s)", os.path.basename(path),
                  row_count(path))
+
+
+def retry_contacts_command(args):
+    """--retry-contacts: search again for the contacts a CAPTCHA cost us.
+
+    Needs only the SEARCH browser. Gemini is never opened: the enrichment
+    for these schools was done when they were first saved, and only the two
+    Google-verified official columns are outstanding.
+    """
+    value_rank, value_num, _source = resolve_rank(args.rank, args.num_sys)
+    RUNTIME["rank_label"] = "%d/%d" % (value_rank, value_num)
+    RUNTIME["rank"] = value_rank
+    RUNTIME["num_sys"] = value_num
+    set_rank_paths(value_rank)
+    reconcile_master_and_cycles()
+    checkpoint = Checkpoint()
+
+    owed = len(checkpoint.data.get("contacts_pending") or [])
+    if not owed:
+        LOG.info("No contact searches are owed - nothing to retry.")
+        replay_contact_journal()
+        return 0
+
+    left = google_cooldown_left()
+    if left > 0:
+        LOG.info("%d contact search(es) owed, but Google is in its CAPTCHA "
+                 "cooldown for another %d minute(s). Nothing was asked.",
+                 owed, int(left // 60 + 1))
+        return 0
+
+    limit = getattr(args, "limit", None)
+    LOG.info("Retrying the official-contact searches for %d school(s)%s",
+             owed, "" if not limit else " (limit %d)" % limit)
+    _install_stop_handler()
+    director = None
+    try:
+        director = BrowserDirector(show=getattr(args, "show", False),
+                                   mode="headless" if args.headless else None)
+        report = retry_contacts_pass(director, checkpoint, limit=limit)
+    except AccessBlocked as error:
+        LOG.error("%s", error)
+        return 5
+    except (PlaywrightError, PlaywrightTimeout) as error:
+        LOG.error("the browser could not be used: %s", str(error)[:160])
+        return 4
+    finally:
+        if director is not None:
+            director.shutdown()
+    log_contact_retry_report(report)
+    git_sync("contact retries", checkpoint, force=True)
+    return 0
 
 
 def retry_failed(args):
@@ -7630,6 +8106,9 @@ def parse_args(argv=None):
                         help="show every school search keyword")
     parser.add_argument("--retry-failed", action="store_true",
                         help="research the schools in the retry queue")
+    parser.add_argument("--retry-contacts", action="store_true",
+                        help="search again for the official email and phone "
+                             "of schools whose searches a CAPTCHA blocked")
     parser.add_argument("--state", help="only cities of this state")
     parser.add_argument("--city", help="only this city")
     parser.add_argument("--limit", type=int,
@@ -7715,6 +8194,8 @@ def main(argv=None):
     if who:
         LOG.warning("   %s", who)
 
+    if args.retry_contacts:
+        return retry_contacts_command(args)
     if args.retry_failed:
         return retry_failed(args)
     if args.test and not (args.city or args.state):
