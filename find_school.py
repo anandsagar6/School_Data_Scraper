@@ -358,6 +358,49 @@ def shared_lists_problem():
 
 CITY_BY_STATES, SCHOOL_KEYWORDS, SCHOOL_FIELDS = load_shared_lists()
 
+
+
+#: The existing column that says what KIND of school this is. The 57
+#: columns are unchanged - this one was always there, it was just left to
+#: Gemini to guess. The keyword knows: "Private Schools in Bengaluru" can
+#: only return private schools, so the keyword is written into it and
+#: Gemini is not asked about it at all.
+SCHOOL_TYPE_COLUMN = "School Type"
+
+
+def school_type_for_keyword(keyword):
+    """The school type a keyword proves. "Private Schools" -> "Private".
+
+    Only the trailing "School"/"Schools" is dropped, so a keyword added
+    later needs no change here: "Government Schools" gives "Government",
+    "International Schools" gives "International". An empty keyword gives
+    "", never a guess.
+    """
+    words = clean(keyword).split()
+    while words and words[-1].lower().strip(".,") in ("school", "schools"):
+        words.pop()
+    return " ".join(words)
+
+
+def stamp_school_type(records, keyword):
+    """Write the keyword's school type onto every record it found.
+
+    Done where the records enter the run - both when they are freshly
+    copied from Maps and when they are read back from a saved capture -
+    so a resumed keyword stamps its schools exactly as the first pass did.
+    Returns how many records were stamped.
+    """
+    value = school_type_for_keyword(keyword)
+    if not value:
+        return 0
+    stamped = 0
+    for record in records:
+        if SCHOOL_TYPE_COLUMN in record and not clean(
+                record.get(SCHOOL_TYPE_COLUMN, "")):
+            record[SCHOOL_TYPE_COLUMN] = value
+            stamped += 1
+    return stamped
+
 #: Built from the one tuple above, so the Excel columns, the prompt, the
 #: answer format and the parser can never disagree about a field.
 SCHOOL_COLUMNS = tuple(label for label, _key in SCHOOL_FIELDS)
@@ -444,17 +487,23 @@ that Value.
 
 
 def gemini_skips_columns():
-    """Columns Gemini is NOT asked about: Google Search researches them.
+    """Columns Gemini is NOT asked about, because something else knows.
 
     Asking as well would spend an answer on work already done, and invite
-    a second, unverified opinion on the one pair of fields that has to be
-    verifiable. The Excel file still has all 57 columns - only the prompt
-    is shorter. Resolved when called, because the column names are
-    defined further down the file beside the search that owns them.
+    a second, unverified opinion on fields that are not matters of
+    opinion. The Excel file still has all 57 columns - only the prompt is
+    shorter. Resolved when called, because the column names are defined
+    further down the file beside the code that owns them.
+
+    School Type is always withheld: the keyword that found the school
+    proves it, so an answer could only disagree with a fact. The two
+    official contacts are withheld while Google Search is researching
+    them, and asked for again if that is ever switched off.
     """
-    if not OFFICIAL_CONTACT_SEARCH:
-        return set()
-    return {OFFICIAL_EMAIL_COLUMN, OFFICIAL_PHONE_COLUMN}
+    skip = {SCHOOL_TYPE_COLUMN}
+    if OFFICIAL_CONTACT_SEARCH:
+        skip |= {OFFICIAL_EMAIL_COLUMN, OFFICIAL_PHONE_COLUMN}
+    return skip
 
 
 def gemini_asked_columns():
@@ -1223,6 +1272,11 @@ def apply_answer(record, values):
         # blank official column is left blank rather than promoted.
         if OFFICIAL_CONTACT_SEARCH and column in OFFICIAL_CONTACT_COLUMNS:
             column = OFFICIAL_TO_ALTERNATE.get(column, column)
+        # The keyword decided this one. An answer that names it anyway -
+        # a stray key, or a run with the prompt from an older version -
+        # is dropped rather than allowed to contradict the keyword.
+        if column == SCHOOL_TYPE_COLUMN:
+            continue
             value = tidy_value(column, value)
             if not value or column not in record:
                 continue
@@ -6087,6 +6141,14 @@ def process_keyword(director, gemini, checkpoint, state, city, keyword,
         browser = director.maps()
         found = collect_search(browser, keyword, state, city, limit=limit)
     report["reason"] = found.reason
+    # The keyword that found these schools says what type they are, with
+    # more certainty than any answer could. Stamped here, where the freshly
+    # copied list and a reused saved list meet, so a resumed keyword marks
+    # its schools exactly as the first pass did.
+    stamped = stamp_school_type(found.records, keyword)
+    if stamped:
+        LOG.debug("   %s: %d record(s) marked %r", keyword, stamped,
+                  school_type_for_keyword(keyword))
     if not found.records:
         # A keyword with no results is finished, not failed - as long as the
         # list really reached its end. Treating it as unresolved would keep
@@ -7009,12 +7071,45 @@ def self_test():
        "%d asked" % asked)
     ok("the answer format lists the same fields",
        answer_format_text().count("\n") == asked - 1)
-    ok("exactly the two official contacts are left out",
-       sorted(gemini_skips_columns()) == ["School Official Email",
-                                          "School Official Phone Number"]
-       if OFFICIAL_CONTACT_SEARCH else asked == 57,
-       sorted(gemini_skips_columns()))
+    # School Type is always withheld - the keyword proves it - and the two
+    # official contacts as well while Google Search researches them.
+    expected_skips = (["School Official Email", "School Official Phone Number",
+                       "School Type"] if OFFICIAL_CONTACT_SEARCH
+                      else ["School Type"])
+    ok("exactly the fields something else knows are left out",
+       sorted(gemini_skips_columns()) == expected_skips,
+       ", ".join(sorted(gemini_skips_columns())))
+    ok("every withheld column is still in the workbook",
+       all(column in SCHOOL_COLUMNS for column in gemini_skips_columns()))
+    ok("the prompt never mentions School Type",
+       SCHOOL_TYPE_COLUMN not in requested_fields_text())
     ok("a blank record still has all 57 columns", len(blank_record()) == 57)
+
+    # --- 4b. the school type comes from the keyword -------------------------
+    ok("School Type is one of the 57 columns",
+       SCHOOL_TYPE_COLUMN in SCHOOL_COLUMNS)
+    for keyword, expected in (("Private Schools", "Private"),
+                              ("Government Schools", "Government"),
+                              ("International Schools", "International"),
+                              ("", "")):
+        ok("%r gives %r" % (keyword, expected),
+           school_type_for_keyword(keyword) == expected,
+           school_type_for_keyword(keyword))
+    typed = [blank_record(), blank_record()]
+    marked = stamp_school_type(typed, "Private Schools")
+    ok("every record of a keyword is marked", marked == 2 and all(
+        r[SCHOOL_TYPE_COLUMN] == "Private" for r in typed))
+    already = blank_record()
+    already[SCHOOL_TYPE_COLUMN] = "Government"
+    stamp_school_type([already], "Private Schools")
+    ok("a type already set is not overwritten",
+       already[SCHOOL_TYPE_COLUMN] == "Government")
+    guessed = blank_record()
+    guessed[SCHOOL_TYPE_COLUMN] = "Private"
+    apply_answer(guessed, {SCHOOL_TYPE_COLUMN: "Co-educational"})
+    ok("an answer cannot contradict the keyword",
+       guessed[SCHOOL_TYPE_COLUMN] == "Private",
+       guessed[SCHOOL_TYPE_COLUMN])
 
     # --- 5. the parser ------------------------------------------------------
     answer = ("School_Name: Gupta Public School\n"

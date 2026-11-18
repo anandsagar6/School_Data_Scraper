@@ -10,6 +10,7 @@ data.
 """
 
 import importlib.util
+import inspect
 import datetime
 import json
 import logging
@@ -4289,3 +4290,108 @@ class PhoneIsSearchedForEverySchoolTests(SandboxTest):
                          fs.phone_key("080 2222 1111"))
         self.assertEqual(fs.phone_key(record["School Alternate Phone Number"]),
                          fs.phone_key("080 7777 0000"))
+
+
+class SchoolTypeComesFromTheKeywordTests(SandboxTest):
+    """"Private Schools in Bengaluru" can only return private schools, so
+    the keyword that found a school decides its School Type. Gemini is not
+    asked, and an answer that names the column anyway cannot override it."""
+
+    def test_the_column_is_one_of_the_existing_57(self):
+        self.assertIn(fs.SCHOOL_TYPE_COLUMN, fs.SCHOOL_COLUMNS)
+        self.assertEqual(len(fs.SCHOOL_COLUMNS), 57)
+
+    def test_the_keyword_decides_the_value(self):
+        for keyword, expected in (("Private Schools", "Private"),
+                                  ("Government Schools", "Government"),
+                                  ("International Schools", "International"),
+                                  ("Boarding School", "Boarding"),
+                                  ("  Private   Schools  ", "Private")):
+            self.assertEqual(fs.school_type_for_keyword(keyword), expected,
+                             keyword)
+
+    def test_an_empty_keyword_gives_no_value_rather_than_a_guess(self):
+        self.assertEqual(fs.school_type_for_keyword(""), "")
+        self.assertEqual(fs.school_type_for_keyword("   "), "")
+
+    def test_every_record_of_a_keyword_is_marked(self):
+        records = [fs.blank_record() for _ in range(3)]
+        marked = fs.stamp_school_type(records, "Government Schools")
+        self.assertEqual(marked, 3)
+        for record in records:
+            self.assertEqual(record[fs.SCHOOL_TYPE_COLUMN], "Government")
+
+    def test_a_type_already_set_is_not_overwritten(self):
+        # a school found earlier by another keyword keeps the type that
+        # found it, rather than being relabelled by a later keyword
+        record = fs.blank_record()
+        record[fs.SCHOOL_TYPE_COLUMN] = "Private"
+        fs.stamp_school_type([record], "Government Schools")
+        self.assertEqual(record[fs.SCHOOL_TYPE_COLUMN], "Private")
+
+    def test_an_empty_keyword_stamps_nothing(self):
+        record = fs.blank_record()
+        self.assertEqual(fs.stamp_school_type([record], ""), 0)
+        self.assertEqual(record[fs.SCHOOL_TYPE_COLUMN], "")
+
+    def test_gemini_is_not_asked_for_it(self):
+        self.assertIn(fs.SCHOOL_TYPE_COLUMN, fs.gemini_skips_columns())
+        self.assertNotIn(fs.SCHOOL_TYPE_COLUMN, fs.gemini_asked_columns())
+        self.assertNotIn(fs.SCHOOL_TYPE_COLUMN, fs.requested_fields_text())
+        self.assertNotIn(fs.SCHOOL_TYPE_COLUMN, fs.answer_format_text())
+
+    def test_it_is_withheld_even_without_the_contact_search(self):
+        kept = fs.OFFICIAL_CONTACT_SEARCH
+        try:
+            fs.OFFICIAL_CONTACT_SEARCH = False
+            self.assertEqual(sorted(fs.gemini_skips_columns()),
+                             [fs.SCHOOL_TYPE_COLUMN])
+        finally:
+            fs.OFFICIAL_CONTACT_SEARCH = kept
+
+    def test_an_answer_cannot_contradict_the_keyword(self):
+        record = fs.blank_record()
+        record[fs.SCHOOL_TYPE_COLUMN] = "Private"
+        fs.apply_answer(record, {fs.SCHOOL_TYPE_COLUMN: "Co-educational"})
+        self.assertEqual(record[fs.SCHOOL_TYPE_COLUMN], "Private")
+
+    def test_an_answer_may_still_fill_the_management_type(self):
+        # the neighbouring column is Gemini's to answer, and untouched here
+        record = fs.blank_record()
+        fs.apply_answer(record, {"School Management Type": "Private Unaided"})
+        self.assertEqual(record["School Management Type"], "Private Unaided")
+        self.assertIn("School Management Type", fs.gemini_asked_columns())
+
+    def test_the_type_reaches_the_saved_excel_row(self):
+        record = fs.blank_record()
+        record.update({"School Name": "Sunrise Public School",
+                       "City": "Bengaluru", "State": "Karnataka",
+                       "Country": "India",
+                       "School Official Phone Number": "9876543210"})
+        fs.stamp_school_type([record], "Private Schools")
+        fs.append_records([record])
+        rows = fs.read_records(fs.master_path())
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0][fs.SCHOOL_TYPE_COLUMN], "Private")
+
+    def test_the_type_survives_the_temporary_workbook(self):
+        # a resumed keyword reads its schools back from here
+        record = fs.blank_record()
+        record.update({"School Name": "Sunrise Public School",
+                       "City": "Bengaluru", "State": "Karnataka"})
+        fs.stamp_school_type([record], "Government Schools")
+        fs.save_temp_excel("Karnataka", "Bengaluru", [record])
+        again = fs.load_temp_excel("Karnataka", "Bengaluru")
+        self.assertEqual(len(again), 1)
+        self.assertEqual(again[0][fs.SCHOOL_TYPE_COLUMN], "Government")
+
+    def test_process_keyword_stamps_both_the_fresh_and_the_reused_list(self):
+        source = inspect.getsource(fs.process_keyword)
+        self.assertIn("stamp_school_type(found.records, keyword)", source)
+        # it must run before the records reach the index or the workbook
+        stamp = source.index("stamp_school_type(found.records, keyword)")
+        self.assertLess(stamp, source.index("merge_into_index"))
+        self.assertLess(stamp, source.index("save_temp_excel"))
+        # and after BOTH ways records are obtained
+        self.assertLess(source.index("found.records = saved_records"), stamp)
+        self.assertLess(source.index("found = collect_search"), stamp)
