@@ -27,7 +27,8 @@
       "email:contact@themis.in",
       "email:rgs.richmond@gmail.com",
       "email:renujn@yahoo.com",
-      "phone:1127011137"
+      "phone:1127011137",
+      "phone:8076605812"
     ]
   },
   "enriched": {
@@ -46,7 +47,8 @@
       "email:contact@themis.in",
       "email:rgs.richmond@gmail.com",
       "email:renujn@yahoo.com",
-      "phone:1127011137"
+      "phone:1127011137",
+      "phone:8076605812"
     ]
   },
   "completed_cities": [],
@@ -442,6 +444,13 @@
       "city": "Delhi",
       "reason": "Google searching is in its CAPTCHA cooldown for another 199 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T16:28:50"
+    },
+    {
+      "school": "Golden Bells Early Years, Pitampura",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 195 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:32:31"
     }
   ],
   "duplicates": 0,
@@ -450,7 +459,7 @@
   "git": {
     "branch": "school-data-rank-1",
     "pending": false,
-    "last_ok": "2026-11-19T16:22:17",
+    "last_ok": "2026-11-19T16:31:24",
     "last_error": ""
   },
   "work": {
@@ -459,5 +468,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:31:20"
+  "updated": "2026-11-19T16:43:30"
 }
