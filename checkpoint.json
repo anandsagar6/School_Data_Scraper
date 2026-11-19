@@ -21,7 +21,9 @@
       "phone:8278017001",
       "phone:8001023344",
       "phone:9896029073",
-      "email:ranavarsha@rediffmail.com"
+      "email:ranavarsha@rediffmail.com",
+      "email:admissions@vdjs.edu.in",
+      "email:anilkasana4003@gmail.com"
     ]
   },
   "enriched": {
@@ -34,7 +36,9 @@
       "phone:8278017001",
       "phone:8001023344",
       "phone:9896029073",
-      "email:ranavarsha@rediffmail.com"
+      "email:ranavarsha@rediffmail.com",
+      "email:admissions@vdjs.edu.in",
+      "email:anilkasana4003@gmail.com"
     ]
   },
   "completed_cities": [],
@@ -308,6 +312,20 @@
       "city": "Hisar",
       "reason": "Google searching is in its CAPTCHA cooldown for another 6 minute(s) - the official email and phone searches were NOT run",
       "when": "2026-11-19T16:08:21"
+    },
+    {
+      "school": "Vidya Devi Jindal School",
+      "state": "Haryana",
+      "city": "Hisar",
+      "reason": "source - email: none | phone: maps",
+      "when": "2026-11-19T16:15:19"
+    },
+    {
+      "school": "Ngo Paryatan School of innovative education foundation",
+      "state": "Haryana",
+      "city": "Hisar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 226 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:20:31"
     }
   ],
   "duplicates": 0,
@@ -316,7 +334,7 @@
   "git": {
     "branch": "school-data-rank-4",
     "pending": false,
-    "last_ok": "2026-11-19T16:07:49",
+    "last_ok": "2026-11-19T16:14:34",
     "last_error": ""
   },
   "work": {
@@ -325,5 +343,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:14:30"
+  "updated": "2026-11-19T16:21:48"
 }
