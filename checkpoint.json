@@ -57,7 +57,8 @@
       "email:vsvpsbetul88@gmail.com",
       "email:lfsssbzu@gmail.com",
       "phone:8278001177",
-      "phone:9424001072"
+      "phone:9424001072",
+      "email:mpls.22data@gmail.com"
     ]
   },
   "enriched": {
@@ -109,7 +110,8 @@
       "email:vsvpsbetul88@gmail.com",
       "email:lfsssbzu@gmail.com",
       "phone:8278001177",
-      "phone:9424001072"
+      "phone:9424001072",
+      "email:mpls.22data@gmail.com"
     ]
   },
   "completed_cities": [],
@@ -628,6 +630,13 @@
       "city": "Betul",
       "reason": "Google searching is in its CAPTCHA cooldown for another 7 minute(s) - the official email and phone searches were NOT run",
       "when": "2026-11-19T18:46:10"
+    },
+    {
+      "school": "Madhyanchal Podar Learn School Betul",
+      "state": "Madhya Pradesh",
+      "city": "Betul",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 4 minute(s) - the official email and phone searches were NOT run",
+      "when": "2026-11-19T18:49:04"
     }
   ],
   "duplicates": 0,
@@ -636,14 +645,14 @@
   "git": {
     "branch": "school-data-rank-6",
     "pending": false,
-    "last_ok": "2026-11-19T18:42:09",
+    "last_ok": "2026-11-19T18:47:38",
     "last_error": ""
   },
   "work": {
-    "period_hours": 0.0,
+    "period_hours": 3.2,
     "breaks_taken": 0,
-    "break_until": "",
-    "reason": ""
+    "break_until": "2026-11-19T19:58:57",
+    "reason": "worked 3.24 h of a 3.2 h period - taking a 68 min break"
   },
-  "updated": "2026-11-19T18:47:33"
+  "updated": "2026-11-19T18:50:57"
 }
