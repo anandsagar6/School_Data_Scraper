@@ -1,0 +1,197 @@
+{
+  "version": 3,
+  "rank": 7,
+  "num_sys": 10,
+  "plan_fingerprint": "9f6ec37c475ac9daafd5eb9656e64aa94cce7cf6e8750e3f385e1c2fece2ac88",
+  "city_fingerprint": "4face9f1d03dd68c4c22d260484c501dbc091075c6decef04119ef5515c2e7f9",
+  "current_city": [
+    "Maharashtra",
+    "Achalpur"
+  ],
+  "current_keyword": "Private Schools",
+  "discovery_done": {},
+  "keywords_done": {
+    "Maharashtra|Gadchiroli": [
+      "Private Schools"
+    ]
+  },
+  "committed": {
+    "Maharashtra|Gadchiroli": [
+      "email:jineshcmi@gmail.com",
+      "phone:7132233504",
+      "phone:9403326564",
+      "email:fde.vidarbhapls@podar.org",
+      "phone:9404465566",
+      "email:sos_gadchiroli@rediffmail.com"
+    ],
+    "Maharashtra|Achalpur": [
+      "email:admissions@podar.org",
+      "phone:7249358335",
+      "phone:8237368751",
+      "phone:7223250149",
+      "phone:8888577107"
+    ]
+  },
+  "enriched": {
+    "Maharashtra|Gadchiroli": [
+      "email:jineshcmi@gmail.com",
+      "phone:7132233504",
+      "phone:9403326564",
+      "email:fde.vidarbhapls@podar.org",
+      "name+address:shivaji and jr science college|52h3+m22",
+      "name+address:nirmal vidhya|52mh+g3v",
+      "phone:9404465566",
+      "email:sos_gadchiroli@rediffmail.com"
+    ],
+    "Maharashtra|Achalpur": [
+      "email:admissions@podar.org",
+      "name+address:fatima achalpur|7gcg+c34",
+      "name+address:subodh achalpur|7gf9+5rm",
+      "phone:7249358335",
+      "phone:8237368751",
+      "phone:7223250149",
+      "name+address:dr apj abdul kalam ideal|7g84+9mh",
+      "name+address:i e s girls|8g49+f28",
+      "phone:8888577107"
+    ]
+  },
+  "completed_cities": [],
+  "failed": [],
+  "contacts_pending": [
+    {
+      "school": "Carmel High School Gadchiroli z",
+      "state": "Maharashtra",
+      "city": "Gadchiroli",
+      "reason": "source - email: none | phone: maps",
+      "when": "2026-11-19T14:24:48"
+    },
+    {
+      "school": "Platinum jubilee school gadchroli",
+      "state": "Maharashtra",
+      "city": "Gadchiroli",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 60 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T14:26:54"
+    },
+    {
+      "school": "Platinum Jubilee High School",
+      "state": "Maharashtra",
+      "city": "Gadchiroli",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 52 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T14:34:58"
+    },
+    {
+      "school": "PODAR JUMBO KIDS & VIDARBHA INTERNATIONAL SCHOOL(CBSE), A Podar curriculum consultancy school, GADCHIROLI. best school",
+      "state": "Maharashtra",
+      "city": "Gadchiroli",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 48 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T14:39:29"
+    },
+    {
+      "school": "Shivaji High School And Jr. Science College",
+      "state": "Maharashtra",
+      "city": "Gadchiroli",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 44 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T14:43:12"
+    },
+    {
+      "school": "Nirmal vidhya Mandir",
+      "state": "Maharashtra",
+      "city": "Gadchiroli",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 40 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T14:47:40"
+    },
+    {
+      "school": "GREENWOOD PRESCHOOL GADCHIROLI",
+      "state": "Maharashtra",
+      "city": "Gadchiroli",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 35 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T14:52:24"
+    },
+    {
+      "school": "School Of Scholars",
+      "state": "Maharashtra",
+      "city": "Gadchiroli",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 33 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T14:54:20"
+    },
+    {
+      "school": "Podar International School Paratwada (CBSE)",
+      "state": "Maharashtra",
+      "city": "Achalpur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 31 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T14:56:32"
+    },
+    {
+      "school": "Fatima Convent High School, Achalpur",
+      "state": "Maharashtra",
+      "city": "Achalpur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 28 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T14:59:30"
+    },
+    {
+      "school": "Subodh High School, Achalpur",
+      "state": "Maharashtra",
+      "city": "Achalpur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 20 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T15:06:48"
+    },
+    {
+      "school": "Avant Grade Public School",
+      "state": "Maharashtra",
+      "city": "Achalpur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 16 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T15:10:50"
+    },
+    {
+      "school": "Sacred Heart School",
+      "state": "Maharashtra",
+      "city": "Achalpur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 13 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T15:13:55"
+    },
+    {
+      "school": "City High School (UDJC) Achalpur",
+      "state": "Maharashtra",
+      "city": "Achalpur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 2 minute(s) - the official email and phone searches were NOT run",
+      "when": "2026-11-19T15:25:23"
+    },
+    {
+      "school": "Dr.APJ Abdul Kalam English Ideal School",
+      "state": "Maharashtra",
+      "city": "Achalpur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 223 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T15:27:36"
+    },
+    {
+      "school": "I.E.S GIRLS HIGH SCHOOL",
+      "state": "Maharashtra",
+      "city": "Achalpur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 220 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T15:31:09"
+    },
+    {
+      "school": "Roots Public School & Jr College",
+      "state": "Maharashtra",
+      "city": "Achalpur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 214 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T15:36:20"
+    }
+  ],
+  "duplicates": 0,
+  "saved": 6,
+  "cycle": 0,
+  "git": {
+    "branch": "",
+    "pending": false,
+    "last_ok": "",
+    "last_error": ""
+  },
+  "work": {
+    "period_hours": 0.0,
+    "breaks_taken": 0,
+    "break_until": "",
+    "reason": ""
+  },
+  "updated": "2026-11-19T15:47:58"
+}
