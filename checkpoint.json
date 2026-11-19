@@ -42,7 +42,9 @@
     ],
     "Sikkim|Tadong": [
       "phone:9733187407",
-      "phone:8250448118"
+      "phone:8250448118",
+      "phone:8250549053",
+      "phone:9593386285"
     ]
   },
   "enriched": {
@@ -79,7 +81,9 @@
     "Sikkim|Tadong": [
       "name+address:tiny pearls|8h7r+64q, nh10",
       "phone:9733187407",
-      "phone:8250448118"
+      "phone:8250448118",
+      "phone:8250549053",
+      "phone:9593386285"
     ]
   },
   "completed_cities": [],
@@ -618,6 +622,20 @@
       "city": "Tadong",
       "reason": "Google searching is in its CAPTCHA cooldown for another 45 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T17:48:19"
+    },
+    {
+      "school": "Taktse International School",
+      "state": "Sikkim",
+      "city": "Tadong",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 35 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:58:00"
+    },
+    {
+      "school": "Stepping stone academy Bhusuk gangtok",
+      "state": "Sikkim",
+      "city": "Tadong",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 31 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:01:42"
     }
   ],
   "duplicates": 0,
@@ -626,7 +644,7 @@
   "git": {
     "branch": "school-data-rank-9",
     "pending": false,
-    "last_ok": "2026-11-19T17:43:19",
+    "last_ok": "2026-11-19T17:56:09",
     "last_error": ""
   },
   "work": {
@@ -635,5 +653,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:56:05"
+  "updated": "2026-11-19T18:08:42"
 }
