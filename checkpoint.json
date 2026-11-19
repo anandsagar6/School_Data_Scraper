@@ -54,7 +54,8 @@
     "Odisha|Jagatsinghpur": [
       "phone:6724223075",
       "phone:6724220234",
-      "email:principaldisjspur@gmail.com"
+      "email:principaldisjspur@gmail.com",
+      "site:svjagatsinghpur.org"
     ]
   },
   "enriched": {
@@ -104,7 +105,9 @@
     "Odisha|Jagatsinghpur": [
       "phone:6724223075",
       "phone:6724220234",
-      "email:principaldisjspur@gmail.com"
+      "email:principaldisjspur@gmail.com",
+      "site:svjagatsinghpur.org",
+      "name+address:xavier|457r+qxx"
     ]
   },
   "completed_cities": [],
@@ -616,6 +619,20 @@
       "city": "Jagatsinghpur",
       "reason": "Google searching is in its CAPTCHA cooldown for another 34 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T18:36:29"
+    },
+    {
+      "school": "suddhananda vidyalaya",
+      "state": "Odisha",
+      "city": "Jagatsinghpur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 31 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:39:52"
+    },
+    {
+      "school": "THE XAVIER ACADEMY",
+      "state": "Odisha",
+      "city": "Jagatsinghpur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 28 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:42:27"
     }
   ],
   "duplicates": 1,
@@ -624,7 +641,7 @@
   "git": {
     "branch": "school-data-rank-8",
     "pending": false,
-    "last_ok": "2026-11-19T18:30:15",
+    "last_ok": "2026-11-19T18:38:08",
     "last_error": ""
   },
   "work": {
@@ -633,5 +650,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T18:38:03"
+  "updated": "2026-11-19T18:43:49"
 }
