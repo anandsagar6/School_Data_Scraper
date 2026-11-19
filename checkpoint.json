@@ -31,7 +31,9 @@
       "email:litroc77@hotmail.com"
     ],
     "Karnataka|Mandya": [
-      "phone:9482441172"
+      "phone:9482441172",
+      "phone:8884370070",
+      "phone:8105696709"
     ]
   },
   "enriched": {
@@ -50,7 +52,9 @@
       "email:litroc77@hotmail.com"
     ],
     "Karnataka|Mandya": [
-      "phone:9482441172"
+      "phone:9482441172",
+      "phone:8884370070",
+      "phone:8105696709"
     ]
   },
   "completed_cities": [],
@@ -352,6 +356,20 @@
       "city": "Mandya",
       "reason": "Google searching is in its CAPTCHA cooldown for another 161 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T16:11:59"
+    },
+    {
+      "school": "Prabodh Montessori",
+      "state": "Karnataka",
+      "city": "Mandya",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 152 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:21:14"
+    },
+    {
+      "school": "INDIAN PUBLIC SCHOOL",
+      "state": "Karnataka",
+      "city": "Mandya",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 149 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:23:47"
     }
   ],
   "duplicates": 0,
@@ -360,7 +378,7 @@
   "git": {
     "branch": "school-data-rank-5",
     "pending": false,
-    "last_ok": "2026-11-19T16:10:57",
+    "last_ok": "2026-11-19T16:18:52",
     "last_error": ""
   },
   "work": {
@@ -369,5 +387,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:18:48"
+  "updated": "2026-11-19T16:35:08"
 }
