@@ -59,7 +59,8 @@
       "phone:9149378089",
       "email:admissions@bachpanglobal.com",
       "phone:9837323460",
-      "phone:9997629988"
+      "phone:9997629988",
+      "phone:9012004024"
     ]
   },
   "enriched": {
@@ -114,7 +115,8 @@
       "phone:9149378089",
       "email:admissions@bachpanglobal.com",
       "phone:9837323460",
-      "phone:9997629988"
+      "phone:9997629988",
+      "phone:9012004024"
     ]
   },
   "completed_cities": [],
@@ -602,6 +604,13 @@
       "city": "Rampur",
       "reason": "Google searching is in its CAPTCHA cooldown for another 2 minute(s) - the official email and phone searches were NOT run",
       "when": "2026-11-19T18:31:20"
+    },
+    {
+      "school": "RAMPUR INSTITUTE OF MEDICAL SCIENCE",
+      "state": "Uttar Pradesh",
+      "city": "Rampur",
+      "reason": "source - email: none | phone: maps",
+      "when": "2026-11-19T18:37:55"
     }
   ],
   "duplicates": 0,
@@ -610,7 +619,7 @@
   "git": {
     "branch": "school-data-rank-10",
     "pending": false,
-    "last_ok": "2026-11-19T18:29:04",
+    "last_ok": "2026-11-19T18:36:17",
     "last_error": ""
   },
   "work": {
@@ -619,5 +628,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T18:36:13"
+  "updated": "2026-11-19T18:41:56"
 }
