@@ -74,7 +74,8 @@
       "phone:8327765623",
       "phone:6762224960",
       "phone:9437188035",
-      "phone:7894972586"
+      "phone:7894972586",
+      "name+address:venkateshwar|mh6x+v5p, main rd"
     ]
   },
   "completed_cities": [],
@@ -495,6 +496,13 @@
       "city": "Dhenkanal",
       "reason": "Google searching is in its CAPTCHA cooldown for another 94 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T17:36:47"
+    },
+    {
+      "school": "Venkateshwar School",
+      "state": "Odisha",
+      "city": "Dhenkanal",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 89 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:41:22"
     }
   ],
   "duplicates": 0,
@@ -503,7 +511,7 @@
   "git": {
     "branch": "school-data-rank-8",
     "pending": false,
-    "last_ok": "2026-11-19T17:30:28",
+    "last_ok": "2026-11-19T17:39:18",
     "last_error": ""
   },
   "work": {
@@ -512,5 +520,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:39:14"
+  "updated": "2026-11-19T17:47:34"
 }
