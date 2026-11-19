@@ -76,7 +76,9 @@
       "phone:6001178921",
       "phone:3843262700",
       "email:markazkxj@gmail.com",
-      "site:ihems.co.in"
+      "site:ihems.co.in",
+      "name+address:kendriya karimganj|nil mony rd",
+      "name+address:jawahar navodaya harinagar karimganj|harinagar"
     ]
   },
   "completed_cities": [],
@@ -511,6 +513,20 @@
       "city": "Karimganj",
       "reason": "Google searching is in its CAPTCHA cooldown for another 143 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:24:23"
+    },
+    {
+      "school": "Kendriya Vidyalaya Karimganj",
+      "state": "Assam",
+      "city": "Karimganj",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 140 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:27:32"
+    },
+    {
+      "school": "Jawahar Navodaya Vidyalaya,Harinagar, Karimganj",
+      "state": "Assam",
+      "city": "Karimganj",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 138 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:29:42"
     }
   ],
   "duplicates": 0,
@@ -519,7 +535,7 @@
   "git": {
     "branch": "school-data-rank-2",
     "pending": false,
-    "last_ok": "2026-11-19T17:18:46",
+    "last_ok": "2026-11-19T17:26:09",
     "last_error": ""
   },
   "work": {
@@ -528,5 +544,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:26:05"
+  "updated": "2026-11-19T17:32:52"
 }
