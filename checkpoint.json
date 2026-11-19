@@ -56,7 +56,9 @@
       "phone:1147297766",
       "email:info.eok@tagoreint.com",
       "phone:1140934396",
-      "phone:9811369470"
+      "phone:9811369470",
+      "phone:1127016688",
+      "phone:9205765248"
     ]
   },
   "enriched": {
@@ -105,7 +107,9 @@
       "phone:1147297766",
       "email:info.eok@tagoreint.com",
       "phone:1140934396",
-      "phone:9811369470"
+      "phone:9811369470",
+      "phone:1127016688",
+      "phone:9205765248"
     ]
   },
   "completed_cities": [],
@@ -704,6 +708,20 @@
       "city": "Delhi",
       "reason": "Google searching is in its CAPTCHA cooldown for another 63 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T18:45:07"
+    },
+    {
+      "school": "Crescent Public School",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 54 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:54:11"
+    },
+    {
+      "school": "National Integral School (DAY-BOARDING)",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 48 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:59:34"
     }
   ],
   "duplicates": 0,
@@ -712,7 +730,7 @@
   "git": {
     "branch": "school-data-rank-1",
     "pending": false,
-    "last_ok": "2026-11-19T18:42:51",
+    "last_ok": "2026-11-19T18:53:23",
     "last_error": ""
   },
   "work": {
@@ -721,5 +739,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T18:53:19"
+  "updated": "2026-11-19T19:00:45"
 }
