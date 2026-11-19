@@ -48,7 +48,8 @@
     "Sikkim|Sichey": [
       "email:office@reyvalley.com",
       "email:admin@tashinamgyalacademy.com",
-      "email:pngssschool@gmail.com"
+      "email:pngssschool@gmail.com",
+      "name+address:west point|8jh8+gjh, ridge rd"
     ]
   },
   "completed_cities": [],
@@ -402,6 +403,13 @@
       "city": "Sichey",
       "reason": "Google searching is in its CAPTCHA cooldown for another 142 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T16:11:24"
+    },
+    {
+      "school": "West Point Senior Secondary School",
+      "state": "Sikkim",
+      "city": "Sichey",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 126 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:27:25"
     }
   ],
   "duplicates": 0,
@@ -410,7 +418,7 @@
   "git": {
     "branch": "school-data-rank-9",
     "pending": false,
-    "last_ok": "2026-11-19T16:09:38",
+    "last_ok": "2026-11-19T16:26:04",
     "last_error": ""
   },
   "work": {
@@ -419,5 +427,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:26:00"
+  "updated": "2026-11-19T16:32:04"
 }
