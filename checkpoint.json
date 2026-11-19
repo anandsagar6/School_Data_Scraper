@@ -55,7 +55,8 @@
       "email:laurelhigh@rediffmail.com",
       "phone:1147297766",
       "email:info.eok@tagoreint.com",
-      "phone:1140934396"
+      "phone:1140934396",
+      "phone:9811369470"
     ]
   },
   "enriched": {
@@ -103,7 +104,8 @@
       "email:laurelhigh@rediffmail.com",
       "phone:1147297766",
       "email:info.eok@tagoreint.com",
-      "phone:1140934396"
+      "phone:1140934396",
+      "phone:9811369470"
     ]
   },
   "completed_cities": [],
@@ -695,6 +697,13 @@
       "city": "Delhi",
       "reason": "Google searching is in its CAPTCHA cooldown for another 71 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T18:36:31"
+    },
+    {
+      "school": "St. John's School",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 63 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:45:07"
     }
   ],
   "duplicates": 0,
@@ -703,7 +712,7 @@
   "git": {
     "branch": "school-data-rank-1",
     "pending": false,
-    "last_ok": "2026-11-19T18:35:37",
+    "last_ok": "2026-11-19T18:42:51",
     "last_error": ""
   },
   "work": {
@@ -712,5 +721,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T18:42:46"
+  "updated": "2026-11-19T18:53:19"
 }
