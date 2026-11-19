@@ -109,7 +109,9 @@
       "email:principaldisjspur@gmail.com",
       "site:svjagatsinghpur.org",
       "name+address:xavier|457r+qxx",
-      "email:bkrath2014@gmail.com"
+      "email:bkrath2014@gmail.com",
+      "name+address:govt girls jagatsinghpur|753f+8q4",
+      "name+address:rasalpur highschool|65hg+f4g"
     ]
   },
   "completed_cities": [],
@@ -642,6 +644,20 @@
       "city": "Jagatsinghpur",
       "reason": "Google searching is in its CAPTCHA cooldown for another 26 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T18:44:45"
+    },
+    {
+      "school": "Govt. Girls High School,Jagatsinghpur",
+      "state": "Odisha",
+      "city": "Jagatsinghpur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 18 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:52:21"
+    },
+    {
+      "school": "Rasalpur highschool",
+      "state": "Odisha",
+      "city": "Jagatsinghpur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 14 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:56:18"
     }
   ],
   "duplicates": 1,
@@ -650,7 +666,7 @@
   "git": {
     "branch": "school-data-rank-8",
     "pending": false,
-    "last_ok": "2026-11-19T18:43:54",
+    "last_ok": "2026-11-19T18:50:06",
     "last_error": ""
   },
   "work": {
@@ -659,5 +675,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T18:50:01"
+  "updated": "2026-11-19T19:03:45"
 }
