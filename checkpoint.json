@@ -45,7 +45,9 @@
       "email:stmarys_rampur@rediffmail.com",
       "phone:7455837788",
       "email:query@anandconvent.com",
-      "phone:5952350956"
+      "phone:5952350956",
+      "phone:9354440511",
+      "email:principalsaintpaulrampur1969@gmail.com"
     ]
   },
   "enriched": {
@@ -85,7 +87,9 @@
       "email:stmarys_rampur@rediffmail.com",
       "phone:7455837788",
       "email:query@anandconvent.com",
-      "phone:5952350956"
+      "phone:5952350956",
+      "phone:9354440511",
+      "email:principalsaintpaulrampur1969@gmail.com"
     ]
   },
   "completed_cities": [],
@@ -468,6 +472,20 @@
       "city": "Rampur",
       "reason": "Google searching is in its CAPTCHA cooldown for another 64 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T17:29:06"
+    },
+    {
+      "school": "Green Fields International School, Rampur",
+      "state": "Uttar Pradesh",
+      "city": "Rampur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 60 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:32:44"
+    },
+    {
+      "school": "St Paul's School, Rampur",
+      "state": "Uttar Pradesh",
+      "city": "Rampur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 55 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:38:03"
     }
   ],
   "duplicates": 0,
@@ -476,7 +494,7 @@
   "git": {
     "branch": "school-data-rank-10",
     "pending": false,
-    "last_ok": "2026-11-19T17:25:35",
+    "last_ok": "2026-11-19T17:31:44",
     "last_error": ""
   },
   "work": {
@@ -485,5 +503,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:31:40"
+  "updated": "2026-11-19T17:39:59"
 }
