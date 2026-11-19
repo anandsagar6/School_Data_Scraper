@@ -10,7 +10,11 @@
   ],
   "current_keyword": "Private Schools",
   "discovery_done": {},
-  "keywords_done": {},
+  "keywords_done": {
+    "Madhya Pradesh|Mandla": [
+      "Private Schools"
+    ]
+  },
   "committed": {
     "Madhya Pradesh|Mandla": [
       "email:care@theorchidfunschool.in",
@@ -345,7 +349,7 @@
   "git": {
     "branch": "school-data-rank-6",
     "pending": false,
-    "last_ok": "2026-11-19T16:55:46",
+    "last_ok": "2026-11-19T17:03:09",
     "last_error": ""
   },
   "work": {
@@ -354,5 +358,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:03:04"
+  "updated": "2026-11-19T17:03:09"
 }
