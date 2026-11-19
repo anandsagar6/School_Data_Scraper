@@ -34,7 +34,8 @@
     "Odisha|Dhenkanal": [
       "email:ripsdkl@gmail.com",
       "phone:9437032662",
-      "phone:4044600600"
+      "phone:4044600600",
+      "phone:7682842755"
     ]
   },
   "enriched": {
@@ -63,7 +64,9 @@
     "Odisha|Dhenkanal": [
       "email:ripsdkl@gmail.com",
       "phone:9437032662",
-      "phone:4044600600"
+      "phone:4044600600",
+      "name+address:ananda marga dhenkanal|bebartakateni",
+      "phone:7682842755"
     ]
   },
   "completed_cities": [],
@@ -442,6 +445,20 @@
       "city": "Dhenkanal",
       "reason": "Google searching is in its CAPTCHA cooldown for another 120 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:10:53"
+    },
+    {
+      "school": "Ananda Marga Public School, Dhenkanal",
+      "state": "Odisha",
+      "city": "Dhenkanal",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 115 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:15:17"
+    },
+    {
+      "school": "Dream India Schools Dhenkanal Odisha",
+      "state": "Odisha",
+      "city": "Dhenkanal",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 111 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:19:39"
     }
   ],
   "duplicates": 0,
@@ -450,7 +467,7 @@
   "git": {
     "branch": "school-data-rank-8",
     "pending": false,
-    "last_ok": "2026-11-19T17:06:06",
+    "last_ok": "2026-11-19T17:13:12",
     "last_error": ""
   },
   "work": {
@@ -459,5 +476,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:13:08"
+  "updated": "2026-11-19T17:21:36"
 }
