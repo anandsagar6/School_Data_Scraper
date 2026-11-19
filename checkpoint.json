@@ -23,7 +23,8 @@
       "email:admissions@mrgschool.edu.in",
       "email:bbpschoolmv@gmail.com",
       "email:me@mothersmountschool.com",
-      "email:vspkschool@yahoo.co.in"
+      "email:vspkschool@yahoo.co.in",
+      "email:contact@themis.in"
     ]
   },
   "enriched": {
@@ -38,7 +39,8 @@
       "email:admissions@mrgschool.edu.in",
       "email:bbpschoolmv@gmail.com",
       "email:me@mothersmountschool.com",
-      "email:vspkschool@yahoo.co.in"
+      "email:vspkschool@yahoo.co.in",
+      "email:contact@themis.in"
     ]
   },
   "completed_cities": [],
@@ -333,6 +335,13 @@
       "city": "Delhi",
       "reason": "Google searching is in its CAPTCHA cooldown for another 28 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T15:42:30"
+    },
+    {
+      "school": "The Mother's International School",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 11 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T15:59:25"
     }
   ],
   "duplicates": 0,
@@ -341,7 +350,7 @@
   "git": {
     "branch": "school-data-rank-1",
     "pending": false,
-    "last_ok": "2026-11-19T15:40:11",
+    "last_ok": "2026-11-19T15:57:12",
     "last_error": ""
   },
   "work": {
@@ -350,5 +359,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T15:57:08"
+  "updated": "2026-11-19T16:06:04"
 }
