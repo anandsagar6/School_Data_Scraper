@@ -45,7 +45,9 @@
       "site:allindiaprivateschools.org",
       "email:saintramanschool@gmail.com",
       "phone:8700608321",
-      "phone:9990603603"
+      "phone:9990603603",
+      "phone:8090907700",
+      "email:info@shokeeninternationalschool.com"
     ]
   },
   "enriched": {
@@ -83,7 +85,9 @@
       "site:allindiaprivateschools.org",
       "email:saintramanschool@gmail.com",
       "phone:8700608321",
-      "phone:9990603603"
+      "phone:9990603603",
+      "phone:8090907700",
+      "email:info@shokeeninternationalschool.com"
     ]
   },
   "completed_cities": [],
@@ -612,6 +616,20 @@
       "city": "Delhi",
       "reason": "Google searching is in its CAPTCHA cooldown for another 119 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:48:58"
+    },
+    {
+      "school": "Gangotri Public School",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 114 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:53:22"
+    },
+    {
+      "school": "Shokeen International School, Dwarka",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 112 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:55:46"
     }
   ],
   "duplicates": 0,
@@ -620,7 +638,7 @@
   "git": {
     "branch": "school-data-rank-1",
     "pending": false,
-    "last_ok": "2026-11-19T17:43:08",
+    "last_ok": "2026-11-19T17:51:17",
     "last_error": ""
   },
   "work": {
@@ -629,5 +647,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:51:11"
+  "updated": "2026-11-19T17:57:34"
 }
