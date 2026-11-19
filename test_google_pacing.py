@@ -140,10 +140,22 @@ class PacingBase(unittest.TestCase):
         answers = list(answers)
 
         def fake(browser, query):
+            """Stand in for run_google_search, whatever arity it has.
+
+            The real one grew a fourth return value - Google's own AI
+            answer - when the AI reading was added, and these fakes were
+            left at three, which raised
+            "not enough values to unpack (expected 4, got 3)" inside
+            find_official_contacts() and errored ten tests. The scripted
+            answers below stay three-tuples because that is what they are
+            about; the missing ai_text is padded here, in one place.
+            """
             self.queries.append(query)
-            if answers:
-                return answers.pop(0)
-            return "", [], ""
+            reply = answers.pop(0) if answers else ("", [], "")
+            reply = tuple(reply)
+            while len(reply) < 4:
+                reply = reply + ("",)        # ai_text: none offered
+            return reply
 
         fs.run_google_search = fake
 
