@@ -58,7 +58,9 @@
       "phone:1140934396",
       "phone:9811369470",
       "phone:1127016688",
-      "phone:9205765248"
+      "phone:9205765248",
+      "phone:1126024645",
+      "email:info@aadyant.com"
     ]
   },
   "enriched": {
@@ -110,7 +112,9 @@
       "phone:9811369470",
       "phone:1127016688",
       "phone:9205765248",
-      "name+address:st andrews|j-46"
+      "name+address:st andrews|j-46",
+      "phone:1126024645",
+      "email:info@aadyant.com"
     ]
   },
   "completed_cities": [],
@@ -730,6 +734,20 @@
       "city": "Delhi",
       "reason": "Google searching is in its CAPTCHA cooldown for another 45 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T19:02:40"
+    },
+    {
+      "school": "St. George's School",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 41 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T19:07:16"
+    },
+    {
+      "school": "Aadyant School",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 38 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T19:10:11"
     }
   ],
   "duplicates": 0,
@@ -738,7 +756,7 @@
   "git": {
     "branch": "school-data-rank-1",
     "pending": false,
-    "last_ok": "2026-11-19T19:00:51",
+    "last_ok": "2026-11-19T19:05:55",
     "last_error": ""
   },
   "work": {
@@ -747,5 +765,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T19:05:50"
+  "updated": "2026-11-19T19:11:17"
 }
