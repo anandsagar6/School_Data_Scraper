@@ -6,7 +6,7 @@
   "city_fingerprint": "4face9f1d03dd68c4c22d260484c501dbc091075c6decef04119ef5515c2e7f9",
   "current_city": [
     "Odisha",
-    "Angul"
+    "Dhenkanal"
   ],
   "current_keyword": "Private Schools",
   "discovery_done": {},
@@ -30,6 +30,9 @@
       "email:davpsangul@gmail.com",
       "site:dpsnalconagar.org",
       "phone:8280149194"
+    ],
+    "Odisha|Dhenkanal": [
+      "email:ripsdkl@gmail.com"
     ]
   },
   "enriched": {
@@ -52,7 +55,11 @@
       "email:davpsangul@gmail.com",
       "site:dpsnalconagar.org",
       "name+address:saraswati|r5x4+r7p",
-      "phone:8280149194"
+      "phone:8280149194",
+      "name+address:mahima jyoti science college angul|q49p+vgj"
+    ],
+    "Odisha|Dhenkanal": [
+      "email:ripsdkl@gmail.com"
     ]
   },
   "completed_cities": [],
@@ -403,6 +410,20 @@
       "city": "Angul",
       "reason": "Google searching is in its CAPTCHA cooldown for another 135 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T16:55:47"
+    },
+    {
+      "school": "Mahima Jyoti Science College,Angul",
+      "state": "Odisha",
+      "city": "Angul",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 130 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:00:26"
+    },
+    {
+      "school": "Royal International Public School, Affiliated to CBSE",
+      "state": "Odisha",
+      "city": "Dhenkanal",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 126 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:04:27"
     }
   ],
   "duplicates": 0,
@@ -411,7 +432,7 @@
   "git": {
     "branch": "school-data-rank-8",
     "pending": false,
-    "last_ok": "2026-11-19T16:51:24",
+    "last_ok": "2026-11-19T16:58:02",
     "last_error": ""
   },
   "work": {
@@ -420,5 +441,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:57:57"
+  "updated": "2026-11-19T17:06:02"
 }
