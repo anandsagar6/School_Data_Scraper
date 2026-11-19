@@ -6,7 +6,7 @@
   "city_fingerprint": "4face9f1d03dd68c4c22d260484c501dbc091075c6decef04119ef5515c2e7f9",
   "current_city": [
     "Madhya Pradesh",
-    "Mandla"
+    "Damoh"
   ],
   "current_keyword": "Private Schools",
   "discovery_done": {},
@@ -32,6 +32,10 @@
       "phone:7987373427",
       "email:mionm.2018@gmail.com",
       "phone:9424989933"
+    ],
+    "Madhya Pradesh|Damoh": [
+      "phone:9425618918",
+      "phone:9755672037"
     ]
   },
   "enriched": {
@@ -57,6 +61,10 @@
       "phone:7987373427",
       "email:mionm.2018@gmail.com",
       "phone:9424989933"
+    ],
+    "Madhya Pradesh|Damoh": [
+      "phone:9425618918",
+      "phone:9755672037"
     ]
   },
   "completed_cities": [],
@@ -341,15 +349,29 @@
       "city": "Mandla",
       "reason": "Google searching is in its CAPTCHA cooldown for another 111 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:01:45"
+    },
+    {
+      "school": "The Gulmohar International School Damoh (M.P )",
+      "state": "Madhya Pradesh",
+      "city": "Damoh",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 108 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:04:58"
+    },
+    {
+      "school": "Saint memorial school",
+      "state": "Madhya Pradesh",
+      "city": "Damoh",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 105 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:08:04"
     }
   ],
   "duplicates": 0,
-  "saved": 0,
+  "saved": 7,
   "cycle": 0,
   "git": {
     "branch": "school-data-rank-6",
     "pending": false,
-    "last_ok": "2026-11-19T17:03:09",
+    "last_ok": "2026-11-19T17:03:13",
     "last_error": ""
   },
   "work": {
@@ -358,5 +380,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:03:09"
+  "updated": "2026-11-19T17:11:06"
 }
