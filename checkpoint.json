@@ -61,7 +61,8 @@
       "phone:9881145793",
       "email:info@rplsparli.com",
       "phone:7391017474",
-      "phone:9403267518"
+      "phone:9403267518",
+      "email:bhel_school@rediffmail.com"
     ]
   },
   "enriched": {
@@ -119,7 +120,9 @@
       "phone:9881145793",
       "email:info@rplsparli.com",
       "phone:7391017474",
-      "phone:9403267518"
+      "phone:9403267518",
+      "email:bhel_school@rediffmail.com",
+      "name+address:dr zakir hussain urdu|rgvp+m3g, mulla galli"
     ]
   },
   "completed_cities": [],
@@ -527,6 +530,20 @@
       "city": "Parli",
       "reason": "Google searching is in its CAPTCHA cooldown for another 60 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T18:10:57"
+    },
+    {
+      "school": "BHEL Secondary school",
+      "state": "Maharashtra",
+      "city": "Parli",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 53 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:18:15"
+    },
+    {
+      "school": "Dr. Zakir Hussain Urdu School",
+      "state": "Maharashtra",
+      "city": "Parli",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 49 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:21:20"
     }
   ],
   "duplicates": 0,
@@ -535,7 +552,7 @@
   "git": {
     "branch": "school-data-rank-7",
     "pending": false,
-    "last_ok": "2026-11-19T18:09:58",
+    "last_ok": "2026-11-19T18:16:49",
     "last_error": ""
   },
   "work": {
@@ -544,5 +561,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T18:16:44"
+  "updated": "2026-11-19T18:23:04"
 }
