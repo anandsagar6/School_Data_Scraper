@@ -32,7 +32,9 @@
       "email:pngssschool@gmail.com",
       "email:pvmssgtk@gmail.com",
       "phone:9434410172",
-      "email:hctadong@gmail.com"
+      "email:hctadong@gmail.com",
+      "phone:9434484740",
+      "phone:3592284518"
     ]
   },
   "enriched": {
@@ -55,7 +57,9 @@
       "name+address:west point|8jh8+gjh, ridge rd",
       "email:pvmssgtk@gmail.com",
       "phone:9434410172",
-      "email:hctadong@gmail.com"
+      "email:hctadong@gmail.com",
+      "phone:9434484740",
+      "phone:3592284518"
     ]
   },
   "completed_cities": [],
@@ -510,6 +514,20 @@
       "city": "Sichey",
       "reason": "Google searching is in its CAPTCHA cooldown for another 96 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T16:57:00"
+    },
+    {
+      "school": "Daffodils Home Secondary School",
+      "state": "Sikkim",
+      "city": "Sichey",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 92 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:01:12"
+    },
+    {
+      "school": "Sai Prashanti Vidya Mandir",
+      "state": "Sikkim",
+      "city": "Sichey",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 88 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:05:29"
     }
   ],
   "duplicates": 0,
@@ -518,7 +536,7 @@
   "git": {
     "branch": "school-data-rank-9",
     "pending": false,
-    "last_ok": "2026-11-19T16:55:38",
+    "last_ok": "2026-11-19T17:00:40",
     "last_error": ""
   },
   "work": {
@@ -527,5 +545,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:00:35"
+  "updated": "2026-11-19T17:07:30"
 }
