@@ -23,7 +23,8 @@
       "phone:9861086018",
       "phone:6764236422",
       "site:antaryamigurukul.in",
-      "email:jnvangul9@gmail.com"
+      "email:jnvangul9@gmail.com",
+      "phone:9438113993"
     ]
   },
   "enriched": {
@@ -39,7 +40,8 @@
       "phone:6764236422",
       "name+address:angul|r3pv+c8v",
       "site:antaryamigurukul.in",
-      "email:jnvangul9@gmail.com"
+      "email:jnvangul9@gmail.com",
+      "phone:9438113993"
     ]
   },
   "completed_cities": [],
@@ -341,6 +343,13 @@
       "city": "Angul",
       "reason": "Google searching is in its CAPTCHA cooldown for another 175 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T16:15:26"
+    },
+    {
+      "school": "Omm bidya bharati residential college sikhyakapada",
+      "state": "Odisha",
+      "city": "Angul",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 167 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:23:20"
     }
   ],
   "duplicates": 0,
@@ -349,7 +358,7 @@
   "git": {
     "branch": "school-data-rank-8",
     "pending": false,
-    "last_ok": "2026-11-19T16:11:17",
+    "last_ok": "2026-11-19T16:21:07",
     "last_error": ""
   },
   "work": {
@@ -358,5 +367,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:21:02"
+  "updated": "2026-11-19T16:28:32"
 }
