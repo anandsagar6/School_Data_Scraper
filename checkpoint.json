@@ -54,7 +54,9 @@
       "email:nlkshisar@gmail.com",
       "email:principalcrcoehisar@gmail.com",
       "email:ipshisar2015@gmail.com",
-      "phone:9466489176"
+      "phone:9466489176",
+      "email:principal@dps-hisar.in",
+      "email:sharmanirmal2002@gmail.com"
     ]
   },
   "enriched": {
@@ -105,7 +107,9 @@
       "email:principalcrcoehisar@gmail.com",
       "name+address:lakshmi|089506 36002",
       "email:ipshisar2015@gmail.com",
-      "phone:9466489176"
+      "phone:9466489176",
+      "email:principal@dps-hisar.in",
+      "email:sharmanirmal2002@gmail.com"
     ]
   },
   "completed_cities": [],
@@ -718,6 +722,20 @@
       "city": "Hisar",
       "reason": "Google searching is in its CAPTCHA cooldown for another 55 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T19:11:48"
+    },
+    {
+      "school": "Delhi Public SchoolHisar",
+      "state": "Haryana",
+      "city": "Hisar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 41 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T19:26:02"
+    },
+    {
+      "school": "New India Convent School",
+      "state": "Haryana",
+      "city": "Hisar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 37 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T19:29:46"
     }
   ],
   "duplicates": 0,
@@ -726,7 +744,7 @@
   "git": {
     "branch": "school-data-rank-4",
     "pending": false,
-    "last_ok": "2026-11-19T19:09:35",
+    "last_ok": "2026-11-19T19:25:15",
     "last_error": ""
   },
   "work": {
@@ -735,5 +753,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T19:25:10"
+  "updated": "2026-11-19T19:43:19"
 }
