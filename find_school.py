@@ -62,10 +62,8 @@ import urllib.parse
 
 # ===========================================================================
 #  SETTINGS
-# ===========================================================================
 #  Everything meant to be changed, most important first. Anything not here
 #  is technical and lives further down, beside the code that uses it.
-# ---------------------------------------------------------------------------
 
 # --- this laptop -----------------------------------------------------------
 rank = 1                            # laptop 1..num_sys; rank.json overrides
@@ -83,21 +81,8 @@ GIT_SYNC_MINUTES = 5                # never sync more often than this
 GIT_BRANCH_PER_RANK = True          # rank 1 -> school-data-rank-1
 
 # --- rank-wise repository URL (NOT IN USE YET) -----------------------------
-#  One repository per rank instead of one repository with ten branches.
-#  Nothing below changes how this script syncs today: RANK_REPO_ENABLED is
-#  False, so git_sync() still pushes to GIT_REMOTE exactly as before. Turn
-#  it on only after the ten repositories exist and each one has been shown
-#  to accept a write - rank_repo_ready() reports that without pushing.
-RANK_REPO_ENABLED = False
-#  There is deliberately no "total_scripts": num_sys above already says how
-#  many ranks share the work, and a second number for the same thing is one
-#  that can disagree with it. rank_repo_url() reads the resolved num_sys.
+
 base_github_url = "git@github.com:anandsagar6/School_Data_Scraper.git"
-#  NOTE: worked out ONCE, when this file is imported, from the `rank`
-#  literal above. rank.json, SCHOOL_RANK and --rank override the rank AT
-#  RUNTIME and cannot reach back and change this string, so on a laptop
-#  whose rank.json says 7 this still reads 1. Anything needing the running
-#  rank's repository must call rank_repo_url() after resolve_rank().
 final_github_url = base_github_url.replace(".git", f"{rank}.git")
 
 # --- what is collected -----------------------------------------------------
@@ -146,7 +131,6 @@ LOG_KEEP_DAYS = 10                  # trim find_school.log to this; 0 keeps all
 
 # ===========================================================================
 #  WHERE THINGS ARE WRITTEN
-# ===========================================================================
 
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 OUTPUT_DIR = PROJECT_DIR
@@ -194,17 +178,10 @@ def set_rank_paths(this_rank=None):
 
 # ===========================================================================
 #  THE 57 SCHOOL FIELDS
-# ===========================================================================
-#  (Excel column heading, Gemini answer key), read from mylib.py. The Excel
-#  columns, the requested field list in the prompt, the answer format and
-#  the parser are all built from that one tuple, so they cannot drift apart
-#  - and there is no second copy of it here.
-#
-#  One deliberate decision: the prompt's rules mention Source_URLs while the
-#  answer format uses School_Data_Source_URL. School_Data_Source_URL is the
-#  authoritative field; Source_URLs is accepted by the parser as a spelling
-#  of it and never becomes a 58th column.
-# ---------------------------------------------------------------------------
+#  (Excel column heading, Gemini answer key), read from mylib.py. Columns,
+#  prompt, answer format and parser all come from that one tuple, so they
+#  cannot drift apart. Source_URLs is accepted by the parser as a spelling
+#  of School_Data_Source_URL, never a 58th column.
 
 
 
@@ -246,20 +223,11 @@ BLANK_ANSWERS = frozenset({
 
 # ---------------------------------------------------------------------------
 #  READING YOUR mylib.py
-# ---------------------------------------------------------------------------
-#  The cities and the school keywords live in your own mylib.py so that one
-#  edit there reaches every script that uses them.
-#
-#  That file is NOT imported. It is parsed, and only the two lists wanted
-#  are read out of it. Three reasons:
-#
-#    * importing it would run it, which pulls in Levenshtein, gtts and
-#      psutil - packages this script has no use for and a fresh laptop may
-#      not have;
-#    * that file also holds mail accounts and their passwords, and reading
-#      two named lists out of the syntax tree cannot touch them;
-#    * a syntax error anywhere else in it cannot stop this script.
-# ---------------------------------------------------------------------------
+#  Cities and keywords live in your mylib.py, so one edit reaches every
+#  script. It is PARSED, never imported, and only the named lists are read
+#  out of the syntax tree: importing would run it (pulling in Levenshtein,
+#  gtts, psutil), would touch the mail passwords it also holds, and a syntax
+#  error anywhere else in it would stop this script.
 
 #: Filled in by load_shared_lists(); each says where its value came from.
 SHARED_SOURCE = {"cities": "not loaded", "keywords": "not loaded",
@@ -508,10 +476,8 @@ def unknown_enabled_keywords():
 
 # ===========================================================================
 #  THE GEMINI PROMPT
-# ===========================================================================
 #  The text of school_gemini_prompt.txt, with the field list and the answer
 #  format generated from SCHOOL_FIELDS above rather than typed out again.
-# ---------------------------------------------------------------------------
 
 GEMINI_PROMPT_TEMPLATE = """\
 School Name is {school_name}. It is located in {city}, {state}, India.
@@ -622,7 +588,6 @@ def build_prompt(record):
 
 # ===========================================================================
 #  WORK DIVISION - the GitHub Profile Extractor's algorithm, unchanged
-# ===========================================================================
 
 def get_cities_by_rank(all_cities, rank, num_sys):
     """This rank's equal, contiguous slice of the city list.
@@ -859,7 +824,6 @@ def search_plan(value_rank, value_num, states=None, only_city=None):
 
 # ===========================================================================
 #  LOGGING
-# ===========================================================================
 
 LOG_LEVEL = "INFO"
 CITY_DELAY_SECONDS = (5.0, 10.0)    # between two cities
@@ -1019,7 +983,6 @@ def announce(message, *args):
 
 # ===========================================================================
 #  SMALL TEXT HELPERS
-# ===========================================================================
 
 _WS = re.compile(r"\s+")
 _PHONE_OK = re.compile(r"[^0-9+]")
@@ -1114,12 +1077,10 @@ def blank_record():
 
 # ===========================================================================
 #  DUPLICATE DETECTION
-# ===========================================================================
 #  Two records are the same school only on evidence: the same Maps place, or
 #  the same website AND PIN code, or the same name AND the same address. A
 #  similar name alone is never enough, and anything that says "different
 #  branch" vetoes the merge even when a weaker key matched.
-# ---------------------------------------------------------------------------
 
 _BRANCH_WORDS = re.compile(
     r"\b(campus|branch|block|sector|phase|road|nagar|extension|colony|puram|"
@@ -1242,24 +1203,14 @@ def place_id_of(url):
     return ""
 
 
-#: Words that genuinely name a SEPARATE CAMPUS when they appear in the
-#: school's own name. Deliberately narrower than _BRANCH_WORDS, which also
-#: holds address words - road, nagar, colony, main, north - that say WHERE
-#: a school is, not WHICH campus it is. Treating those as campus markers
-#: would split one school in two the moment one copy had its locality
-#: filled in and the other did not.
-#: STRUCTURAL words only - the ones that name a separate site. The school
-#: LEVEL words (junior, senior, primary, boys, girls) are deliberately NOT
-#: here: in Indian naming they are part of the school's own name far more
-#: often than they mark a campus, and 7 of the 9 campus-looking names in
-#: the first collected city were "... Senior Secondary School". Treating
-#: those as campus markers would split one school from itself the moment
-#: it was collected once with its short name and once with its full one.
-#:
-#: The level words still separate schools when BOTH names carry one and
-#: they differ - "X Boys School" against "X Girls School" - because
-#: branch_signature() already covers that from the wider _BRANCH_WORDS
-#: list. Nothing true is lost by leaving them out here.
+#: STRUCTURAL words that name a separate campus, read from the school's own
+#: name. Narrower than _BRANCH_WORDS on purpose, which also holds address
+#: words (road, nagar, colony) and LEVEL words (junior, senior, primary,
+#: boys, girls) - 7 of the 9 campus-looking names in the first city were
+#: "... Senior Secondary School", so treating those as markers would split
+#: a school from itself. Level words still separate schools when BOTH names
+#: carry one and they differ ("X Boys" / "X Girls"): branch_signature()
+#: covers that case.
 _CAMPUS_DESIGNATORS = re.compile(
     r"\b(campus|branch|annexe|annex|block|phase|sector|wing)\b", re.I)
 
@@ -1295,19 +1246,12 @@ def contradicts(left, right):
         return "different branch words (%s)" % ", ".join(sorted(only))
 
     # A campus named in ONE name and not the other is two campuses, even
-    # at the same PIN code and address, and EVEN ON ONE PHONE LINE:
-    # "Modern School" and "Modern School Branch II" share a street, a
-    # switchboard, a domain and a website without being one school. A
-    # trust running several campuses publishes one number for all of
-    # them, so a shared contact says who runs a school, not which
-    # building it is - it must never merge two campuses into one row,
-    # because the row that loses is a school nobody ever contacts.
-    #
-    # Only the NAME is read, and only the narrow designator list, so a
-    # record whose locality is merely more complete is still one school.
-    # The one thing that does outrank a named campus is a confirmed
-    # matching Google Maps place id, settled at the top of this function:
-    # that is the same pin on the same map, which no name can contradict.
+    # at the same PIN, address and phone: a trust publishes one number for
+    # all its campuses, so a shared contact says WHO RUNS a school, not
+    # which building - and the row that loses a wrong merge is a school
+    # nobody ever contacts. Only the name is read, and only the narrow
+    # designator list, so a fuller locality is still one school. A matching
+    # Maps place id does outrank the name; it is settled further up.
     left_campus, right_campus = (campus_designators(left),
                                  campus_designators(right))
     if left_campus != right_campus:
@@ -1390,7 +1334,6 @@ class SchoolIndex:
 
 # ===========================================================================
 #  GEMINI ANSWER PARSER
-# ===========================================================================
 
 def _key_pattern():
     keys = sorted(set(ANSWER_KEYS) | set(KEY_SYNONYMS), key=len, reverse=True)
@@ -1539,13 +1482,11 @@ def tidy_value(column, value):
 
 # ===========================================================================
 #  EXCEL
-# ===========================================================================
 #  current_data.xlsx fills to CYCLE_SIZE, then current_data_cycle1.xlsx,
 #  _cycle2 and so on. A finished cycle file is never reopened for writing, so
 #  nothing can overwrite completed work. Every save is atomic: written to a
 #  temporary file in the same folder, then os.replace()d into place, so a
 #  crash leaves either the old workbook or the new one, never half of one.
-# ---------------------------------------------------------------------------
 
 try:
     import openpyxl
@@ -2006,25 +1947,16 @@ def existing_match_keys():
 
 # ===========================================================================
 #  SAVING RECOVERABLE PROGRESS TO GITHUB
-# ===========================================================================
-#  The point of this is one thing only: if a production laptop dies, the
-#  work it had already done must not die with it. So the files that let a
-#  fresh clone carry on - the checkpoint, the Excel files, the cycle
-#  backups and the few temporary files an unfinished city needs - are
-#  committed and pushed on a timer and at the natural milestones.
+#  If a laptop dies its finished work must not die with it, so the files a
+#  fresh clone needs to carry on are committed and pushed on a timer and at
+#  milestones. A failure - GitHub down, push rejected, no network - is
+#  logged, noted in the checkpoint as NOT synced, then ignored so the run
+#  carries on.
 #
-#  What it must never do is put the collection at risk. GitHub being down,
-#  a rejected push, no network at all: every one of those is logged, noted
-#  in the checkpoint as NOT synced, and then ignored so the run carries on.
-#
-#  Rules followed here, all of them deliberate:
-#    * only named paths are added - never "git add ." - so a credential
-#      file, a browser profile or a log cannot be committed by accident
-#    * no repository is created and no git config is written
-#    * no force-push, no reset, no clean, no checkout of existing branches
-#    * each rank pushes its OWN branch, so 25 laptops cannot collide
-#    * a push that did not happen is never recorded as if it had
-# ---------------------------------------------------------------------------
+#  Rules, all deliberate: only named paths are added, never "git add .";
+#  no repository is created and no git config written; no force-push, reset,
+#  clean or checkout; each rank pushes its OWN branch; and a push that did
+#  not happen is never recorded as if it had.
 
 GIT_STATE = {"last_attempt": 0.0, "last_ok": 0.0, "pending": False,
              "last_error": "", "branch": "", "checked": False,
@@ -2033,20 +1965,11 @@ GIT_STATE = {"last_attempt": 0.0, "last_ok": 0.0, "pending": False,
 
 # ===========================================================================
 #  WORKING HOURS: RANDOM WORK PERIODS, BREAKS AND THE NIGHT STOP
-# ===========================================================================
-#  Modelled on the GitHub Profile Extractor's clock, which was read for
-#  reference and not modified. Three ideas, all of them from it:
-#
-#    * a work period is a fresh random draw, not a fixed number, and a
-#      break is drawn fresh too, so no two are the same length;
-#    * the clock counts WORKING time - it stops while a break runs, so a
-#      3-hour period means three hours of actual collecting;
-#    * a stop is only ever taken at a safe point, between schools or
-#      between cities, never in the middle of an Excel write.
-#
-#  The night stop is read on the TIME_ZONE clock so every laptop agrees
-#  whatever the machine is set to.
-# ---------------------------------------------------------------------------
+#  Modelled on the GitHub Profile Extractor's clock (read, not modified).
+#  Work periods and breaks are fresh random draws, so no two are alike; the
+#  clock counts WORKING time, stopping while a break runs; and a stop is
+#  taken only between schools or cities, never mid-write. The night stop is
+#  read on the TIME_ZONE clock so every laptop agrees.
 
 WORK = {"started": None, "banked": 0.0, "mark": None, "depth": 0,
         "period_hours": 0.0, "breaks": 0, "break_until": 0.0}
@@ -2546,19 +2469,13 @@ def git_sync(reason, checkpoint=None, force=False):
         return False
 
     branch = GIT_STATE["branch"]
-    # THE DATA NEVER TOUCHES THE SOURCE BRANCH.
-    #
-    # This used to commit onto whatever branch was checked out and push
-    # that. When a push failed - no network, no key - the commit stayed
-    # behind on master, and the next ordinary "git push origin master"
-    # would have carried the collected school records into the public
-    # source repository. On a public repo that is a one-way mistake.
-    #
-    # So the commit is built with plumbing instead: a throwaway index, a
-    # tree written from it, and a commit recorded straight onto the rank
-    # branch's ref. HEAD, the checked-out branch and the operator's own
-    # staged changes are never touched, and nothing about the data can
-    # reach the source branch even if every push fails for a week.
+    # THE DATA NEVER TOUCHES THE SOURCE BRANCH. Committing onto whatever
+    # branch was checked out meant a failed push left the records on
+    # master, where the next "git push origin master" would have carried
+    # them into the source repository. So the commit is built with
+    # plumbing - throwaway index, tree, commit straight onto the rank
+    # branch's ref - leaving HEAD, the branch and any staged changes
+    # untouched even if every push fails for a week.
     ref = "refs/heads/%s" % branch
     # git_run returns (ok, output): the FIRST value says whether the ref
     # exists, the second is its hash.
@@ -2852,15 +2769,11 @@ def append_records(records):
         return 0, 0
 
     keymap = master_key_map()
-    # The cycle file is checked as well as the master, not instead of it.
-    # A row can be sitting in the active cycle that the master has not got
-    # - an interrupted save, a file edited by hand - and checking only the
-    # master would let its twin through and write the same school into the
-    # cycle file twice. Checked here, before either file is written, so
-    # the two never disagree about what was saved.
-    #
-    # Only the active file: a finished cycle is never appended to again,
-    # and a row that drifted out of the master is copied back into it by
+    # The cycle file is checked AS WELL AS the master. A row can sit in the
+    # active cycle that the master lacks - an interrupted save, a hand edit
+    # - and checking only the master would write that school twice. Only
+    # the active file: a finished cycle is never appended to, and a row
+    # that drifted out of the master is restored by
     # reconcile_master_and_cycles() at the start of every run.
     for record in read_records(cycle_path(0)):
         for key in match_keys(record):
@@ -2931,12 +2844,10 @@ def append_records(records):
 
 # ===========================================================================
 #  TEMPORARY PER-CITY STORAGE
-# ===========================================================================
 #  Discovered schools are written here the moment a city's searches finish,
 #  before any Gemini work starts. A crash during enrichment therefore costs
 #  the research, never the discovery. These files are removed only after the
 #  city's rows have been read back from the final workbook.
-# ---------------------------------------------------------------------------
 
 def city_dir(state, city):
     """Temp_Data itself. Every city's files live in it side by side.
@@ -3020,29 +2931,19 @@ def load_city_progress(state, city):
 
 # ===========================================================================
 #  CLEANING UP TEMPORARY FILES
-# ===========================================================================
-#  One rule, in three stages:
+#  SUCCESS -> clean up. UNRESOLVED FAILURE -> preserve for the resume.
+#  Nothing here is called from an error path or a finally: block, on
+#  purpose - a failed school, a keyword that never reached its end and a
+#  city with rows still missing all keep every file, because the next run
+#  needs them to carry on from the right school.
 #
-#      SUCCESS            -> CLEAN UP
-#      UNRESOLVED FAILURE -> PRESERVE FOR RESUME
-#
-#  Nothing below is ever called from an error path, and nothing below is in
-#  a finally: block. That is deliberate. A school that failed, a keyword
-#  whose list never reached its end and a city with rows still missing from
-#  the master all keep every file they have, because the next run needs them
-#  to carry on from the right school instead of collecting everything again.
-#
-#  What gets written, and when it goes:
-#
-#    <State>_<City>_<keyword>.txt[.gz]   the copied Maps text
-#         -> removed when that keyword is complete (stage 2)
-#    <State>_<City>_gemini_<school>.txt  one school's raw answer
-#         -> removed when that school is saved and verified (stage 1)
+#    <State>_<City>_<keyword>.txt[.gz]       the copied Maps text
+#         -> goes when that keyword completes          (stage 2)
+#    <State>_<City>_gemini_<school>.txt      one school's raw answer
+#         -> goes when that school is saved + verified (stage 1)
 #    <State>_<City>_temporary_schools.xlsx   the city's working sheet
-#         -> removed when the city is complete (stage 3)
-#    <State>_<City>_schools.json         the resume file
-#         -> removed when the city is complete (stage 3)
-# ---------------------------------------------------------------------------
+#    <State>_<City>_schools.json             the resume file
+#         -> go when the city completes               (stage 3)
 
 def drop_files(paths):
     """Remove files that are certainly not needed any more."""
@@ -3191,7 +3092,6 @@ def dump_text(state, city, name, text):
 
 # ===========================================================================
 #  CHECKPOINT
-# ===========================================================================
 
 CHECKPOINT_VERSION = 3
 
@@ -3211,17 +3111,15 @@ def empty_checkpoint():
         "enriched": {},                # "State|City" -> [match key strings]
         "completed_cities": [],        # ["State|City", ...]
         "failed": [],                  # [{record, reason, when}]
-        #: Schools that were SAVED but whose official email/phone searches
-        #: could not be run, because Google was in its CAPTCHA cooldown or
-        #: the search browser failed. Their rows are already in the master
-        #: from Maps and Gemini; only the Google-verified official pair is
-        #: outstanding, so this is a list of searches owed, not of failures.
+        #: Schools SAVED but whose official email/phone searches could not
+        #: run - a CAPTCHA cooldown, or the search browser failed. Their
+        #: rows are already in the master; only the verified official pair
+        #: is owed. A list of searches outstanding, not of failures.
         #:
         #: Added WITHOUT bumping CHECKPOINT_VERSION on purpose: load() does
         #: empty_checkpoint() then update(stored), so an older checkpoint
-        #: simply picks up the default. Bumping the version would make every
-        #: live checkpoint "written by an older version" and set it aside -
-        #: which would throw away the progress of every running rank.
+        #: picks up the default. Bumping it would set every live checkpoint
+        #: aside as "written by an older version" and throw away progress.
         "contacts_pending": [],        # [{school, state, city, reason, when}]
         "duplicates": 0,
         "saved": 0,
@@ -3478,7 +3376,6 @@ class Checkpoint:
 
 # ===========================================================================
 #  BROWSER
-# ===========================================================================
 
 try:
     from playwright.sync_api import sync_playwright
@@ -3554,21 +3451,13 @@ SOCKET_PROBE_TIMEOUT = 3            # for the bare X socket check
 
 # ===========================================================================
 #  SHOWING THE BROWSER ON THE REAL DESKTOP  (--show)
-# ===========================================================================
-#  xvfb-run runs the whole command against a private, invisible X server: it
-#  replaces DISPLAY (with something like :99) AND XAUTHORITY (with a file in
-#  /tmp/xvfb-run.XXXX/). A browser started inside it draws into that virtual
-#  screen, which is exactly what you want for an unattended run and exactly
-#  what you do NOT want when you are watching.
-#
-#  --show finds the display the desktop is really on, together with the
-#  authority file that opens it, and starts Chromium against that instead.
-#  Both are needed: the display alone gets "Authorization required, but no
-#  authorization protocol specified" and the browser dies.
-#
-#  Nothing else changes. The rank, the city list, Maps, Gemini, Excel and the
-#  checkpoint neither know nor care which screen the window is on.
-# ---------------------------------------------------------------------------
+#  xvfb-run replaces BOTH DISPLAY (with :99 or so) and XAUTHORITY (a file
+#  in /tmp/xvfb-run.XXXX/), so a browser inside it draws on a private
+#  invisible screen - right for an unattended run, wrong when you want to
+#  watch. --show finds the desktop's real display AND its authority file and
+#  starts Chromium there; the display alone gives "Authorization required,
+#  but no authorization protocol specified" and the browser dies. Nothing
+#  else changes: no other part of the run knows which screen it is on.
 
 X_SOCKET_DIR = "/tmp/.X11-unix"
 
@@ -4298,21 +4187,10 @@ class Browser:
 
 # ===========================================================================
 #  GOOGLE MAPS SCHOOL DISCOVERY
-# ===========================================================================
-#  WHY THIS IS NOT Ctrl+A / Down / Ctrl+C
-#  --------------------------------------
-#  Ctrl+A selects everything the results pane has RENDERED. Maps virtualises
-#  that pane: it removes cards that scroll out of view. So one Down keypress
-#  may add nothing, may add several cards, and may drop as many from the top
-#  as it adds at the bottom. Copying after every keypress therefore produces
-#  overlapping, unordered, partly repeated text, and a run that stops as soon
-#  as two copies look alike loses most of the list - which is exactly what
-#  "six schools" was.
-#
-#  Instead the results feed is scrolled and the rendered cards are read after
-#  each scroll, keyed by their place link. A card already seen is ignored, a
-#  card not seen before is added. That is insensitive to how much one scroll
-#  happens to move, and nothing is counted twice.
+#  The list is scrolled with Down presses and copied with the real
+#  clipboard; every copy takes the WHOLE list, so a bigger press count means
+#  fewer copies, never fewer schools. Schools are keyed, so an entry seen
+#  twice is counted once however much one scroll moved.
 #
 #  Stopping is deliberate and the reason is always reported:
 #    * the end-of-list message appeared           -> complete
@@ -4320,7 +4198,6 @@ class Browser:
 #    * the clipboard stopped being readable               -> INCOMPLETE
 #    * the list stopped moving                            -> INCOMPLETE
 #  A city is never marked complete on an incomplete search.
-# ---------------------------------------------------------------------------
 
 FEED_SELECTOR = 'div[role="feed"]'
 CARD_SELECTOR = 'div[role="feed"] a[href*="/maps/place/"]'
@@ -4371,18 +4248,14 @@ SCROLL_NO_PROGRESS_PRESSES = 180
 
 # ---------------------------------------------------------------------------
 #  READING THE RESULTS LIST: Ctrl+A, Ctrl+C, the real clipboard
-# ---------------------------------------------------------------------------
-#  No card is clicked, no place page is opened and nothing is read out of the
-#  cards' markup. The results list is focused, the page is selected and
-#  copied with the keyboard, and the text comes back off the system
-#  clipboard - the same thing a person does by hand.
+#  No card is clicked, no place page opened, nothing read out of the markup:
+#  the list is focused, selected and copied with the keyboard, off the
+#  system clipboard - what a person does by hand.
 #
-#  Measured on a live Delhi search: the copied text GROWS as the list loads
-#  (10 entries at 1,966 characters, 80 entries at 14,548). Maps keeps the
-#  earlier results in the page, so a later snapshot contains the earlier
-#  ones. Every snapshot is still kept and parsed, because that is only true
-#  while Google chooses to keep them.
-# ---------------------------------------------------------------------------
+#  Measured live in Delhi, the copied text GROWS as the list loads (10
+#  entries = 1,966 characters, 80 = 14,548), so a later copy contains the
+#  earlier ones. Every copy is still parsed, because that only holds while
+#  Google chooses to keep them in the page.
 
 #: Google's own icon glyphs land in the clipboard as private-use characters.
 _ICON_CHARS = re.compile(r"[\ue000-\uf8ff]")
@@ -4588,14 +4461,12 @@ COMPRESS_CAPTURE_FILES = True
 
 # ---------------------------------------------------------------------------
 #  THE CAPTURED TEXT FILE
-# ---------------------------------------------------------------------------
 #  Every Ctrl+C is appended to the keyword's .txt as its own snapshot, with a
 #  header saying which copy it was. The file is written during the search,
 #  not at the end, so an interrupted keyword keeps everything it copied.
 #
 #  This file is then the ONLY input to the extraction step: the records are
 #  produced by reading it, never by going back to the page.
-# ---------------------------------------------------------------------------
 
 SNAPSHOT_RULE = "=" * 36
 _SNAPSHOT_SPLIT = re.compile(
@@ -5124,16 +4995,11 @@ KEEP_RAW_GEMINI_ANSWERS = True      # kept under their school in a .txt
 
 # ===========================================================================
 #  GEMINI RESEARCH
-# ===========================================================================
-#  The answer is taken from the CURRENT response container, not from a copy
-#  of the whole page: a whole-page capture also contains the question, the
-#  previous answers and the interface, and mixing two schools' answers is the
-#  one mistake that silently corrupts the dataset.
-#
-#  The wait is on the answer itself, not on a fixed number of seconds: the
-#  response counts as finished when it carries real field lines AND has
-#  stopped growing for GEMINI_SETTLE_SECONDS.
-# ---------------------------------------------------------------------------
+#  The answer comes from the CURRENT response container, never a whole-page
+#  copy: that would also hold the question, earlier answers and the
+#  interface, and mixing two schools' answers silently corrupts the data.
+#  The wait is on the answer, not a fixed time - finished means real field
+#  lines AND no growth for GEMINI_SETTLE_SECONDS.
 
 INPUT_SELECTORS = (
     'rich-textarea div[contenteditable="true"]',
@@ -5820,7 +5686,6 @@ class Gemini:
 
 # ===========================================================================
 #  THE RUN
-# ===========================================================================
 
 #: What the status line says about where the run has got to. Set as the
 #: run moves; read whenever the line is redrawn.
@@ -5841,32 +5706,18 @@ def say_status(doing):
 
 # ===========================================================================
 #  ONE RUN AT A TIME
-# ===========================================================================
-#  Two extractors sharing one checkpoint and one master workbook would
-#  undo each other: both would research the same schools, both would write
-#  the same Excel file, and the one that saved last would win. systemd
-#  keeps a service to a single copy, but nothing stops a second run being
-#  started by hand in a terminal while the service is working.
+#  Two extractors on one checkpoint and one workbook would undo each other,
+#  and systemd keeping a service to one copy does not stop a second run
+#  being started by hand. So the writing commands take an exclusive
+#  fcntl.flock() first, which the KERNEL holds: it is released the moment
+#  the process ends however it ends - clean exit, crash, kill -9, power cut
+#  - so there is no such thing as a stale lock to clear.
 #
-#  So the writing commands take an exclusive lock first. fcntl.flock() is
-#  the right tool because the KERNEL holds it, not a file's contents:
-#
-#    * it is released the moment the process ends, however it ends - a
-#      clean exit, a crash, kill -9, or the power going out. There is no
-#      such thing as a stale flock, so nothing has to time out or be
-#      cleared by hand after a power cut.
-#    * it is advisory between processes on this machine, which is exactly
-#      the scope that matters: one project directory, one run.
-#
-#  The lock file lives in the project directory, so two installations in
-#  two different folders - or on two laptops - never collide. It is listed
-#  in .gitignore and is not one of recovery_paths(), so it is never
-#  committed, pushed or backed up.
-#
-#  --status, --dry-run, --self-test, --list-keywords and --check-display
-#  read or work in a temporary folder, so they are NOT blocked: an
-#  operator can always look at a running collection.
-# ---------------------------------------------------------------------------
+#  The lock file sits in the project directory, so two installations never
+#  collide; it is gitignored and not in recovery_paths(). The read-only
+#  commands (--status, --dry-run, --self-test, --list-keywords,
+#  --check-display) are NOT blocked: looking at a running collection is
+#  always allowed.
 
 #: Where the lock lives. Named after the project folder it guards.
 LOCK_FILE = os.path.join(PROJECT_DIR, ".school_extractor.lock")
@@ -6065,24 +5916,16 @@ def save_gemini_answer(state, city, record, raw):
 
 # ===========================================================================
 #  THE OFFICIAL EMAIL AND PHONE NUMBER, FROM GOOGLE SEARCH
-# ===========================================================================
-#  The senior's rule: the OFFICIAL contact columns come from a Google
-#  Search of the school itself, not from Gemini. Gemini keeps the alternate
-#  contacts and the other fields.
+#  The OFFICIAL contact columns come from a Google Search of the school
+#  itself, not from Gemini, which keeps the alternates and the other fields.
 #
-#  The whole difficulty is evidence. A search result page will happily show
-#  a phone number belonging to a directory site, another branch, or a
-#  coaching centre with a similar name. So a value is written only when it
-#  can be tied to THIS school:
-#
-#    * it is published on a page whose host belongs to the school, or
-#    * it is already on the record as Google Maps evidence (the phone), or
-#    * its email domain is the school's own website domain.
-#
-#  A snippet on somebody else's site is not evidence. Nothing is invented,
-#  nothing is guessed, and an uncertain field is left BLANK - which the
-#  contact rule then treats as "no official contact", not as a failure.
-# ---------------------------------------------------------------------------
+#  The difficulty is evidence: a results page will happily show a number
+#  belonging to a directory, another branch or a similarly named coaching
+#  centre. So a value is written only when it ties to THIS school - the host
+#  belongs to the school, or the number is already on the record from Maps,
+#  or the email domain is the school's own. A snippet on somebody else's
+#  site is not evidence. Nothing is guessed; an uncertain field is left
+#  BLANK, which counts as "no official contact", not as a failure.
 
 GOOGLE_SEARCH_URL = "https://www.google.com/search?q=%s&hl=en&gl=in"
 OFFICIAL_EMAIL_QUERY = "Official email address of %s in %s"
@@ -6754,25 +6597,16 @@ def merge_official_contacts(record, found):
 
 # ===========================================================================
 #  GOING BACK FOR THE CONTACTS A CAPTCHA COST US
-# ===========================================================================
-#  A school whose Google searches never ran is already SAVED - its row is in
-#  the master and in a cycle file, built from Google Maps and Gemini. Only
-#  the two Google-verified official columns are outstanding, and they are
-#  BLANK rather than wrong, which is what makes coming back for them safe:
-#  there is nothing to correct, only a gap to fill.
+#  A school whose searches never ran is already SAVED from Maps and Gemini;
+#  only the two verified official columns are outstanding, and they are
+#  BLANK rather than wrong - nothing to correct, only a gap to fill.
 #
-#  THE RULES THIS OBEYS
-#    * only a blank official column is ever written; a value already there
-#      is never touched, whatever the new search says
-#    * every workbook holding that school is updated, so the master and the
-#      cycle files cannot disagree
-#    * each workbook write is atomic, and a journal makes the multi-file
-#      update replayable after a crash - the update is idempotent, so
-#      replaying it is always safe
-#    * a pending entry is dropped only once its outcome is on disk
-#    * a CAPTCHA is never a result: the entry stays pending and the pass
-#      stops rather than asking again
-# ---------------------------------------------------------------------------
+#  Rules: only a blank official column is ever written, never a value
+#  already there; every workbook holding that school is updated so the
+#  master and cycles cannot disagree; each write is atomic and journalled so
+#  the multi-file update replays safely after a crash; a pending entry is
+#  dropped only once its outcome is on disk; and a CAPTCHA is never a result
+#  - the entry stays pending and the pass stops rather than asking again.
 
 #: Written before the workbooks are touched, removed after. Its presence on
 #: start-up means a pass died part way through a multi-file update.
@@ -7939,7 +7773,6 @@ def retry_failed(args):
 
 # ===========================================================================
 #  REPORTING MODES
-# ===========================================================================
 
 def print_status(args):
     value_rank, value_num, source = resolve_rank(args.rank, args.num_sys)
@@ -8136,7 +7969,6 @@ def print_keywords():
 
 # ===========================================================================
 #  SELF TEST - offline, no browser, no network
-# ===========================================================================
 
 def self_test():
     """Every check that can be made without a live website."""
@@ -8538,16 +8370,11 @@ def self_test():
 
 def _excel_self_test():
     """The master file, the 100-record cycles and the crash repair."""
-    # BACKUP_DIR is redirected too, and that is not optional: this section
-    # finalises cycles at CYCLE_SIZE = 3, and finalise_current_cycle() now
-    # takes a permanent backup. Without this the self-test wrote three-row
-    # fixture workbooks straight into the project's real Backup/ folder
-    # every single time it ran.
-    # GIT_SYNC_ENABLED is turned off here for the same reason BACKUP_DIR
-    # is redirected: this section finalises cycles, finalise_current_cycle()
-    # calls git_sync(), and an offline self-test must not commit anything -
-    # it was creating a real commit on the rank branch holding the real
-    # checkpoint and working sheet.
+    # BACKUP_DIR redirected and GIT_SYNC_ENABLED off, both required: this
+    # section finalises cycles at CYCLE_SIZE = 3, and
+    # finalise_current_cycle() takes a backup and calls git_sync(). Without
+    # them the self-test wrote fixture workbooks into the real Backup/ and
+    # made a real commit on the rank branch, every time it ran.
     global EXCEL_DIR, CYCLE_SIZE, BACKUP_DIR, GIT_SYNC_ENABLED
     kept_dir, kept_size = EXCEL_DIR, CYCLE_SIZE
     kept_backup = BACKUP_DIR
@@ -8641,7 +8468,6 @@ def _excel_self_test():
 
 # ===========================================================================
 #  COMMAND LINE
-# ===========================================================================
 
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(

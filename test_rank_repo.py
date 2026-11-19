@@ -152,8 +152,12 @@ class RankRepositoryUrlTests(unittest.TestCase):
                 "refs/heads/_write_probe").returncode, 0)
 
     def test_url_generation_is_separate_from_source_synchronisation(self):
-        self.assertIs(fs.RANK_REPO_ENABLED, False)
+        # there is no RANK_REPO_ENABLED flag: nothing read it, so what
+        # keeps generation separate from synchronisation is that git_sync()
+        # does not mention the rank URL at all.
+        self.assertFalse(hasattr(fs, "RANK_REPO_ENABLED"))
         self.assertNotIn("rank_repo_url", inspect.getsource(fs.git_sync))
+        self.assertNotIn("final_github_url", inspect.getsource(fs.git_sync))
         # one number for how many ranks share the work, and it is num_sys
         self.assertFalse(hasattr(fs, "total_scripts"),
                          "total_scripts is back; num_sys already says this")
