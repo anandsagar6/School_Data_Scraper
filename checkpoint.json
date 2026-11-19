@@ -321,6 +321,13 @@
       "city": "Murtijapur",
       "reason": "Google searching is in its CAPTCHA cooldown for another 154 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T16:36:20"
+    },
+    {
+      "school": "Bachpan School",
+      "state": "Maharashtra",
+      "city": "Murtijapur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 147 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:43:25"
     }
   ],
   "duplicates": 0,
@@ -329,7 +336,7 @@
   "git": {
     "branch": "school-data-rank-7",
     "pending": false,
-    "last_ok": "2026-11-19T16:35:05",
+    "last_ok": "2026-11-19T16:42:42",
     "last_error": ""
   },
   "work": {
@@ -338,5 +345,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:42:38"
+  "updated": "2026-11-19T16:48:52"
 }
