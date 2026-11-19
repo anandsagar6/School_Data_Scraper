@@ -36,7 +36,8 @@
       "phone:7642250010",
       "name+address:takshshila niketan|block",
       "phone:9516309866",
-      "phone:8319850954"
+      "phone:8319850954",
+      "name+address:galaxy group of institutions|rani avanti bhai, jha ward rd"
     ]
   },
   "completed_cities": [],
@@ -264,9 +265,9 @@
   "saved": 0,
   "cycle": 0,
   "git": {
-    "branch": "",
+    "branch": "school-data-rank-6",
     "pending": false,
-    "last_ok": "",
+    "last_ok": "2026-11-19T15:48:21",
     "last_error": ""
   },
   "work": {
@@ -275,5 +276,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T15:48:16"
+  "updated": "2026-11-19T16:01:40"
 }
