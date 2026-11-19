@@ -29,7 +29,9 @@
     "Sikkim|Sichey": [
       "email:office@reyvalley.com",
       "email:admin@tashinamgyalacademy.com",
-      "email:pngssschool@gmail.com"
+      "email:pngssschool@gmail.com",
+      "email:pvmssgtk@gmail.com",
+      "phone:9434410172"
     ]
   },
   "enriched": {
@@ -49,7 +51,9 @@
       "email:office@reyvalley.com",
       "email:admin@tashinamgyalacademy.com",
       "email:pngssschool@gmail.com",
-      "name+address:west point|8jh8+gjh, ridge rd"
+      "name+address:west point|8jh8+gjh, ridge rd",
+      "email:pvmssgtk@gmail.com",
+      "phone:9434410172"
     ]
   },
   "completed_cities": [],
@@ -483,6 +487,20 @@
       "city": "Sichey",
       "reason": "Google searching is in its CAPTCHA cooldown for another 119 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T16:34:04"
+    },
+    {
+      "school": "Prashanti Vidya Mandir",
+      "state": "Sikkim",
+      "city": "Sichey",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 103 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:50:17"
+    },
+    {
+      "school": "Tathangchen Secondary School",
+      "state": "Sikkim",
+      "city": "Sichey",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 100 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:53:26"
     }
   ],
   "duplicates": 0,
@@ -491,7 +509,7 @@
   "git": {
     "branch": "school-data-rank-9",
     "pending": false,
-    "last_ok": "2026-11-19T16:32:07",
+    "last_ok": "2026-11-19T16:48:32",
     "last_error": ""
   },
   "work": {
@@ -500,5 +518,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:48:28"
+  "updated": "2026-11-19T16:55:34"
 }
