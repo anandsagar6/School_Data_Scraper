@@ -32,7 +32,9 @@
       "phone:7587706495",
       "phone:7759249351",
       "site:jpskorba.com",
-      "email:info@ddmgroup.in"
+      "email:info@ddmgroup.in",
+      "phone:7428096975",
+      "phone:9907927255"
     ]
   },
   "enriched": {
@@ -58,7 +60,9 @@
       "phone:7759249351",
       "site:jpskorba.com",
       "email:info@ddmgroup.in",
-      "name+address:lions|9p43+6h3"
+      "name+address:lions|9p43+6h3",
+      "phone:7428096975",
+      "phone:9907927255"
     ]
   },
   "completed_cities": [],
@@ -409,6 +413,20 @@
       "city": "Korba District",
       "reason": "Google searching is in its CAPTCHA cooldown for another 203 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T16:43:27"
+    },
+    {
+      "school": "Physics Wallah Vidyapeeth Pathshala",
+      "state": "Chhattisgarh",
+      "city": "Korba District",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 188 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:59:12"
+    },
+    {
+      "school": "Aryan public school",
+      "state": "Chhattisgarh",
+      "city": "Korba District",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 183 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:03:28"
     }
   ],
   "duplicates": 0,
@@ -417,7 +435,7 @@
   "git": {
     "branch": "school-data-rank-3",
     "pending": false,
-    "last_ok": "2026-11-19T16:37:43",
+    "last_ok": "2026-11-19T16:57:38",
     "last_error": ""
   },
   "work": {
@@ -426,5 +444,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:57:33"
+  "updated": "2026-11-19T17:05:07"
 }
