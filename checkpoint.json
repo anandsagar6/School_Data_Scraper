@@ -31,6 +31,9 @@
       "email:rwwjc2010@gmail.com",
       "phone:9435541716",
       "email:contact@jjga.in"
+    ],
+    "Assam|Karimganj": [
+      "phone:9401375466"
     ]
   },
   "enriched": {
@@ -58,7 +61,8 @@
       "email:contact@jjga.in"
     ],
     "Assam|Karimganj": [
-      "name+address:little angels|v988+3x3, station rd, opp. capital travels"
+      "name+address:little angels|v988+3x3, station rd, opp. capital travels",
+      "phone:9401375466"
     ]
   },
   "completed_cities": [],
@@ -423,6 +427,13 @@
       "city": "Karimganj",
       "reason": "Google searching is in its CAPTCHA cooldown for another 190 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T16:37:41"
+    },
+    {
+      "school": "Saraswati Vidya Niketan",
+      "state": "Assam",
+      "city": "Karimganj",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 181 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:46:24"
     }
   ],
   "duplicates": 0,
@@ -431,7 +442,7 @@
   "git": {
     "branch": "school-data-rank-2",
     "pending": false,
-    "last_ok": "2026-11-19T16:31:54",
+    "last_ok": "2026-11-19T16:44:05",
     "last_error": ""
   },
   "work": {
@@ -440,5 +451,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:44:00"
+  "updated": "2026-11-19T16:57:28"
 }
