@@ -24,7 +24,10 @@
       "email:bbpschoolmv@gmail.com",
       "email:me@mothersmountschool.com",
       "email:vspkschool@yahoo.co.in",
-      "email:contact@themis.in"
+      "email:contact@themis.in",
+      "email:rgs.richmond@gmail.com",
+      "email:renujn@yahoo.com",
+      "phone:1127011137"
     ]
   },
   "enriched": {
@@ -40,7 +43,10 @@
       "email:bbpschoolmv@gmail.com",
       "email:me@mothersmountschool.com",
       "email:vspkschool@yahoo.co.in",
-      "email:contact@themis.in"
+      "email:contact@themis.in",
+      "email:rgs.richmond@gmail.com",
+      "email:renujn@yahoo.com",
+      "phone:1127011137"
     ]
   },
   "completed_cities": [],
@@ -415,6 +421,27 @@
       "city": "Delhi",
       "reason": "Google searching is in its CAPTCHA cooldown for another 3 minute(s) - the official email and phone searches were NOT run",
       "when": "2026-11-19T16:07:39"
+    },
+    {
+      "school": "Richmondd Global School",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "source - email: none | phone: maps",
+      "when": "2026-11-19T16:23:03"
+    },
+    {
+      "school": "St. Margaret Sr Sec School",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 202 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:25:51"
+    },
+    {
+      "school": "St. Prayag Public School",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 199 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:28:50"
     }
   ],
   "duplicates": 0,
@@ -423,7 +450,7 @@
   "git": {
     "branch": "school-data-rank-1",
     "pending": false,
-    "last_ok": "2026-11-19T16:06:10",
+    "last_ok": "2026-11-19T16:22:17",
     "last_error": ""
   },
   "work": {
@@ -432,5 +459,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:22:12"
+  "updated": "2026-11-19T16:31:20"
 }
