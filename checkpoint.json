@@ -87,7 +87,9 @@
       "phone:7978009732",
       "phone:7077263579",
       "email:principaldpsdhenkanal@gmail.com",
-      "email:kvdhenkanaltown@gmail.com"
+      "email:kvdhenkanaltown@gmail.com",
+      "name+address:sarion up|jgwj+3qf, kankadhad, sarion road",
+      "name+address:odisha adarsha mahisapat dhenkanal|jjf2+275, unnamed road"
     ]
   },
   "completed_cities": [],
@@ -557,6 +559,20 @@
       "city": "Dhenkanal",
       "reason": "Google searching is in its CAPTCHA cooldown for another 63 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T18:07:41"
+    },
+    {
+      "school": "SARION UP School",
+      "state": "Odisha",
+      "city": "Dhenkanal",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 58 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:12:57"
+    },
+    {
+      "school": "Odisha adarsha vidyalaya Mahisapat, Dhenkanal",
+      "state": "Odisha",
+      "city": "Dhenkanal",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 55 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:16:07"
     }
   ],
   "duplicates": 0,
@@ -565,7 +581,7 @@
   "git": {
     "branch": "school-data-rank-8",
     "pending": false,
-    "last_ok": "2026-11-19T18:03:27",
+    "last_ok": "2026-11-19T18:10:29",
     "last_error": ""
   },
   "work": {
@@ -574,5 +590,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T18:10:24"
+  "updated": "2026-11-19T18:20:54"
 }
