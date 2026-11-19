@@ -30,7 +30,9 @@
       "email:info@gdgoenkahisar.com",
       "phone:8222860360",
       "phone:9254349592",
-      "phone:9416123377"
+      "phone:9416123377",
+      "email:holychildschool@hotmail.com",
+      "email:lapshisar@gmail.com"
     ]
   },
   "enriched": {
@@ -53,7 +55,9 @@
       "email:info@gdgoenkahisar.com",
       "phone:8222860360",
       "phone:9254349592",
-      "phone:9416123377"
+      "phone:9416123377",
+      "email:holychildschool@hotmail.com",
+      "email:lapshisar@gmail.com"
     ]
   },
   "completed_cities": [],
@@ -397,6 +401,20 @@
       "city": "Hisar",
       "reason": "Google searching is in its CAPTCHA cooldown for another 179 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:07:54"
+    },
+    {
+      "school": "Holy Child Senior Secondary School",
+      "state": "Haryana",
+      "city": "Hisar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 175 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:12:16"
+    },
+    {
+      "school": "Leading Angel Public School",
+      "state": "Haryana",
+      "city": "Hisar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 172 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:15:16"
     }
   ],
   "duplicates": 0,
@@ -405,7 +423,7 @@
   "git": {
     "branch": "school-data-rank-4",
     "pending": false,
-    "last_ok": "2026-11-19T17:02:18",
+    "last_ok": "2026-11-19T17:10:28",
     "last_error": ""
   },
   "work": {
@@ -414,5 +432,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:10:23"
+  "updated": "2026-11-19T17:17:26"
 }
