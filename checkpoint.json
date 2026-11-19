@@ -43,7 +43,8 @@
       "phone:9954485060",
       "phone:9401558194",
       "phone:8486929973",
-      "phone:9365343465"
+      "phone:9365343465",
+      "phone:8723963517"
     ]
   },
   "enriched": {
@@ -89,7 +90,8 @@
       "name+address:talent bhanga|bhanga bazaar",
       "phone:9401558194",
       "phone:8486929973",
-      "phone:9365343465"
+      "phone:9365343465",
+      "phone:8723963517"
     ]
   },
   "completed_cities": [],
@@ -580,6 +582,13 @@
       "city": "Karimganj",
       "reason": "Google searching is in its CAPTCHA cooldown for another 116 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:52:13"
+    },
+    {
+      "school": "Vivekananda College Of Education",
+      "state": "Assam",
+      "city": "Karimganj",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 112 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:55:48"
     }
   ],
   "duplicates": 0,
@@ -588,7 +597,7 @@
   "git": {
     "branch": "school-data-rank-2",
     "pending": false,
-    "last_ok": "2026-11-19T17:47:12",
+    "last_ok": "2026-11-19T17:54:23",
     "last_error": ""
   },
   "work": {
@@ -597,5 +606,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:54:18"
+  "updated": "2026-11-19T18:02:05"
 }
