@@ -45,7 +45,8 @@
       "phone:8486929973",
       "phone:9365343465",
       "phone:8723963517",
-      "email:kollol.sen@gmail.com"
+      "email:kollol.sen@gmail.com",
+      "phone:9435827220"
     ]
   },
   "enriched": {
@@ -94,7 +95,9 @@
       "phone:9365343465",
       "phone:8723963517",
       "email:kollol.sen@gmail.com",
-      "name+address:makunda christian|c8mh+pj5, makunda christian leprosy and general hospital rd"
+      "name+address:makunda christian|c8mh+pj5, makunda christian leprosy and general hospital rd",
+      "name+address:karimganj|ward no. 17, hospital road, karimganj, assam 788710 schools.",
+      "phone:9435827220"
     ]
   },
   "completed_cities": [],
@@ -606,6 +609,20 @@
       "city": "Karimganj",
       "reason": "Google searching is in its CAPTCHA cooldown for another 101 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T18:06:42"
+    },
+    {
+      "school": "Public Higher Secondary School, Karimganj",
+      "state": "Assam",
+      "city": "Karimganj",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 98 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:09:56"
+    },
+    {
+      "school": "Ramkrishna Vidyapith",
+      "state": "Assam",
+      "city": "Karimganj",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 94 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:14:17"
     }
   ],
   "duplicates": 0,
@@ -614,14 +631,14 @@
   "git": {
     "branch": "school-data-rank-2",
     "pending": false,
-    "last_ok": "2026-11-19T18:02:11",
+    "last_ok": "2026-11-19T18:08:37",
     "last_error": ""
   },
   "work": {
-    "period_hours": 0.0,
+    "period_hours": 2.6,
     "breaks_taken": 0,
-    "break_until": "",
-    "reason": ""
+    "break_until": "2026-11-19T19:29:38",
+    "reason": "worked 2.66 h of a 2.6 h period - taking a 73 min break"
   },
-  "updated": "2026-11-19T18:08:32"
+  "updated": "2026-11-19T18:15:54"
 }
