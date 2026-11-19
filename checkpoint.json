@@ -6,7 +6,7 @@
   "city_fingerprint": "4face9f1d03dd68c4c22d260484c501dbc091075c6decef04119ef5515c2e7f9",
   "current_city": [
     "Maharashtra",
-    "Achalpur"
+    "Murtijapur"
   ],
   "current_keyword": "Private Schools",
   "discovery_done": {},
@@ -30,6 +30,9 @@
       "phone:8237368751",
       "phone:7223250149",
       "phone:8888577107"
+    ],
+    "Maharashtra|Murtijapur": [
+      "email:admissions@academicheights.in"
     ]
   },
   "enriched": {
@@ -56,6 +59,10 @@
       "name+address:urdu skil writers|asma naaz jabir shah",
       "name+address:smt vaishali deshpande|7g67+c67",
       "name+address:z p|7g86+65j"
+    ],
+    "Maharashtra|Murtijapur": [
+      "email:admissions@academicheights.in",
+      "name+address:shri vyankatesh balaji abhijeet bopte|p9m5+396"
     ]
   },
   "completed_cities": [],
@@ -274,6 +281,20 @@
       "city": "Achalpur",
       "reason": "Google searching is in its CAPTCHA cooldown for another 178 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T16:13:14"
+    },
+    {
+      "school": "Academic Heights Public School (AHPS) - Best School in Murtizapur",
+      "state": "Maharashtra",
+      "city": "Murtijapur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 171 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:19:51"
+    },
+    {
+      "school": "Shri Vyankatesh Balaji English High School ,abhijeet bopte",
+      "state": "Maharashtra",
+      "city": "Murtijapur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 166 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:24:26"
     }
   ],
   "duplicates": 0,
@@ -282,7 +303,7 @@
   "git": {
     "branch": "school-data-rank-7",
     "pending": false,
-    "last_ok": "2026-11-19T16:11:25",
+    "last_ok": "2026-11-19T16:19:28",
     "last_error": ""
   },
   "work": {
@@ -291,5 +312,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:19:24"
+  "updated": "2026-11-19T16:26:48"
 }
