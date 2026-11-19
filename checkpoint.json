@@ -670,14 +670,14 @@
   "git": {
     "branch": "school-data-rank-9",
     "pending": false,
-    "last_ok": "2026-11-19T18:19:44",
+    "last_ok": "2026-11-19T18:31:31",
     "last_error": ""
   },
   "work": {
-    "period_hours": 2.9,
-    "breaks_taken": 0,
-    "break_until": "2026-11-19T19:31:59",
-    "reason": "worked 2.92 h of a 2.9 h period - taking a 60 min break"
+    "period_hours": 5.7,
+    "breaks_taken": 1,
+    "break_until": "",
+    "reason": ""
   },
-  "updated": "2026-11-19T18:31:27"
+  "updated": "2026-11-19T19:32:03"
 }
