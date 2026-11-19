@@ -54,7 +54,9 @@
       "phone:7055607076",
       "email:upmoradabad1731@narayanagroup.com",
       "phone:9837269889",
-      "phone:9259044872"
+      "phone:9259044872",
+      "phone:5952357089",
+      "phone:9149378089"
     ]
   },
   "enriched": {
@@ -104,7 +106,9 @@
       "name+address:whitehall|8th milestone, rampur-bareilly road, p.o. kakrawa",
       "email:upmoradabad1731@narayanagroup.com",
       "phone:9837269889",
-      "phone:9259044872"
+      "phone:9259044872",
+      "phone:5952357089",
+      "phone:9149378089"
     ]
   },
   "completed_cities": [],
@@ -557,6 +561,20 @@
       "city": "Rampur",
       "reason": "Google searching is in its CAPTCHA cooldown for another 29 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T18:04:10"
+    },
+    {
+      "school": "St. Paul's Elementry School",
+      "state": "Uttar Pradesh",
+      "city": "Rampur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 21 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:12:36"
+    },
+    {
+      "school": "D. S. LIBRARY(SELF STUDY CENTRE)",
+      "state": "Uttar Pradesh",
+      "city": "Rampur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 18 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:15:38"
     }
   ],
   "duplicates": 0,
@@ -565,7 +583,7 @@
   "git": {
     "branch": "school-data-rank-10",
     "pending": false,
-    "last_ok": "2026-11-19T17:59:08",
+    "last_ok": "2026-11-19T18:10:30",
     "last_error": ""
   },
   "work": {
@@ -574,5 +592,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T18:10:25"
+  "updated": "2026-11-19T18:20:53"
 }
