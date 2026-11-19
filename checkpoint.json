@@ -41,7 +41,9 @@
       "email:markazkxj@gmail.com",
       "phone:7086745651",
       "phone:9954485060",
-      "phone:9401558194"
+      "phone:9401558194",
+      "phone:8486929973",
+      "phone:9365343465"
     ]
   },
   "enriched": {
@@ -85,7 +87,9 @@
       "phone:7086745651",
       "phone:9954485060",
       "name+address:talent bhanga|bhanga bazaar",
-      "phone:9401558194"
+      "phone:9401558194",
+      "phone:8486929973",
+      "phone:9365343465"
     ]
   },
   "completed_cities": [],
@@ -562,6 +566,20 @@
       "city": "Karimganj",
       "reason": "Google searching is in its CAPTCHA cooldown for another 123 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:44:55"
+    },
+    {
+      "school": "Eastern Sr. Secondary School - Eastern Junior College",
+      "state": "Assam",
+      "city": "Karimganj",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 118 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:49:24"
+    },
+    {
+      "school": "PATHSHALA PLAYSCHOOL",
+      "state": "Assam",
+      "city": "Karimganj",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 116 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:52:13"
     }
   ],
   "duplicates": 0,
@@ -570,7 +588,7 @@
   "git": {
     "branch": "school-data-rank-2",
     "pending": false,
-    "last_ok": "2026-11-19T17:40:17",
+    "last_ok": "2026-11-19T17:47:12",
     "last_error": ""
   },
   "work": {
@@ -579,5 +597,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:47:07"
+  "updated": "2026-11-19T17:54:18"
 }
