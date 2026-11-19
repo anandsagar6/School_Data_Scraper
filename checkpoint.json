@@ -39,7 +39,9 @@
       "phone:5842228094"
     ],
     "Uttar Pradesh|Rampur": [
-      "phone:9971776535"
+      "phone:9971776535",
+      "phone:8865091309",
+      "email:simsrampur@gmail.com"
     ]
   },
   "enriched": {
@@ -73,7 +75,9 @@
       "phone:5842228094"
     ],
     "Uttar Pradesh|Rampur": [
-      "phone:9971776535"
+      "phone:9971776535",
+      "phone:8865091309",
+      "email:simsrampur@gmail.com"
     ]
   },
   "completed_cities": [],
@@ -414,6 +418,20 @@
       "city": "Rampur",
       "reason": "Google searching is in its CAPTCHA cooldown for another 92 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T17:00:56"
+    },
+    {
+      "school": "Guidance International School",
+      "state": "Uttar Pradesh",
+      "city": "Rampur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 88 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:05:14"
+    },
+    {
+      "school": "Smart Indian Model School",
+      "state": "Uttar Pradesh",
+      "city": "Rampur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 83 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:10:32"
     }
   ],
   "duplicates": 0,
@@ -422,7 +440,7 @@
   "git": {
     "branch": "school-data-rank-10",
     "pending": false,
-    "last_ok": "2026-11-19T16:57:18",
+    "last_ok": "2026-11-19T17:03:22",
     "last_error": ""
   },
   "work": {
@@ -431,5 +449,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:03:17"
+  "updated": "2026-11-19T17:12:25"
 }
