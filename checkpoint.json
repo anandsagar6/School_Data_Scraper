@@ -631,14 +631,14 @@
   "git": {
     "branch": "school-data-rank-2",
     "pending": false,
-    "last_ok": "2026-11-19T18:08:37",
+    "last_ok": "2026-11-19T18:15:58",
     "last_error": ""
   },
   "work": {
-    "period_hours": 2.6,
-    "breaks_taken": 0,
-    "break_until": "2026-11-19T19:29:38",
-    "reason": "worked 2.66 h of a 2.6 h period - taking a 73 min break"
+    "period_hours": 3.5,
+    "breaks_taken": 1,
+    "break_until": "",
+    "reason": ""
   },
-  "updated": "2026-11-19T18:15:54"
+  "updated": "2026-11-19T19:29:42"
 }
