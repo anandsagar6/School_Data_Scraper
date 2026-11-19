@@ -45,7 +45,8 @@
       "phone:8250448118",
       "phone:8250549053",
       "phone:9593386285",
-      "email:cmps.tadong@gmail.com"
+      "email:cmps.tadong@gmail.com",
+      "phone:3592232646"
     ]
   },
   "enriched": {
@@ -86,7 +87,8 @@
       "phone:8250549053",
       "phone:9593386285",
       "name+address:west point|8jh8+gjh, ridge rd",
-      "email:cmps.tadong@gmail.com"
+      "email:cmps.tadong@gmail.com",
+      "phone:3592232646"
     ]
   },
   "completed_cities": [],
@@ -653,6 +655,13 @@
       "city": "Tadong",
       "reason": "Google searching is in its CAPTCHA cooldown for another 19 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T18:14:08"
+    },
+    {
+      "school": "KENDRIYA VIDYALAYA GANGTOK",
+      "state": "Sikkim",
+      "city": "Tadong",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 13 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:20:15"
     }
   ],
   "duplicates": 0,
@@ -661,14 +670,14 @@
   "git": {
     "branch": "school-data-rank-9",
     "pending": false,
-    "last_ok": "2026-11-19T18:08:47",
+    "last_ok": "2026-11-19T18:19:44",
     "last_error": ""
   },
   "work": {
-    "period_hours": 0.0,
+    "period_hours": 2.9,
     "breaks_taken": 0,
-    "break_until": "",
-    "reason": ""
+    "break_until": "2026-11-19T19:31:59",
+    "reason": "worked 2.92 h of a 2.9 h period - taking a 60 min break"
   },
-  "updated": "2026-11-19T18:19:39"
+  "updated": "2026-11-19T18:31:27"
 }
