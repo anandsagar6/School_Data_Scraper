@@ -43,7 +43,8 @@
     ],
     "Maharashtra|Rajgurunagar": [
       "phone:7722033583",
-      "site:gavhaneacademy.com"
+      "site:gavhaneacademy.com",
+      "phone:2435222105"
     ]
   },
   "enriched": {
@@ -83,7 +84,9 @@
     ],
     "Maharashtra|Rajgurunagar": [
       "phone:7722033583",
-      "site:gavhaneacademy.com"
+      "site:gavhaneacademy.com",
+      "phone:2435222105",
+      "name+address:crazy kids|phata, pune - nashik hwy"
     ]
   },
   "completed_cities": [],
@@ -379,6 +382,20 @@
       "city": "Rajgurunagar",
       "reason": "Google searching is in its CAPTCHA cooldown for another 124 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:07:04"
+    },
+    {
+      "school": "Little Champs English Medium School",
+      "state": "Maharashtra",
+      "city": "Rajgurunagar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 121 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:09:17"
+    },
+    {
+      "school": "Crazy Kids International School (Preschool)",
+      "state": "Maharashtra",
+      "city": "Rajgurunagar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 118 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:12:39"
     }
   ],
   "duplicates": 0,
@@ -387,7 +404,7 @@
   "git": {
     "branch": "school-data-rank-7",
     "pending": false,
-    "last_ok": "2026-11-19T17:03:04",
+    "last_ok": "2026-11-19T17:08:40",
     "last_error": ""
   },
   "work": {
@@ -396,5 +413,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:08:36"
+  "updated": "2026-11-19T17:16:25"
 }
