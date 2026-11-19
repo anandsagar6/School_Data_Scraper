@@ -536,14 +536,14 @@
   "git": {
     "branch": "school-data-rank-5",
     "pending": false,
-    "last_ok": "2026-11-19T17:46:51",
+    "last_ok": "2026-11-19T17:49:57",
     "last_error": ""
   },
   "work": {
-    "period_hours": 2.2,
-    "breaks_taken": 0,
-    "break_until": "2026-11-19T19:10:56",
-    "reason": "worked 2.22 h of a 2.2 h period - taking a 81 min break"
+    "period_hours": 5.0,
+    "breaks_taken": 1,
+    "break_until": "",
+    "reason": ""
   },
-  "updated": "2026-11-19T17:49:52"
+  "updated": "2026-11-19T19:11:01"
 }
