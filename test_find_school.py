@@ -3159,10 +3159,10 @@ class UserSettingsTests(unittest.TestCase):
         # is still checked, by this bound and the span below.
         self.assertLess(max(lines), 150,
                         "a user setting is far down the file")
-        # 80, not 60: base_github_url and final_github_url
-        # joined the block, which is what this test wants - the settings
-        # TOGETHER and near the top - so the bound follows the block rather
-        # than the block being squeezed. Same value as on master.
+        # 80, not 60: the rank-wise repository settings (RANK_REPO_ENABLED,
+        # total_scripts, base_github_url) joined the block, which is what
+        # this test wants - settings TOGETHER, near the top - so the bound
+        # follows the block rather than the block being squeezed.
         self.assertLess(max(lines) - min(lines), 80,
                         "the user settings are not in one block")
 
