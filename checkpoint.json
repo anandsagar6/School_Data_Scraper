@@ -76,7 +76,9 @@
       "phone:8788801400",
       "phone:7588042130",
       "phone:8904980486",
-      "phone:8888339284"
+      "phone:8888339284",
+      "email:ambejogai@podarprep.com",
+      "phone:2446247534"
     ]
   },
   "enriched": {
@@ -149,7 +151,9 @@
       "site:indo-british.com",
       "phone:7588042130",
       "phone:8904980486",
-      "phone:8888339284"
+      "phone:8888339284",
+      "email:ambejogai@podarprep.com",
+      "phone:2446247534"
     ]
   },
   "completed_cities": [],
@@ -721,6 +725,20 @@
       "city": "Ambajogai",
       "reason": "Google searching is in its CAPTCHA cooldown for another 233 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T19:20:47"
+    },
+    {
+      "school": "Podar Prep Preschool Ambejogai",
+      "state": "Maharashtra",
+      "city": "Ambajogai",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 216 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T19:37:40"
+    },
+    {
+      "school": "St.Anthony's English High School",
+      "state": "Maharashtra",
+      "city": "Ambajogai",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 213 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T19:40:38"
     }
   ],
   "duplicates": 0,
@@ -729,7 +747,7 @@
   "git": {
     "branch": "school-data-rank-7",
     "pending": false,
-    "last_ok": "2026-11-19T19:19:50",
+    "last_ok": "2026-11-19T19:35:33",
     "last_error": ""
   },
   "work": {
@@ -738,5 +756,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T19:35:28"
+  "updated": "2026-11-19T19:43:08"
 }
