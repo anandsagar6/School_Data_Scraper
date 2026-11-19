@@ -43,7 +43,8 @@
       "site:republiccentral.school",
       "phone:9844855230",
       "email:inventureashokashaala@gmail.com",
-      "phone:9008955251"
+      "phone:9008955251",
+      "phone:9900423456"
     ]
   },
   "enriched": {
@@ -74,7 +75,10 @@
       "site:republiccentral.school",
       "phone:9844855230",
       "email:inventureashokashaala@gmail.com",
-      "phone:9008955251"
+      "phone:9008955251",
+      "phone:9900423456",
+      "name+address:st thomas|pandering kalpana mantapa, 14th cross, chamundeshwari nagar ",
+      "name+address:santhome p u college|gv2c+93h, 2nd cross rd"
     ]
   },
   "completed_cities": [],
@@ -460,6 +464,27 @@
       "city": "Mandya",
       "reason": "Google searching is in its CAPTCHA cooldown for another 91 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T17:22:00"
+    },
+    {
+      "school": "JSL Sports Academy",
+      "state": "Karnataka",
+      "city": "Mandya",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 88 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:25:23"
+    },
+    {
+      "school": "St. Thomas English High School",
+      "state": "Karnataka",
+      "city": "Mandya",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 86 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:27:08"
+    },
+    {
+      "school": "Santhome P U college",
+      "state": "Karnataka",
+      "city": "Mandya",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 83 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:29:56"
     }
   ],
   "duplicates": 0,
@@ -468,7 +493,7 @@
   "git": {
     "branch": "school-data-rank-5",
     "pending": false,
-    "last_ok": "2026-11-19T17:18:52",
+    "last_ok": "2026-11-19T17:24:13",
     "last_error": ""
   },
   "work": {
@@ -477,5 +502,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:24:08"
+  "updated": "2026-11-19T17:32:55"
 }
