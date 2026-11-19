@@ -28,7 +28,8 @@
       "email:rpd_angul@yahoo.com",
       "phone:6764296027",
       "email:davpsangul@gmail.com",
-      "site:dpsnalconagar.org"
+      "site:dpsnalconagar.org",
+      "phone:8280149194"
     ]
   },
   "enriched": {
@@ -49,7 +50,9 @@
       "email:rpd_angul@yahoo.com",
       "phone:6764296027",
       "email:davpsangul@gmail.com",
-      "site:dpsnalconagar.org"
+      "site:dpsnalconagar.org",
+      "name+address:saraswati|r5x4+r7p",
+      "phone:8280149194"
     ]
   },
   "completed_cities": [],
@@ -386,6 +389,20 @@
       "city": "Angul",
       "reason": "Google searching is in its CAPTCHA cooldown for another 142 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T16:48:48"
+    },
+    {
+      "school": "Saraswati Vidya Mandir",
+      "state": "Odisha",
+      "city": "Angul",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 138 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:52:42"
+    },
+    {
+      "school": "GOLDY VIDYALOKA PUBLIC SCHOOL",
+      "state": "Odisha",
+      "city": "Angul",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 135 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:55:47"
     }
   ],
   "duplicates": 0,
@@ -394,7 +411,7 @@
   "git": {
     "branch": "school-data-rank-8",
     "pending": false,
-    "last_ok": "2026-11-19T16:44:05",
+    "last_ok": "2026-11-19T16:51:24",
     "last_error": ""
   },
   "work": {
@@ -403,5 +420,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:51:20"
+  "updated": "2026-11-19T16:57:57"
 }
