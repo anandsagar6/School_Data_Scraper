@@ -35,7 +35,8 @@
       "email:admissions@academicheights.in",
       "phone:7756032746",
       "email:ashok957@bachpanglobal.com",
-      "phone:9623888666"
+      "phone:9623888666",
+      "phone:7256243454"
     ]
   },
   "enriched": {
@@ -69,7 +70,9 @@
       "phone:7756032746",
       "email:ashok957@bachpanglobal.com",
       "name+address:gadge maharaj|p9p7+8cc",
-      "phone:9623888666"
+      "phone:9623888666",
+      "phone:7256243454",
+      "name+address:z p murtizapur|zilla parishad high school, sh212"
     ]
   },
   "completed_cities": [],
@@ -337,6 +340,20 @@
       "city": "Murtijapur",
       "reason": "Google searching is in its CAPTCHA cooldown for another 141 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T16:50:08"
+    },
+    {
+      "school": "Shri Gadge Maharaj College, Murtijapur",
+      "state": "Maharashtra",
+      "city": "Murtijapur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 134 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:57:15"
+    },
+    {
+      "school": "Z P school murtizapur",
+      "state": "Maharashtra",
+      "city": "Murtijapur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 130 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:00:48"
     }
   ],
   "duplicates": 0,
@@ -345,7 +362,7 @@
   "git": {
     "branch": "school-data-rank-7",
     "pending": false,
-    "last_ok": "2026-11-19T16:48:57",
+    "last_ok": "2026-11-19T16:56:25",
     "last_error": ""
   },
   "work": {
@@ -354,5 +371,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:56:21"
+  "updated": "2026-11-19T17:02:56"
 }
