@@ -97,7 +97,8 @@
       "email:kollol.sen@gmail.com",
       "name+address:makunda christian|c8mh+pj5, makunda christian leprosy and general hospital rd",
       "name+address:karimganj|ward no. 17, hospital road, karimganj, assam 788710 schools.",
-      "phone:9435827220"
+      "phone:9435827220",
+      "name+address:adarsha lowairpoa|h827+9fh, shillong - agartala - sabroom rd"
     ]
   },
   "completed_cities": [],
@@ -623,6 +624,13 @@
       "city": "Karimganj",
       "reason": "Google searching is in its CAPTCHA cooldown for another 94 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T18:14:17"
+    },
+    {
+      "school": "Adarsha Vidyalaya, Lowairpoa",
+      "state": "Assam",
+      "city": "Karimganj",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 17 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T19:30:29"
     }
   ],
   "duplicates": 0,
@@ -631,7 +639,7 @@
   "git": {
     "branch": "school-data-rank-2",
     "pending": false,
-    "last_ok": "2026-11-19T18:15:58",
+    "last_ok": "2026-11-19T19:29:46",
     "last_error": ""
   },
   "work": {
@@ -640,5 +648,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T19:29:42"
+  "updated": "2026-11-19T19:41:18"
 }
