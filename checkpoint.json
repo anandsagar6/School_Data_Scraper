@@ -27,7 +27,9 @@
       "email:geniusacademynlp2006@gmail.com",
       "phone:3752222541",
       "phone:9387852837",
-      "phone:8472950746"
+      "phone:8472950746",
+      "email:rwwjc2010@gmail.com",
+      "phone:9435541716"
     ]
   },
   "enriched": {
@@ -49,7 +51,9 @@
       "phone:3752222541",
       "phone:9387852837",
       "phone:8472950746",
-      "name+address:lakhimpur hs|64p7+wm3, chetia gaon road"
+      "name+address:lakhimpur hs|64p7+wm3, chetia gaon road",
+      "email:rwwjc2010@gmail.com",
+      "phone:9435541716"
     ]
   },
   "completed_cities": [],
@@ -386,6 +390,20 @@
       "city": "North Lakhimpur",
       "reason": "Google searching is in its CAPTCHA cooldown for another 3 minute(s) - the official email and phone searches were NOT run",
       "when": "2026-11-19T16:07:24"
+    },
+    {
+      "school": "Reverend William Ward Sr. Secondary School",
+      "state": "Assam",
+      "city": "North Lakhimpur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 205 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:23:13"
+    },
+    {
+      "school": "Shining Star English High School",
+      "state": "Assam",
+      "city": "North Lakhimpur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 202 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:25:21"
     }
   ],
   "duplicates": 0,
@@ -394,7 +412,7 @@
   "git": {
     "branch": "school-data-rank-2",
     "pending": false,
-    "last_ok": "2026-11-19T16:02:02",
+    "last_ok": "2026-11-19T16:21:07",
     "last_error": ""
   },
   "work": {
@@ -403,5 +421,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:21:03"
+  "updated": "2026-11-19T16:31:50"
 }
