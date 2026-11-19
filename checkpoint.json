@@ -40,7 +40,8 @@
       "phone:3843262700",
       "email:markazkxj@gmail.com",
       "phone:7086745651",
-      "phone:9954485060"
+      "phone:9954485060",
+      "phone:9401558194"
     ]
   },
   "enriched": {
@@ -82,7 +83,9 @@
       "name+address:kendriya karimganj|nil mony rd",
       "name+address:jawahar navodaya harinagar karimganj|harinagar",
       "phone:7086745651",
-      "phone:9954485060"
+      "phone:9954485060",
+      "name+address:talent bhanga|bhanga bazaar",
+      "phone:9401558194"
     ]
   },
   "completed_cities": [],
@@ -545,6 +548,20 @@
       "city": "Karimganj",
       "reason": "Google searching is in its CAPTCHA cooldown for another 130 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:38:14"
+    },
+    {
+      "school": "Talent Academy, Bhanga",
+      "state": "Assam",
+      "city": "Karimganj",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 127 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:40:56"
+    },
+    {
+      "school": "Frontier Sr Secondary school",
+      "state": "Assam",
+      "city": "Karimganj",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 123 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:44:55"
     }
   ],
   "duplicates": 0,
@@ -553,7 +570,7 @@
   "git": {
     "branch": "school-data-rank-2",
     "pending": false,
-    "last_ok": "2026-11-19T17:32:56",
+    "last_ok": "2026-11-19T17:40:17",
     "last_error": ""
   },
   "work": {
@@ -562,5 +579,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:40:12"
+  "updated": "2026-11-19T17:47:07"
 }
