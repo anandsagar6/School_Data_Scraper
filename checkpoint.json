@@ -6,7 +6,7 @@
   "city_fingerprint": "4face9f1d03dd68c4c22d260484c501dbc091075c6decef04119ef5515c2e7f9",
   "current_city": [
     "Madhya Pradesh",
-    "Damoh"
+    "Betul"
   ],
   "current_keyword": "Private Schools",
   "discovery_done": {},
@@ -47,6 +47,9 @@
       "email:timescompu@rediffmail.com",
       "email:kvdamohmp@gmail.com",
       "phone:6265887031"
+    ],
+    "Madhya Pradesh|Betul": [
+      "site:kidzee.com"
     ]
   },
   "enriched": {
@@ -88,6 +91,9 @@
       "phone:6265887031",
       "name+address:navjagriti|nav jagriti higher secondary school",
       "name+address:j p b|rcjr+9rf"
+    ],
+    "Madhya Pradesh|Betul": [
+      "site:kidzee.com"
     ]
   },
   "completed_cities": [],
@@ -470,15 +476,22 @@
       "city": "Damoh",
       "reason": "Google searching is in its CAPTCHA cooldown for another 59 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T17:54:02"
+    },
+    {
+      "school": "Kidzee- India's best Pre-school- Betul",
+      "state": "Madhya Pradesh",
+      "city": "Betul",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 53 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:00:13"
     }
   ],
   "duplicates": 0,
-  "saved": 7,
+  "saved": 17,
   "cycle": 0,
   "git": {
     "branch": "school-data-rank-6",
     "pending": false,
-    "last_ok": "2026-11-19T17:51:35",
+    "last_ok": "2026-11-19T17:55:30",
     "last_error": ""
   },
   "work": {
@@ -487,5 +500,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:55:25"
+  "updated": "2026-11-19T18:01:07"
 }
