@@ -21,7 +21,9 @@
       "email:info@stfroebelschool.com",
       "email:info@moderninternationalschool.com",
       "email:admissions@mrgschool.edu.in",
-      "email:bbpschoolmv@gmail.com"
+      "email:bbpschoolmv@gmail.com",
+      "email:me@mothersmountschool.com",
+      "email:vspkschool@yahoo.co.in"
     ]
   },
   "enriched": {
@@ -34,7 +36,9 @@
       "email:info@stfroebelschool.com",
       "email:info@moderninternationalschool.com",
       "email:admissions@mrgschool.edu.in",
-      "email:bbpschoolmv@gmail.com"
+      "email:bbpschoolmv@gmail.com",
+      "email:me@mothersmountschool.com",
+      "email:vspkschool@yahoo.co.in"
     ]
   },
   "completed_cities": [],
@@ -242,6 +246,20 @@
       "city": "Delhi",
       "reason": "Google searching is in its CAPTCHA cooldown for another 40 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T15:30:20"
+    },
+    {
+      "school": "Mothers' Mount School",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 36 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T15:34:56"
+    },
+    {
+      "school": "VSPK International School",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 33 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T15:37:54"
     }
   ],
   "duplicates": 0,
@@ -250,7 +268,7 @@
   "git": {
     "branch": "school-data-rank-1",
     "pending": false,
-    "last_ok": "2026-11-19T15:26:14",
+    "last_ok": "2026-11-19T15:32:30",
     "last_error": ""
   },
   "work": {
@@ -259,5 +277,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T15:32:25"
+  "updated": "2026-11-19T15:40:06"
 }
