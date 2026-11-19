@@ -61,7 +61,8 @@
       "phone:9837323460",
       "phone:9997629988",
       "phone:9012004024",
-      "phone:9457138354"
+      "phone:9457138354",
+      "phone:9456269929"
     ]
   },
   "enriched": {
@@ -118,7 +119,9 @@
       "phone:9837323460",
       "phone:9997629988",
       "phone:9012004024",
-      "phone:9457138354"
+      "phone:9457138354",
+      "phone:9456269929",
+      "name+address:east west|q2xf+7fh, near est west school"
     ]
   },
   "completed_cities": [],
@@ -693,6 +696,20 @@
       "city": "Rampur",
       "reason": "Google searching is in its CAPTCHA cooldown for another 226 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T18:52:05"
+    },
+    {
+      "school": "Vikas Public School",
+      "state": "Uttar Pradesh",
+      "city": "Rampur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 211 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T19:07:44"
+    },
+    {
+      "school": "East West Public School",
+      "state": "Uttar Pradesh",
+      "city": "Rampur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 206 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T19:11:56"
     }
   ],
   "duplicates": 0,
@@ -701,7 +718,7 @@
   "git": {
     "branch": "school-data-rank-10",
     "pending": false,
-    "last_ok": "2026-11-19T18:49:36",
+    "last_ok": "2026-11-19T19:05:29",
     "last_error": ""
   },
   "work": {
@@ -710,5 +727,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T19:05:25"
+  "updated": "2026-11-19T19:12:59"
 }
