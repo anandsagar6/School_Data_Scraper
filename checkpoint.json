@@ -55,7 +55,8 @@
       "phone:6724223075",
       "phone:6724220234",
       "email:principaldisjspur@gmail.com",
-      "site:svjagatsinghpur.org"
+      "site:svjagatsinghpur.org",
+      "email:bkrath2014@gmail.com"
     ]
   },
   "enriched": {
@@ -107,7 +108,8 @@
       "phone:6724220234",
       "email:principaldisjspur@gmail.com",
       "site:svjagatsinghpur.org",
-      "name+address:xavier|457r+qxx"
+      "name+address:xavier|457r+qxx",
+      "email:bkrath2014@gmail.com"
     ]
   },
   "completed_cities": [],
@@ -633,6 +635,13 @@
       "city": "Jagatsinghpur",
       "reason": "Google searching is in its CAPTCHA cooldown for another 28 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T18:42:27"
+    },
+    {
+      "school": "Jagatsinghpur Public School(new)",
+      "state": "Odisha",
+      "city": "Jagatsinghpur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 26 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:44:45"
     }
   ],
   "duplicates": 1,
@@ -641,7 +650,7 @@
   "git": {
     "branch": "school-data-rank-8",
     "pending": false,
-    "last_ok": "2026-11-19T18:38:08",
+    "last_ok": "2026-11-19T18:43:54",
     "last_error": ""
   },
   "work": {
@@ -650,5 +659,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T18:43:49"
+  "updated": "2026-11-19T18:50:01"
 }
