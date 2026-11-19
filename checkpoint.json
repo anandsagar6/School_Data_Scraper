@@ -6,7 +6,7 @@
   "city_fingerprint": "4face9f1d03dd68c4c22d260484c501dbc091075c6decef04119ef5515c2e7f9",
   "current_city": [
     "Uttar Pradesh",
-    "Shahjahanpur"
+    "Rampur"
   ],
   "current_keyword": "Private Schools",
   "discovery_done": {},
@@ -35,7 +35,11 @@
       "phone:9936119488",
       "email:fertspn@gmail.com",
       "email:info@scsschool.in",
-      "email:renaissance_tlh@yahoo.co.in"
+      "email:renaissance_tlh@yahoo.co.in",
+      "phone:5842228094"
+    ],
+    "Uttar Pradesh|Rampur": [
+      "phone:9971776535"
     ]
   },
   "enriched": {
@@ -65,7 +69,11 @@
       "email:fertspn@gmail.com",
       "email:info@scsschool.in",
       "email:renaissance_tlh@yahoo.co.in",
-      "name+address:kendriya no 2 ocf shahjahanpur|no-2, ocf, cantt. area shahjahanpur"
+      "name+address:kendriya no 2 ocf shahjahanpur|no-2, ocf, cantt. area shahjahanpur",
+      "phone:5842228094"
+    ],
+    "Uttar Pradesh|Rampur": [
+      "phone:9971776535"
     ]
   },
   "completed_cities": [],
@@ -392,6 +400,20 @@
       "city": "Shahjahanpur",
       "reason": "Google searching is in its CAPTCHA cooldown for another 98 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T16:55:13"
+    },
+    {
+      "school": "Holy Angel's School",
+      "state": "Uttar Pradesh",
+      "city": "Shahjahanpur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 95 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T16:58:18"
+    },
+    {
+      "school": "The Palm Tree Academy",
+      "state": "Uttar Pradesh",
+      "city": "Rampur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 92 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:00:56"
     }
   ],
   "duplicates": 0,
@@ -400,7 +422,7 @@
   "git": {
     "branch": "school-data-rank-10",
     "pending": false,
-    "last_ok": "2026-11-19T16:48:54",
+    "last_ok": "2026-11-19T16:57:18",
     "last_error": ""
   },
   "work": {
@@ -409,5 +431,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:57:14"
+  "updated": "2026-11-19T17:03:17"
 }
