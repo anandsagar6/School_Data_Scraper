@@ -51,7 +51,9 @@
       "phone:7065499991",
       "phone:9810181565",
       "phone:9811269490",
-      "phone:9667036772"
+      "phone:9667036772",
+      "email:laurelhigh@rediffmail.com",
+      "phone:1147297766"
     ]
   },
   "enriched": {
@@ -95,7 +97,9 @@
       "phone:7065499991",
       "phone:9810181565",
       "phone:9811269490",
-      "phone:9667036772"
+      "phone:9667036772",
+      "email:laurelhigh@rediffmail.com",
+      "phone:1147297766"
     ]
   },
   "completed_cities": [],
@@ -666,6 +670,20 @@
       "city": "Delhi",
       "reason": "Google searching is in its CAPTCHA cooldown for another 90 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T18:17:52"
+    },
+    {
+      "school": "Laurel High School",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 84 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:24:09"
+    },
+    {
+      "school": "Bluebells School International",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 82 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:26:18"
     }
   ],
   "duplicates": 0,
@@ -674,7 +692,7 @@
   "git": {
     "branch": "school-data-rank-1",
     "pending": false,
-    "last_ok": "2026-11-19T18:12:18",
+    "last_ok": "2026-11-19T18:21:40",
     "last_error": ""
   },
   "work": {
@@ -683,5 +701,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T18:21:35"
+  "updated": "2026-11-19T18:29:04"
 }
