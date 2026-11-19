@@ -42,7 +42,9 @@
     "Chhattisgarh|Sarguja": [
       "phone:9826747037",
       "phone:9826190902",
-      "phone:9009711222"
+      "phone:9009711222",
+      "phone:9644540555",
+      "email:admissions.ambikapur@birlaopenminds.com"
     ]
   },
   "enriched": {
@@ -85,7 +87,9 @@
       "name+address:nehru|45cj+6rp",
       "phone:9826190902",
       "name+address:karma cbsc based kerakachhar ambikapur|343c+hv2",
-      "phone:9009711222"
+      "phone:9009711222",
+      "phone:9644540555",
+      "email:admissions.ambikapur@birlaopenminds.com"
     ]
   },
   "completed_cities": [],
@@ -541,6 +545,20 @@
       "city": "Sarguja",
       "reason": "Google searching is in its CAPTCHA cooldown for another 125 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T18:01:49"
+    },
+    {
+      "school": "SHRI SAI BABA SCHOOL",
+      "state": "Chhattisgarh",
+      "city": "Sarguja",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 120 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T18:06:40"
+    },
+    {
+      "school": "Birla Open Minds International School Ambikapur",
+      "state": "Chhattisgarh",
+      "city": "Sarguja",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 117 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T18:10:16"
     }
   ],
   "duplicates": 0,
@@ -549,14 +567,14 @@
   "git": {
     "branch": "school-data-rank-3",
     "pending": false,
-    "last_ok": "2026-11-19T17:58:03",
+    "last_ok": "2026-11-19T18:05:15",
     "last_error": ""
   },
   "work": {
-    "period_hours": 0.0,
+    "period_hours": 2.7,
     "breaks_taken": 0,
-    "break_until": "",
-    "reason": ""
+    "break_until": "2026-11-19T20:12:13",
+    "reason": "worked 2.74 h of a 2.7 h period - taking a 111 min break"
   },
-  "updated": "2026-11-19T18:05:10"
+  "updated": "2026-11-19T18:20:25"
 }
