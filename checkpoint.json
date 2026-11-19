@@ -53,7 +53,8 @@
       "phone:9811269490",
       "phone:9667036772",
       "email:laurelhigh@rediffmail.com",
-      "phone:1147297766"
+      "phone:1147297766",
+      "email:info.eok@tagoreint.com"
     ]
   },
   "enriched": {
@@ -99,7 +100,8 @@
       "phone:9811269490",
       "phone:9667036772",
       "email:laurelhigh@rediffmail.com",
-      "phone:1147297766"
+      "phone:1147297766",
+      "email:info.eok@tagoreint.com"
     ]
   },
   "completed_cities": [],
@@ -692,7 +694,7 @@
   "git": {
     "branch": "school-data-rank-1",
     "pending": false,
-    "last_ok": "2026-11-19T18:21:40",
+    "last_ok": "2026-11-19T18:29:09",
     "last_error": ""
   },
   "work": {
@@ -701,5 +703,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T18:29:04"
+  "updated": "2026-11-19T18:35:33"
 }
