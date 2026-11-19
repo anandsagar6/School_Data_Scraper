@@ -153,25 +153,43 @@ class Sandbox:
 
 @contextlib.contextmanager
 def pinned_scrolling(presses):
-    """Hold the Maps scrolling settings still for one measurement.
+    """Hold the Maps scrolling settings still for one measurement, in a
+    throwaway folder.
 
     DOWN_PRESSES_PER_ROUND and SCROLL_PAUSE_SECONDS are random draws on
     purpose, which makes any measurement of them unrepeatable - and the
     real pause is tens of seconds, far too slow for a test. A test that
     needs a deterministic answer pins them here and puts them back, so
     the configured expressions in the file are never edited.
+
+    TEMP_DIR IS REDIRECTED TOO. Collecting writes the copied list to
+    TEMP_DIR, and a caller outside SandboxTest still has the real one, so
+    running the suite inside a production directory left a synthetic
+    "Karnataka_Bengaluru_private_schools.txt" among that rank's real
+    captures. Isolating it here protects every caller whatever its base
+    class, which matters because the suite is run on each laptop during a
+    deployment.
     """
     kept = (fs.DOWN_PRESSES_PER_ROUND, fs.SCROLL_PAUSE_SECONDS,
-            fs.DOWN_KEY_PAUSE_SECONDS, fs.PAGE_SETTLE_SECONDS)
+            fs.DOWN_KEY_PAUSE_SECONDS, fs.PAGE_SETTLE_SECONDS,
+            fs.TEMP_DIR, fs.OUTPUT_DIR, fs.EXCEL_DIR)
+    folder = tempfile.mkdtemp(prefix="pinned_scrolling_")
     fs.DOWN_PRESSES_PER_ROUND = presses
     fs.SCROLL_PAUSE_SECONDS = 0
     fs.DOWN_KEY_PAUSE_SECONDS = 0
     fs.PAGE_SETTLE_SECONDS = 0
+    fs.OUTPUT_DIR = folder
+    fs.TEMP_DIR = os.path.join(folder, "Temp_Data")
+    fs.EXCEL_DIR = os.path.join(folder, "Excel_Data")
+    os.makedirs(fs.TEMP_DIR, exist_ok=True)
+    os.makedirs(fs.EXCEL_DIR, exist_ok=True)
     try:
         yield
     finally:
         (fs.DOWN_PRESSES_PER_ROUND, fs.SCROLL_PAUSE_SECONDS,
-         fs.DOWN_KEY_PAUSE_SECONDS, fs.PAGE_SETTLE_SECONDS) = kept
+         fs.DOWN_KEY_PAUSE_SECONDS, fs.PAGE_SETTLE_SECONDS,
+         fs.TEMP_DIR, fs.OUTPUT_DIR, fs.EXCEL_DIR) = kept
+        shutil.rmtree(folder, ignore_errors=True)
 
 
 def press_range():
@@ -3221,6 +3239,23 @@ class UserSettingsTests(unittest.TestCase):
         self.assertNotIn("MAX_SCROLL_ROUNDS", source)
         self.assertNotIn("SEARCH_TIMEOUT_SECONDS", source)
         self.assertIn("END_OF_LIST_MARKERS", source)
+
+    def test_the_suite_writes_nothing_into_the_real_temp_folder(self):
+        """A deployment runs this suite on a production laptop. It must not
+        leave a synthetic capture among that rank's real ones."""
+        before = set(os.listdir(fs.TEMP_DIR)) if os.path.isdir(fs.TEMP_DIR) else set()
+        real_temp = fs.TEMP_DIR
+        with pinned_scrolling(press_range()[0]):
+            self.assertNotEqual(fs.TEMP_DIR, real_temp,
+                                "TEMP_DIR was not redirected")
+            page = FakeMapsPage([maps_entry(n) for n in range(1, 21)],
+                                per_scroll=5, visible=5)
+            fs.collect_search(FakeBrowser([page]), "Private Schools",
+                              "Karnataka", "Bengaluru")
+        after = set(os.listdir(fs.TEMP_DIR)) if os.path.isdir(fs.TEMP_DIR) else set()
+        self.assertEqual(after, before,
+                         "the suite left files in the real Temp_Data: %s"
+                         % sorted(after - before))
 
     def test_giving_up_is_measured_in_presses_not_copies(self):
         """Giving up is counted in PRESSES, so the press-per-round setting
