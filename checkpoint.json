@@ -38,7 +38,9 @@
       "email:ppshsr20127@gmail.com",
       "email:info@opjms.edu.in",
       "phone:1662276025",
-      "email:thesanskarhsr@gmail.com"
+      "email:thesanskarhsr@gmail.com",
+      "email:principal.sms@gmail.com",
+      "phone:1662323800"
     ]
   },
   "enriched": {
@@ -70,7 +72,9 @@
       "email:info@opjms.edu.in",
       "name+address:chandulal anglo vedic|5p58+2c5, balsamand rd",
       "phone:1662276025",
-      "email:thesanskarhsr@gmail.com"
+      "email:thesanskarhsr@gmail.com",
+      "email:principal.sms@gmail.com",
+      "phone:1662323800"
     ]
   },
   "completed_cities": [],
@@ -477,6 +481,20 @@
       "city": "Hisar",
       "reason": "Google searching is in its CAPTCHA cooldown for another 146 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:40:46"
+    },
+    {
+      "school": "Thakur Dass Bhargava Sr. Sec. Model School",
+      "state": "Haryana",
+      "city": "Hisar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 141 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:45:46"
+    },
+    {
+      "school": "Army Public School",
+      "state": "Haryana",
+      "city": "Hisar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 137 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:50:09"
     }
   ],
   "duplicates": 0,
@@ -485,7 +503,7 @@
   "git": {
     "branch": "school-data-rank-4",
     "pending": false,
-    "last_ok": "2026-11-19T17:36:00",
+    "last_ok": "2026-11-19T17:43:25",
     "last_error": ""
   },
   "work": {
@@ -494,5 +512,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:43:21"
+  "updated": "2026-11-19T17:52:20"
 }
