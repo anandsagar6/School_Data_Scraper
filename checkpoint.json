@@ -63,7 +63,8 @@
       "phone:7391017474",
       "phone:9403267518",
       "email:bhel_school@rediffmail.com",
-      "phone:8551886677"
+      "phone:8551886677",
+      "phone:9028511151"
     ]
   },
   "enriched": {
@@ -124,7 +125,9 @@
       "phone:9403267518",
       "email:bhel_school@rediffmail.com",
       "name+address:dr zakir hussain urdu|rgvp+m3g, mulla galli",
-      "phone:8551886677"
+      "phone:8551886677",
+      "name+address:dr babasaheb ambedkar hostel parli|rgq7+289, parli - ambajogai rd, near iti college",
+      "phone:9028511151"
     ]
   },
   "completed_cities": [],
@@ -553,6 +556,20 @@
       "city": "Parli",
       "reason": "Google searching is in its CAPTCHA cooldown for another 45 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T18:25:29"
+    },
+    {
+      "school": "Dr. Babasaheb Ambedkar Hostel, Parli",
+      "state": "Maharashtra",
+      "city": "Parli",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 37 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:33:21"
+    },
+    {
+      "school": "IDEAL COACHING ACADEMY",
+      "state": "Maharashtra",
+      "city": "Parli",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 34 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:36:44"
     }
   ],
   "duplicates": 0,
@@ -561,7 +578,7 @@
   "git": {
     "branch": "school-data-rank-7",
     "pending": false,
-    "last_ok": "2026-11-19T18:23:08",
+    "last_ok": "2026-11-19T18:31:52",
     "last_error": ""
   },
   "work": {
@@ -570,5 +587,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T18:31:48"
+  "updated": "2026-11-19T18:41:12"
 }
