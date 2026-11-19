@@ -37,7 +37,9 @@
       "phone:9480764900",
       "phone:9844545101",
       "site:60e40b6447e41.site123.me",
-      "phone:9916156256"
+      "phone:9916156256",
+      "email:admin@achieversinternational.in",
+      "phone:9886913202"
     ]
   },
   "enriched": {
@@ -62,7 +64,9 @@
       "phone:9480764900",
       "phone:9844545101",
       "site:60e40b6447e41.site123.me",
-      "phone:9916156256"
+      "phone:9916156256",
+      "email:admin@achieversinternational.in",
+      "phone:9886913202"
     ]
   },
   "completed_cities": [],
@@ -406,6 +410,20 @@
       "city": "Mandya",
       "reason": "Google searching is in its CAPTCHA cooldown for another 125 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T16:47:48"
+    },
+    {
+      "school": "Achievers International Public School",
+      "state": "Karnataka",
+      "city": "Mandya",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 112 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:00:42"
+    },
+    {
+      "school": "(UMS) Ullas Montessori school",
+      "state": "Karnataka",
+      "city": "Mandya",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 108 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:04:32"
     }
   ],
   "duplicates": 0,
@@ -414,7 +432,7 @@
   "git": {
     "branch": "school-data-rank-5",
     "pending": false,
-    "last_ok": "2026-11-19T16:42:04",
+    "last_ok": "2026-11-19T16:58:53",
     "last_error": ""
   },
   "work": {
@@ -423,5 +441,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:58:49"
+  "updated": "2026-11-19T17:10:54"
 }
