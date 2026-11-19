@@ -32,7 +32,9 @@
       "phone:9450415403",
       "phone:9044133058",
       "email:srivastavagaurav2011@gmail.com",
-      "phone:9936119488"
+      "phone:9936119488",
+      "email:fertspn@gmail.com",
+      "email:info@scsschool.in"
     ]
   },
   "enriched": {
@@ -58,7 +60,9 @@
       "phone:9450415403",
       "phone:9044133058",
       "email:srivastavagaurav2011@gmail.com",
-      "phone:9936119488"
+      "phone:9936119488",
+      "email:fertspn@gmail.com",
+      "email:info@scsschool.in"
     ]
   },
   "completed_cities": [],
@@ -357,6 +361,20 @@
       "city": "Shahjahanpur",
       "reason": "Google searching is in its CAPTCHA cooldown for another 115 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T16:38:16"
+    },
+    {
+      "school": "Fertilizer Public School",
+      "state": "Uttar Pradesh",
+      "city": "Shahjahanpur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 108 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:45:04"
+    },
+    {
+      "school": "S.C.S. Public School",
+      "state": "Uttar Pradesh",
+      "city": "Shahjahanpur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 105 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:47:48"
     }
   ],
   "duplicates": 0,
@@ -365,7 +383,7 @@
   "git": {
     "branch": "school-data-rank-10",
     "pending": false,
-    "last_ok": "2026-11-19T16:34:10",
+    "last_ok": "2026-11-19T16:43:49",
     "last_error": ""
   },
   "work": {
@@ -374,5 +392,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:43:44"
+  "updated": "2026-11-19T16:48:50"
 }
