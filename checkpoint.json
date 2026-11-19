@@ -44,7 +44,8 @@
       "phone:9733187407",
       "phone:8250448118",
       "phone:8250549053",
-      "phone:9593386285"
+      "phone:9593386285",
+      "email:cmps.tadong@gmail.com"
     ]
   },
   "enriched": {
@@ -83,7 +84,9 @@
       "phone:9733187407",
       "phone:8250448118",
       "phone:8250549053",
-      "phone:9593386285"
+      "phone:9593386285",
+      "name+address:west point|8jh8+gjh, ridge rd",
+      "email:cmps.tadong@gmail.com"
     ]
   },
   "completed_cities": [],
@@ -636,6 +639,20 @@
       "city": "Tadong",
       "reason": "Google searching is in its CAPTCHA cooldown for another 31 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T18:01:42"
+    },
+    {
+      "school": "West Point Senior Secondary School",
+      "state": "Sikkim",
+      "city": "Tadong",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 23 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:09:58"
+    },
+    {
+      "school": "CAMBRIDGE MONTESSORI PRE SCHOOL /DAY CARE/ MIND LAB",
+      "state": "Sikkim",
+      "city": "Tadong",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 19 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:14:08"
     }
   ],
   "duplicates": 0,
@@ -644,7 +661,7 @@
   "git": {
     "branch": "school-data-rank-9",
     "pending": false,
-    "last_ok": "2026-11-19T17:56:09",
+    "last_ok": "2026-11-19T18:08:47",
     "last_error": ""
   },
   "work": {
@@ -653,5 +670,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T18:08:42"
+  "updated": "2026-11-19T18:19:39"
 }
