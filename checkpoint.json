@@ -24,7 +24,9 @@
       "email:info@leadconvent.com",
       "phone:5842229588",
       "email:cambridgeconvent@yahoo.co.in",
-      "phone:6391600000"
+      "phone:6391600000",
+      "email:lsppublicschool@outlook.com",
+      "email:tps_spn@rediffmail.com"
     ]
   },
   "enriched": {
@@ -42,7 +44,9 @@
       "name+address:john nave|nti college play ground",
       "phone:5842229588",
       "email:cambridgeconvent@yahoo.co.in",
-      "phone:6391600000"
+      "phone:6391600000",
+      "email:lsppublicschool@outlook.com",
+      "email:tps_spn@rediffmail.com"
     ]
   },
   "completed_cities": [],
@@ -212,15 +216,29 @@
       "city": "Shahjahanpur",
       "reason": "Google searching is in its CAPTCHA cooldown for another 28 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T15:35:25"
+    },
+    {
+      "school": "LSP Public School",
+      "state": "Uttar Pradesh",
+      "city": "Shahjahanpur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 14 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T15:49:22"
+    },
+    {
+      "school": "Takshashila Public School",
+      "state": "Uttar Pradesh",
+      "city": "Shahjahanpur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 12 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T15:51:17"
     }
   ],
   "duplicates": 0,
   "saved": 0,
   "cycle": 0,
   "git": {
-    "branch": "",
+    "branch": "school-data-rank-10",
     "pending": false,
-    "last_ok": "",
+    "last_ok": "2026-11-19T15:48:07",
     "last_error": ""
   },
   "work": {
@@ -229,5 +247,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T15:48:03"
+  "updated": "2026-11-19T15:53:20"
 }
