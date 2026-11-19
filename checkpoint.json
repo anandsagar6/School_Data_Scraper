@@ -40,7 +40,9 @@
       "phone:1662276025",
       "email:thesanskarhsr@gmail.com",
       "email:principal.sms@gmail.com",
-      "phone:1662323800"
+      "phone:1662323800",
+      "phone:9254181416",
+      "phone:8373909277"
     ]
   },
   "enriched": {
@@ -74,7 +76,9 @@
       "phone:1662276025",
       "email:thesanskarhsr@gmail.com",
       "email:principal.sms@gmail.com",
-      "phone:1662323800"
+      "phone:1662323800",
+      "phone:9254181416",
+      "phone:8373909277"
     ]
   },
   "completed_cities": [],
@@ -495,6 +499,20 @@
       "city": "Hisar",
       "reason": "Google searching is in its CAPTCHA cooldown for another 137 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:50:09"
+    },
+    {
+      "school": "Delhi Public School (Junior)",
+      "state": "Haryana",
+      "city": "Hisar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 132 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:54:51"
+    },
+    {
+      "school": "Doon International School",
+      "state": "Haryana",
+      "city": "Hisar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 129 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:57:22"
     }
   ],
   "duplicates": 0,
@@ -503,7 +521,7 @@
   "git": {
     "branch": "school-data-rank-4",
     "pending": false,
-    "last_ok": "2026-11-19T17:43:25",
+    "last_ok": "2026-11-19T17:52:25",
     "last_error": ""
   },
   "work": {
@@ -512,5 +530,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:52:20"
+  "updated": "2026-11-19T17:59:46"
 }
