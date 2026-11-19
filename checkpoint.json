@@ -6,7 +6,7 @@
   "city_fingerprint": "4face9f1d03dd68c4c22d260484c501dbc091075c6decef04119ef5515c2e7f9",
   "current_city": [
     "Chhattisgarh",
-    "Korba District"
+    "Sarguja"
   ],
   "current_keyword": "Private Schools",
   "discovery_done": {},
@@ -36,7 +36,11 @@
       "phone:7428096975",
       "phone:9907927255",
       "phone:7999576814",
-      "phone:7815275143"
+      "phone:7815275143",
+      "phone:7759222874"
+    ],
+    "Chhattisgarh|Sarguja": [
+      "phone:9826747037"
     ]
   },
   "enriched": {
@@ -71,7 +75,11 @@
       "name+address:shri har kishan|9p72+36q, tp nagar rd",
       "name+address:jyoti sec|9m3r+2g7",
       "name+address:saraswati shishu|9rpg+ccp, rajgamar main rd",
-      "phone:7815275143"
+      "phone:7815275143",
+      "phone:7759222874"
+    ],
+    "Chhattisgarh|Sarguja": [
+      "phone:9826747037"
     ]
   },
   "completed_cities": [],
@@ -485,6 +493,20 @@
       "city": "Korba District",
       "reason": "Google searching is in its CAPTCHA cooldown for another 156 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:30:36"
+    },
+    {
+      "school": "Nirmala English Medium Higher Secondary Convent School",
+      "state": "Chhattisgarh",
+      "city": "Korba District",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 153 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:33:52"
+    },
+    {
+      "school": "Mount Litera Zee School (MLZS) - Akashwani Chowk",
+      "state": "Chhattisgarh",
+      "city": "Sarguja",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 145 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:41:48"
     }
   ],
   "duplicates": 0,
@@ -493,7 +515,7 @@
   "git": {
     "branch": "school-data-rank-3",
     "pending": false,
-    "last_ok": "2026-11-19T17:26:44",
+    "last_ok": "2026-11-19T17:32:23",
     "last_error": ""
   },
   "work": {
@@ -502,5 +524,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:32:19"
+  "updated": "2026-11-19T17:44:34"
 }
