@@ -32,7 +32,9 @@
       "phone:8888577107"
     ],
     "Maharashtra|Murtijapur": [
-      "email:admissions@academicheights.in"
+      "email:admissions@academicheights.in",
+      "phone:7756032746",
+      "email:ashok957@bachpanglobal.com"
     ]
   },
   "enriched": {
@@ -62,7 +64,9 @@
     ],
     "Maharashtra|Murtijapur": [
       "email:admissions@academicheights.in",
-      "name+address:shri vyankatesh balaji abhijeet bopte|p9m5+396"
+      "name+address:shri vyankatesh balaji abhijeet bopte|p9m5+396",
+      "phone:7756032746",
+      "email:ashok957@bachpanglobal.com"
     ]
   },
   "completed_cities": [],
@@ -295,6 +299,20 @@
       "city": "Murtijapur",
       "reason": "Google searching is in its CAPTCHA cooldown for another 166 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T16:24:26"
+    },
+    {
+      "school": "Murtizapur High School",
+      "state": "Maharashtra",
+      "city": "Murtijapur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 161 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:29:20"
+    },
+    {
+      "school": "Bachpan Play School in Murtizapur",
+      "state": "Maharashtra",
+      "city": "Murtijapur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 157 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:33:54"
     }
   ],
   "duplicates": 0,
@@ -303,7 +321,7 @@
   "git": {
     "branch": "school-data-rank-7",
     "pending": false,
-    "last_ok": "2026-11-19T16:19:28",
+    "last_ok": "2026-11-19T16:26:53",
     "last_error": ""
   },
   "work": {
@@ -312,5 +330,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:26:48"
+  "updated": "2026-11-19T16:35:01"
 }
