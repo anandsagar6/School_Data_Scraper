@@ -20,7 +20,8 @@
       "email:info@palladiumschool.com",
       "phone:8278017001",
       "phone:8001023344",
-      "phone:9896029073"
+      "phone:9896029073",
+      "email:ranavarsha@rediffmail.com"
     ]
   },
   "enriched": {
@@ -32,7 +33,8 @@
       "email:info@palladiumschool.com",
       "phone:8278017001",
       "phone:8001023344",
-      "phone:9896029073"
+      "phone:9896029073",
+      "email:ranavarsha@rediffmail.com"
     ]
   },
   "completed_cities": [],
@@ -299,6 +301,13 @@
       "city": "Hisar",
       "reason": "Google searching is in its CAPTCHA cooldown for another 20 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T15:54:25"
+    },
+    {
+      "school": "St. Sophia Senior Secondary School",
+      "state": "Haryana",
+      "city": "Hisar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 6 minute(s) - the official email and phone searches were NOT run",
+      "when": "2026-11-19T16:08:21"
     }
   ],
   "duplicates": 0,
@@ -307,7 +316,7 @@
   "git": {
     "branch": "school-data-rank-4",
     "pending": false,
-    "last_ok": "2026-11-19T15:53:16",
+    "last_ok": "2026-11-19T16:07:49",
     "last_error": ""
   },
   "work": {
@@ -316,5 +325,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:07:44"
+  "updated": "2026-11-19T16:14:30"
 }
