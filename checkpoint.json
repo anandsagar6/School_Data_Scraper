@@ -46,7 +46,9 @@
       "email:info@osgu.ac.in",
       "phone:9996719978",
       "email:aipsdobhi@gmail.com",
-      "phone:9728552795"
+      "phone:9728552795",
+      "email:lahoria.school@gmail.com",
+      "email:gssshisar1@gmail.com"
     ]
   },
   "enriched": {
@@ -87,7 +89,9 @@
       "email:info@osgu.ac.in",
       "phone:9996719978",
       "email:aipsdobhi@gmail.com",
-      "phone:9728552795"
+      "phone:9728552795",
+      "email:lahoria.school@gmail.com",
+      "email:gssshisar1@gmail.com"
     ]
   },
   "completed_cities": [],
@@ -557,6 +561,20 @@
       "city": "Hisar",
       "reason": "Google searching is in its CAPTCHA cooldown for another 110 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T18:17:00"
+    },
+    {
+      "school": "New Lahoria Vidya Mandir Senior Secondary School",
+      "state": "Haryana",
+      "city": "Hisar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 104 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T18:23:00"
+    },
+    {
+      "school": "Government Model Sanskriti Senior Secondary School Jahajpul",
+      "state": "Haryana",
+      "city": "Hisar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 102 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T18:25:12"
     }
   ],
   "duplicates": 0,
@@ -565,7 +583,7 @@
   "git": {
     "branch": "school-data-rank-4",
     "pending": false,
-    "last_ok": "2026-11-19T18:14:43",
+    "last_ok": "2026-11-19T18:21:40",
     "last_error": ""
   },
   "work": {
@@ -574,5 +592,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T18:21:35"
+  "updated": "2026-11-19T18:26:50"
 }
