@@ -25,7 +25,8 @@
       "email:admissions@vdjs.edu.in",
       "email:anilkasana4003@gmail.com",
       "phone:9215649592",
-      "site:smshisar.org"
+      "site:smshisar.org",
+      "email:cpshsr59@yahoo.com"
     ]
   },
   "enriched": {
@@ -42,7 +43,9 @@
       "email:admissions@vdjs.edu.in",
       "email:anilkasana4003@gmail.com",
       "phone:9215649592",
-      "site:smshisar.org"
+      "site:smshisar.org",
+      "email:cpshsr59@yahoo.com",
+      "name+address:campus|5p25+8qg, ccs haryana agricultural university hisar"
     ]
   },
   "completed_cities": [],
@@ -344,6 +347,20 @@
       "city": "Hisar",
       "reason": "Google searching is in its CAPTCHA cooldown for another 210 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T16:36:27"
+    },
+    {
+      "school": "Cambridge Public School",
+      "state": "Haryana",
+      "city": "Hisar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 203 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:43:34"
+    },
+    {
+      "school": "Campus School",
+      "state": "Haryana",
+      "city": "Hisar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 201 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:46:10"
     }
   ],
   "duplicates": 0,
@@ -352,7 +369,7 @@
   "git": {
     "branch": "school-data-rank-4",
     "pending": false,
-    "last_ok": "2026-11-19T16:34:23",
+    "last_ok": "2026-11-19T16:42:55",
     "last_error": ""
   },
   "work": {
@@ -361,5 +378,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:42:50"
+  "updated": "2026-11-19T16:55:49"
 }
