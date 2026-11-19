@@ -39,7 +39,9 @@
       "site:60e40b6447e41.site123.me",
       "phone:9916156256",
       "email:admin@achieversinternational.in",
-      "phone:9886913202"
+      "phone:9886913202",
+      "site:republiccentral.school",
+      "phone:9844855230"
     ]
   },
   "enriched": {
@@ -66,7 +68,9 @@
       "site:60e40b6447e41.site123.me",
       "phone:9916156256",
       "email:admin@achieversinternational.in",
-      "phone:9886913202"
+      "phone:9886913202",
+      "site:republiccentral.school",
+      "phone:9844855230"
     ]
   },
   "completed_cities": [],
@@ -424,6 +428,20 @@
       "city": "Mandya",
       "reason": "Google searching is in its CAPTCHA cooldown for another 108 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:04:32"
+    },
+    {
+      "school": "Republic Central School",
+      "state": "Karnataka",
+      "city": "Mandya",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 100 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:12:32"
+    },
+    {
+      "school": "Kidzee Subhash Nagar",
+      "state": "Karnataka",
+      "city": "Mandya",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 96 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:16:59"
     }
   ],
   "duplicates": 0,
@@ -432,7 +450,7 @@
   "git": {
     "branch": "school-data-rank-5",
     "pending": false,
-    "last_ok": "2026-11-19T16:58:53",
+    "last_ok": "2026-11-19T17:10:58",
     "last_error": ""
   },
   "work": {
@@ -441,5 +459,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:10:54"
+  "updated": "2026-11-19T17:18:47"
 }
