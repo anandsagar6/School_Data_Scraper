@@ -56,7 +56,9 @@
       "phone:2135222054"
     ],
     "Maharashtra|Parli": [
-      "phone:9422241930"
+      "phone:9422241930",
+      "phone:9112217100",
+      "phone:9881145793"
     ]
   },
   "enriched": {
@@ -109,7 +111,9 @@
     ],
     "Maharashtra|Parli": [
       "phone:9422241930",
-      "name+address:foundation|natraj rang mandir"
+      "name+address:foundation|natraj rang mandir",
+      "phone:9112217100",
+      "phone:9881145793"
     ]
   },
   "completed_cities": [],
@@ -482,6 +486,20 @@
       "city": "Parli",
       "reason": "Google searching is in its CAPTCHA cooldown for another 82 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T17:49:04"
+    },
+    {
+      "school": "Vidyaniketan school",
+      "state": "Maharashtra",
+      "city": "Parli",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 76 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:54:40"
+    },
+    {
+      "school": "IDEAL ENGLISH SCHOOL PARLI.V",
+      "state": "Maharashtra",
+      "city": "Parli",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 72 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:58:25"
     }
   ],
   "duplicates": 0,
@@ -490,7 +508,7 @@
   "git": {
     "branch": "school-data-rank-7",
     "pending": false,
-    "last_ok": "2026-11-19T17:43:27",
+    "last_ok": "2026-11-19T17:52:23",
     "last_error": ""
   },
   "work": {
@@ -499,5 +517,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:52:18"
+  "updated": "2026-11-19T18:01:01"
 }
