@@ -35,7 +35,8 @@
       "email:lapshisar@gmail.com",
       "email:rishikul.hsr@gmail.com",
       "email:info@nypshisar.edu.in",
-      "email:ppshsr20127@gmail.com"
+      "email:ppshsr20127@gmail.com",
+      "email:info@opjms.edu.in"
     ]
   },
   "enriched": {
@@ -63,7 +64,9 @@
       "email:lapshisar@gmail.com",
       "email:rishikul.hsr@gmail.com",
       "email:info@nypshisar.edu.in",
-      "email:ppshsr20127@gmail.com"
+      "email:ppshsr20127@gmail.com",
+      "email:info@opjms.edu.in",
+      "name+address:chandulal anglo vedic|5p58+2c5, balsamand rd"
     ]
   },
   "completed_cities": [],
@@ -442,6 +445,20 @@
       "city": "Hisar",
       "reason": "Google searching is in its CAPTCHA cooldown for another 158 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:28:28"
+    },
+    {
+      "school": "OP Jindal Modern School",
+      "state": "Haryana",
+      "city": "Hisar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 154 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:33:00"
+    },
+    {
+      "school": "Chandulal Anglo Vedic High School",
+      "state": "Haryana",
+      "city": "Hisar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 152 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:34:58"
     }
   ],
   "duplicates": 0,
@@ -450,7 +467,7 @@
   "git": {
     "branch": "school-data-rank-4",
     "pending": false,
-    "last_ok": "2026-11-19T17:23:56",
+    "last_ok": "2026-11-19T17:30:53",
     "last_error": ""
   },
   "work": {
@@ -459,5 +476,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:30:49"
+  "updated": "2026-11-19T17:35:55"
 }
