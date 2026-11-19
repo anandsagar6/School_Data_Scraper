@@ -57,7 +57,8 @@
       "phone:7587706495",
       "phone:7759249351",
       "site:jpskorba.com",
-      "email:info@ddmgroup.in"
+      "email:info@ddmgroup.in",
+      "name+address:lions|9p43+6h3"
     ]
   },
   "completed_cities": [],
@@ -161,6 +162,72 @@
         "Number of Non-Teaching Staff": "",
         "School Address": "Korba - Champa Rd, near Saraswati Higher Secondary School",
         "Area / Locality": "Korba - Champa Rd, near Saraswati Higher Secondary School",
+        "Village / Town": "",
+        "City": "Korba District",
+        "Block / Tehsil": "",
+        "District": "",
+        "State": "Chhattisgarh",
+        "PIN Code": "",
+        "Country": "India",
+        "Principal Name": "",
+        "Principal Official Email": "",
+        "Principal Office Phone Number": "",
+        "Vice Principal Name": "",
+        "School Administrator Name": "",
+        "School Google Maps Link": "",
+        "School Latitude": "",
+        "School Longitude": "",
+        "School Working Days": "",
+        "School Office Hours": "",
+        "School Academic Session": "",
+        "Available Streams (Science / Commerce / Arts)": "",
+        "Computer Science Offered": "",
+        "Computer Lab Available": "",
+        "Number of Computers": "",
+        "Internet Available": "",
+        "Smart Classroom Available": "",
+        "Science Lab Available": "",
+        "Library Available": "",
+        "Auditorium / Seminar Hall Available": "",
+        "Existing IT / Coding / AI Programs": "",
+        "School Official Social Media Links": "",
+        "School Data Source URL": "",
+        "Additional School Notes": ""
+      }
+    },
+    {
+      "school": "Beacon English Higher Secondary School Darri Korba \"West\"",
+      "city": "Korba District",
+      "state": "Chhattisgarh",
+      "reason": "no answer arrived",
+      "when": "2026-11-19T16:57:33",
+      "record": {
+        "School Name": "Beacon English Higher Secondary School Darri Korba \"West\"",
+        "School Short Name": "",
+        "School Website": "",
+        "School Official Email": "",
+        "School Alternate Email": "",
+        "School Official Phone Number": "",
+        "School Alternate Phone Number": "",
+        "UDISE Code": "",
+        "School Type": "Private",
+        "School Management Type": "",
+        "School Category": "",
+        "Affiliation Board": "",
+        "Affiliation Number": "",
+        "School Registration Number": "",
+        "Year of Establishment": "",
+        "Classes Offered": "",
+        "Education Medium": "",
+        "Co-Educational Status": "",
+        "Residential School Status": "",
+        "Total Student Strength": "",
+        "Number of Boys": "",
+        "Number of Girls": "",
+        "Number of Teaching Staff": "",
+        "Number of Non-Teaching Staff": "",
+        "School Address": "CMFH+WV4",
+        "Area / Locality": "CMFH+WV4",
         "Village / Town": "",
         "City": "Korba District",
         "Block / Tehsil": "",
@@ -328,6 +395,20 @@
       "city": "Korba District",
       "reason": "Google searching is in its CAPTCHA cooldown for another 212 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T16:35:13"
+    },
+    {
+      "school": "Lions English Higher Secondary School",
+      "state": "Chhattisgarh",
+      "city": "Korba District",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 207 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:39:53"
+    },
+    {
+      "school": "Beacon English Higher Secondary School Darri Korba \"West\"",
+      "state": "Chhattisgarh",
+      "city": "Korba District",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 203 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:43:27"
     }
   ],
   "duplicates": 0,
@@ -336,7 +417,7 @@
   "git": {
     "branch": "school-data-rank-3",
     "pending": false,
-    "last_ok": "2026-11-19T16:31:43",
+    "last_ok": "2026-11-19T16:37:43",
     "last_error": ""
   },
   "work": {
@@ -345,5 +426,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:37:39"
+  "updated": "2026-11-19T16:57:33"
 }
