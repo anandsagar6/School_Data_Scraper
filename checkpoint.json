@@ -49,7 +49,9 @@
       "phone:6265887031"
     ],
     "Madhya Pradesh|Betul": [
-      "site:kidzee.com"
+      "site:kidzee.com",
+      "email:info@ekidschools.com",
+      "phone:7509001078"
     ]
   },
   "enriched": {
@@ -93,7 +95,9 @@
       "name+address:j p b|rcjr+9rf"
     ],
     "Madhya Pradesh|Betul": [
-      "site:kidzee.com"
+      "site:kidzee.com",
+      "email:info@ekidschools.com",
+      "phone:7509001078"
     ]
   },
   "completed_cities": [],
@@ -483,6 +487,20 @@
       "city": "Betul",
       "reason": "Google searching is in its CAPTCHA cooldown for another 53 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T18:00:13"
+    },
+    {
+      "school": "EKids pre school",
+      "state": "Madhya Pradesh",
+      "city": "Betul",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 50 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:02:46"
+    },
+    {
+      "school": "Satpuda Valley Public School Sonaghati, Betul",
+      "state": "Madhya Pradesh",
+      "city": "Betul",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 47 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:05:25"
     }
   ],
   "duplicates": 0,
@@ -491,7 +509,7 @@
   "git": {
     "branch": "school-data-rank-6",
     "pending": false,
-    "last_ok": "2026-11-19T17:55:30",
+    "last_ok": "2026-11-19T18:01:14",
     "last_error": ""
   },
   "work": {
@@ -500,5 +518,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T18:01:07"
+  "updated": "2026-11-19T18:07:11"
 }
