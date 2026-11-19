@@ -13,6 +13,9 @@
   "keywords_done": {
     "Madhya Pradesh|Mandla": [
       "Private Schools"
+    ],
+    "Madhya Pradesh|Damoh": [
+      "Private Schools"
     ]
   },
   "committed": {
@@ -83,7 +86,8 @@
       "email:kvdamohmp@gmail.com",
       "name+address:rhymes play to 8th|lane between nirman and suraj marbles",
       "phone:6265887031",
-      "name+address:navjagriti|nav jagriti higher secondary school"
+      "name+address:navjagriti|nav jagriti higher secondary school",
+      "name+address:j p b|rcjr+9rf"
     ]
   },
   "completed_cities": [],
@@ -459,6 +463,13 @@
       "city": "Damoh",
       "reason": "Google searching is in its CAPTCHA cooldown for another 63 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T17:49:34"
+    },
+    {
+      "school": "J.P.B. School",
+      "state": "Madhya Pradesh",
+      "city": "Damoh",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 59 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:54:02"
     }
   ],
   "duplicates": 0,
@@ -467,7 +478,7 @@
   "git": {
     "branch": "school-data-rank-6",
     "pending": false,
-    "last_ok": "2026-11-19T17:43:22",
+    "last_ok": "2026-11-19T17:51:35",
     "last_error": ""
   },
   "work": {
@@ -476,5 +487,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:51:31"
+  "updated": "2026-11-19T17:55:25"
 }
