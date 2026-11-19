@@ -48,7 +48,8 @@
       "email:aksharaipskowdle@gmail.com",
       "email:bcp651@gmail.com",
       "phone:9008846132",
-      "phone:9901514131"
+      "phone:9901514131",
+      "phone:9972719631"
     ]
   },
   "enriched": {
@@ -88,7 +89,8 @@
       "email:aksharaipskowdle@gmail.com",
       "email:bcp651@gmail.com",
       "phone:9008846132",
-      "phone:9901514131"
+      "phone:9901514131",
+      "phone:9972719631"
     ]
   },
   "completed_cities": [],
@@ -610,6 +612,13 @@
       "city": "Mandya",
       "reason": "Google searching is in its CAPTCHA cooldown for another 237 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T19:16:49"
+    },
+    {
+      "school": "Krushi 24*7 Study Center/24*7 private library",
+      "state": "Karnataka",
+      "city": "Mandya",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 221 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T19:32:46"
     }
   ],
   "duplicates": 0,
@@ -618,7 +627,7 @@
   "git": {
     "branch": "school-data-rank-5",
     "pending": false,
-    "last_ok": "2026-11-19T19:11:05",
+    "last_ok": "2026-11-19T19:30:24",
     "last_error": ""
   },
   "work": {
@@ -627,5 +636,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T19:30:19"
+  "updated": "2026-11-19T19:43:11"
 }
