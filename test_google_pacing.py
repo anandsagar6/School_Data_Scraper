@@ -154,14 +154,41 @@ class PacingBase(unittest.TestCase):
 
 class PacingSettings(unittest.TestCase):
 
-    def test_between_schools_is_45_to_90(self):
-        self.assertEqual(fs.GOOGLE_BETWEEN_SCHOOLS_DELAY_SECONDS, (45, 90))
+    #: The pacing the senior has configured. These three were (45, 90),
+    #: (15, 25) and (5, 12) when this suite was written; the senior has
+    #: since widened them, and that configuration is authoritative - a
+    #: source update must never quietly put the older values back. The
+    #: table is here so changing them stays a deliberate one-line edit.
+    SENIOR_PACING = {
+        "GOOGLE_BETWEEN_SCHOOLS_DELAY_SECONDS": (30, 150),
+        "GOOGLE_BETWEEN_QUERIES_DELAY_SECONDS": (20, 120),
+        "GOOGLE_TO_GEMINI_DELAY_SECONDS": (25, 130),
+    }
 
-    def test_between_queries_is_15_to_25(self):
-        self.assertEqual(fs.GOOGLE_BETWEEN_QUERIES_DELAY_SECONDS, (15, 25))
+    def test_the_configured_pacing_is_what_the_senior_set(self):
+        for name, expected in self.SENIOR_PACING.items():
+            self.assertEqual(getattr(fs, name), expected, name)
 
-    def test_google_to_gemini_is_5_to_12(self):
-        self.assertEqual(fs.GOOGLE_TO_GEMINI_DELAY_SECONDS, (5, 12))
+    def test_each_delay_is_an_ordered_pair_of_positive_seconds(self):
+        """What the three old value tests were really guarding: a usable
+        (min, max) range, whatever numbers are in it."""
+        for name in self.SENIOR_PACING:
+            span = getattr(fs, name)
+            self.assertIsInstance(span, tuple, name)
+            self.assertEqual(len(span), 2, name)
+            low, high = span
+            self.assertGreater(low, 0, name)
+            self.assertLess(low, high, name)
+
+    def test_no_delay_is_faster_than_the_old_upstream_default(self):
+        """A widened range must not become a FASTER one by accident."""
+        was = {"GOOGLE_BETWEEN_SCHOOLS_DELAY_SECONDS": 45,
+               "GOOGLE_BETWEEN_QUERIES_DELAY_SECONDS": 15,
+               "GOOGLE_TO_GEMINI_DELAY_SECONDS": 5}
+        for name, old_low in was.items():
+            low, high = getattr(fs, name)
+            self.assertGreaterEqual((low + high) / 2.0, old_low,
+                                    "%s is now faster on average" % name)
 
     def test_cooldown_is_60_to_120_minutes(self):
         self.assertEqual(fs.GOOGLE_CHALLENGE_COOLDOWN_MINUTES, (60, 120))

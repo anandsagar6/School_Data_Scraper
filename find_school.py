@@ -42,6 +42,7 @@ run says so and stops that step instead of inventing records.
 
 import argparse
 import datetime
+import filecmp
 import glob
 import gzip
 import hashlib
@@ -81,6 +82,16 @@ GIT_REMOTE = "localtest"            # "origin" is the public repo - careful
 GIT_SYNC_MINUTES = 5                # never sync more often than this
 GIT_BRANCH_PER_RANK = True          # rank 1 -> school-data-rank-1
 
+# --- rank-wise repository URL (NOT IN USE YET) -----------------------------
+#  One repository per rank instead of one repository with ten branches.
+#  Nothing below changes how this script syncs today: RANK_REPO_ENABLED is
+#  False, so git_sync() still pushes to GIT_REMOTE exactly as before. Turn
+#  it on only after the ten repositories exist and each one has been shown
+#  to accept a write - rank_repo_ready() reports that without pushing.
+RANK_REPO_ENABLED = False
+total_scripts = 10                  # how many ranks share the work
+base_github_url = "git@github.com:YOUR_TEST_ACCOUNT/school_extractor.git"
+
 # --- what is collected -----------------------------------------------------
 OFFICIAL_CONTACT_SEARCH = True      # official email/phone from Google Search
 KEYWORD_FIRST_ORDER = True          # one keyword across every city, then next
@@ -90,29 +101,29 @@ COUNTRY = "India"                   # added to every Maps and Google query
 WORK_PERIOD_MIN_HOURS = 2           # work this long (working time only)...
 WORK_PERIOD_MAX_HOURS = 6
 BREAK_MIN_MINUTES = 30              # ...then stop this long
-BREAK_MAX_MINUTES = 90
-NIGHT_PAUSE_ENABLED = False         # no collecting between the hours below
+BREAK_MAX_MINUTES = 120
+NIGHT_PAUSE_ENABLED = True         # no collecting between the hours below
 NIGHT_START_HOUR = 23
 NIGHT_END_HOUR = 5
 TIME_ZONE = "Asia/Kolkata"          # the clock the night stop is read on
 
 # --- pacing: every wait is a fresh random draw from its range --------------
-GOOGLE_BETWEEN_SCHOOLS_DELAY_SECONDS = (45, 90)  # between two schools
-GOOGLE_BETWEEN_QUERIES_DELAY_SECONDS = (15, 25)  # email search -> phone search
-GOOGLE_TO_GEMINI_DELAY_SECONDS = (5, 12)         # searches -> Gemini
+GOOGLE_BETWEEN_SCHOOLS_DELAY_SECONDS = (30, 150)   # between two schools
+GOOGLE_BETWEEN_QUERIES_DELAY_SECONDS = (20, 120)    # email search -> phone search
+GOOGLE_TO_GEMINI_DELAY_SECONDS = (25, 130)         # searches -> Gemini
 #: After a CAPTCHA, stop asking Google for this long; each further
 #: challenge doubles it to the ceiling. See start_google_cooldown().
 GOOGLE_CHALLENGE_COOLDOWN_MINUTES = (60, 120)
 GOOGLE_CHALLENGE_COOLDOWN_MAX_MINUTES = 240
 #: Where the ranks on ONE laptop publish a cooldown to each other.
 GOOGLE_COOLDOWN_SHARE_NAME = "google_cooldown.json"
-PAUSE_CLOSES_BROWSER_SECONDS = 600  # a break this long closes the browser
+PAUSE_CLOSES_BROWSER_SECONDS = random.randint(300, 900)  # a break this long closes the browser
 
 # --- Google Maps scrolling -------------------------------------------------
 #  Each copy takes the WHOLE list, so more presses between copies cannot
 #  skip a school - it only means fewer copies. One press moves ~24 pixels.
-DOWN_PRESSES_PER_ROUND = 10         # lower = copy more often, slower
-SCROLL_PAUSE_SECONDS = 2.5          # wait after the presses for new results
+DOWN_PRESSES_PER_ROUND = random.randint(10,100)        # lower = copy more often, slower
+SCROLL_PAUSE_SECONDS = random.randint(10,90)          # wait after the presses for new results
 
 # --- Gemini ----------------------------------------------------------------
 GEMINI_URL = "https://gemini.google.com/app?hl=en-IN"
@@ -374,18 +385,62 @@ CITY_BY_STATES, SCHOOL_KEYWORDS, SCHOOL_FIELDS = load_shared_lists()
 SCHOOL_TYPE_COLUMN = "School Type"
 
 
-def school_type_for_keyword(keyword):
-    """The school type a keyword proves. "Private Schools" -> "Private".
+#: The ONLY two values this column may ever hold. The website filters
+#: schools on this field, so a third value - "International",
+#: "Co-Educational", "Unknown" - silently breaks that filter. Anything
+#: that is not one of these two is left BLANK instead.
+SCHOOL_TYPE_PRIVATE = "Private"
+SCHOOL_TYPE_GOVERNMENT = "Government"
+SCHOOL_TYPES_ALLOWED = (SCHOOL_TYPE_PRIVATE, SCHOOL_TYPE_GOVERNMENT)
 
-    Only the trailing "School"/"Schools" is dropped, so a keyword added
-    later needs no change here: "Government Schools" gives "Government",
-    "International Schools" gives "International". An empty keyword gives
-    "", never a guess.
+
+def school_type_for_keyword(keyword):
+    """"Private Schools" -> "Private", "Government Schools" -> "Government".
+
+    Returns "" for anything else, including a keyword that somehow names
+    both. It used to strip the trailing "School"/"Schools" and return
+    whatever was left, so adding "International Schools" to the shared
+    keyword list would have put "International" in the column and broken
+    the website's filter without anyone noticing.
     """
-    words = clean(keyword).split()
-    while words and words[-1].lower().strip(".,") in ("school", "schools"):
-        words.pop()
-    return " ".join(words)
+    words = clean(keyword).lower()
+    if not words:
+        return ""
+    government = "government" in words or "govt" in words
+    private = "private" in words
+    if government and private:
+        return ""           # names both: not a classification
+    if government:
+        return SCHOOL_TYPE_GOVERNMENT
+    if private:
+        return SCHOOL_TYPE_PRIVATE
+    return ""
+
+
+def valid_school_type(value):
+    """The value if it is one of the two allowed, otherwise ""."""
+    wanted = clean(value)
+    for allowed in SCHOOL_TYPES_ALLOWED:
+        if wanted.lower() == allowed.lower():
+            return allowed          # also fixes the capitalisation
+    return ""
+
+
+def better_school_type(existing, incoming):
+    """Which classification survives when one school has two.
+
+    PRIVATE ALWAYS WINS. Google returns some schools under both keywords,
+    and the result must not depend on which keyword ran first: a school
+    wrongly left as Government would be missed by work aimed at private
+    schools, which is the costlier mistake.
+
+    Anything that is not one of the two allowed values counts as nothing,
+    so a legacy "Co-Educational" loses to a real classification.
+    """
+    mine, theirs = valid_school_type(existing), valid_school_type(incoming)
+    if SCHOOL_TYPE_PRIVATE in (mine, theirs):
+        return SCHOOL_TYPE_PRIVATE
+    return mine or theirs
 
 
 def stamp_school_type(records, keyword):
@@ -396,14 +451,19 @@ def stamp_school_type(records, keyword):
     so a resumed keyword stamps its schools exactly as the first pass did.
     Returns how many records were stamped.
     """
-    value = school_type_for_keyword(keyword)
+    value = valid_school_type(school_type_for_keyword(keyword))
     if not value:
         return 0
     stamped = 0
     for record in records:
-        if SCHOOL_TYPE_COLUMN in record and not clean(
-                record.get(SCHOOL_TYPE_COLUMN, "")):
-            record[SCHOOL_TYPE_COLUMN] = value
+        if SCHOOL_TYPE_COLUMN not in record:
+            continue
+        # Private wins over whatever is there, so the result does not
+        # depend on which keyword reached this school first. Any other
+        # value - blank, or a legacy guess - is replaced by this keyword's.
+        settled = better_school_type(record.get(SCHOOL_TYPE_COLUMN, ""), value)
+        if settled != clean(record.get(SCHOOL_TYPE_COLUMN, "")):
+            record[SCHOOL_TYPE_COLUMN] = settled
             stamped += 1
     return stamped
 
@@ -1174,12 +1234,47 @@ def place_id_of(url):
     return ""
 
 
+#: Words that genuinely name a SEPARATE CAMPUS when they appear in the
+#: school's own name. Deliberately narrower than _BRANCH_WORDS, which also
+#: holds address words - road, nagar, colony, main, north - that say WHERE
+#: a school is, not WHICH campus it is. Treating those as campus markers
+#: would split one school in two the moment one copy had its locality
+#: filled in and the other did not.
+#: STRUCTURAL words only - the ones that name a separate site. The school
+#: LEVEL words (junior, senior, primary, boys, girls) are deliberately NOT
+#: here: in Indian naming they are part of the school's own name far more
+#: often than they mark a campus, and 7 of the 9 campus-looking names in
+#: the first collected city were "... Senior Secondary School". Treating
+#: those as campus markers would split one school from itself the moment
+#: it was collected once with its short name and once with its full one.
+#:
+#: The level words still separate schools when BOTH names carry one and
+#: they differ - "X Boys School" against "X Girls School" - because
+#: branch_signature() already covers that from the wider _BRANCH_WORDS
+#: list. Nothing true is lost by leaving them out here.
+_CAMPUS_DESIGNATORS = re.compile(
+    r"\b(campus|branch|annexe|annex|block|phase|sector|wing)\b", re.I)
+
+
+def campus_designators(record):
+    """Campus-naming words in the school's NAME only, never the locality."""
+    return frozenset(w.lower() for w in
+                     _CAMPUS_DESIGNATORS.findall(
+                         clean(record.get("School Name", ""))))
+
+
 def contradicts(left, right):
     """A reason these two records are different schools, or ""."""
     left_id, right_id = (place_id_of(left.get("School Google Maps Link", "")),
                          place_id_of(right.get("School Google Maps Link", "")))
     if left_id and right_id and left_id != right_id:
         return "different Google Maps places"
+    # THE SAME Maps place is the same school, whatever the two names say.
+    # This is the strongest identity available, so it settles the question
+    # before any name is compared - otherwise a copy that happened to pick
+    # up "Branch II" would split one place into two rows.
+    if left_id and right_id and left_id == right_id:
+        return ""
 
     left_pin, right_pin = tidy_pin(left.get("PIN Code", "")), tidy_pin(
         right.get("PIN Code", ""))
@@ -1191,6 +1286,27 @@ def contradicts(left, right):
         only = (left_branch ^ right_branch)
         return "different branch words (%s)" % ", ".join(sorted(only))
 
+    # A campus named in ONE name and not the other is two campuses, even
+    # at the same PIN code and address, and EVEN ON ONE PHONE LINE:
+    # "Modern School" and "Modern School Branch II" share a street, a
+    # switchboard, a domain and a website without being one school. A
+    # trust running several campuses publishes one number for all of
+    # them, so a shared contact says who runs a school, not which
+    # building it is - it must never merge two campuses into one row,
+    # because the row that loses is a school nobody ever contacts.
+    #
+    # Only the NAME is read, and only the narrow designator list, so a
+    # record whose locality is merely more complete is still one school.
+    # The one thing that does outrank a named campus is a confirmed
+    # matching Google Maps place id, settled at the top of this function:
+    # that is the same pin on the same map, which no name can contradict.
+    left_campus, right_campus = (campus_designators(left),
+                                 campus_designators(right))
+    if left_campus != right_campus:
+        only = (left_campus ^ right_campus)
+        return "one names a campus the other does not (%s)" % ", ".join(
+            sorted(only))
+
     left_address = clean(left.get("School Address", "")).lower()
     right_address = clean(right.get("School Address", "")).lower()
     if left_address and right_address:
@@ -1201,10 +1317,26 @@ def contradicts(left, right):
 
 
 def merge_records(kept, incoming):
-    """Fill the blanks of ``kept`` from ``incoming``. Never overwrites."""
+    """Fill the blanks of ``kept`` from ``incoming``. Never overwrites.
+
+    ONE exception, and it is the point of it: School Type is settled by
+    better_school_type() rather than by which copy arrived first, so
+    Government + Private gives Private in either order. Every other
+    column still only fills a blank, so nothing collected is replaced.
+    """
+    settled = better_school_type(kept.get(SCHOOL_TYPE_COLUMN, ""),
+                                 incoming.get(SCHOOL_TYPE_COLUMN, ""))
     for column in SCHOOL_COLUMNS:
         if not clean(kept.get(column, "")) and clean(incoming.get(column, "")):
             kept[column] = incoming[column]
+    if settled and SCHOOL_TYPE_COLUMN in kept:
+        was = clean(kept.get(SCHOOL_TYPE_COLUMN, ""))
+        kept[SCHOOL_TYPE_COLUMN] = settled
+        if was and was != settled:
+            LOG.info("      %s: %s + %s -> %s",
+                     clean(kept.get("School Name", ""))[:40], was,
+                     clean(incoming.get(SCHOOL_TYPE_COLUMN, "")) or "blank",
+                     settled)
     return kept
 
 
@@ -1639,6 +1771,203 @@ def master_identities():
     return identities, keys
 
 
+def correct_school_type_in_workbook(path, corrections):
+    """Rewrite ONLY the School Type cell of the named rows in one workbook.
+
+    ``corrections`` maps a row number (1-based data row, header excluded)
+    to its new value. Nothing else in the file is touched: the workbook is
+    loaded, those single cells are set, and it is written through the same
+    atomic temp-file-and-replace the ordinary save uses, so an interrupted
+    correction leaves the old file intact.
+    """
+    if not corrections or not os.path.exists(path):
+        return 0
+    require_openpyxl()
+    book = openpyxl.load_workbook(path)
+    sheet = book.active
+    header = [clean(c.value) for c in sheet[1]]
+    if SCHOOL_TYPE_COLUMN not in header:
+        book.close()
+        return 0
+    column = header.index(SCHOOL_TYPE_COLUMN) + 1
+    changed = 0
+    for data_row, value in corrections.items():
+        cell = sheet.cell(row=data_row + 1, column=column)
+        if clean(cell.value) != value:
+            cell.value = value
+            changed += 1
+    if changed:
+        save_workbook_atomically(book, path)
+    book.close()
+    return changed
+
+
+class SchoolTypeSyncError(RuntimeError):
+    """A School Type correction could not be made safely."""
+
+
+def school_type_workbooks():
+    """Every workbook whose School Type cells must agree.
+
+    master_data.xlsx, current_data.xlsx, every finished cycle file, and
+    the temporary workbook of each city still being worked on - which is
+    what a resumed run reads its schools back from, so a correction that
+    skipped it would be undone on the next restart.
+    """
+    paths = [master_path()] + list(all_cycle_paths())
+    if os.path.isdir(TEMP_DIR):
+        paths.extend(sorted(glob.glob(os.path.join(
+            TEMP_DIR, "*_temporary_schools.xlsx"))))
+    seen, unique = set(), []
+    for path in paths:
+        if path and path not in seen and os.path.exists(path):
+            seen.add(path)
+            unique.append(path)
+    return unique
+
+
+def correct_school_types_everywhere(records, paths=None, backup_dir=None):
+    """Apply the Private-over-Government rule across every workbook.
+
+    SAFETY, in order:
+      * every file that will change is copied first, and the copy is read
+        back and compared before anything is written;
+      * each file is written through the same atomic temp-and-replace the
+        ordinary save uses, so an interrupted write leaves the old file;
+      * if any file fails, every file already written in this call is
+        restored from its copy, so the set either all changes or none does.
+
+    Only School Type cells are touched, and only ever towards Private.
+    Returns ``(corrections, rolled_back)``.
+    """
+    if paths is None:
+        paths = school_type_workbooks()
+    wanted = [r for r in records
+              if valid_school_type(r.get(SCHOOL_TYPE_COLUMN, ""))]
+    if not wanted or not paths:
+        return [], False
+    # NOT inside TEMP_DIR: that folder is swept empty when a city
+    # finishes, and a stray directory there would break that guarantee.
+    # A throwaway folder is used instead, removed once every file is
+    # written, and KEPT when a rollback happens so the copies survive for
+    # inspection.
+    made_here = backup_dir is None
+    if made_here:
+        backup_dir = tempfile.mkdtemp(prefix="school_type_rollback_")
+    else:
+        os.makedirs(backup_dir, exist_ok=True)
+
+    planned = {}
+    corrections = []
+    for path in paths:
+        rows = read_records(path)
+        if not rows:
+            continue
+        keymap = master_key_map(rows)
+        positions = {id(row): n for n, row in enumerate(rows, start=1)}
+        changes = {}
+        for record in wanted:
+            existing = found_in_master(record, keymap)
+            if existing is None:
+                continue
+            was = clean(existing.get(SCHOOL_TYPE_COLUMN, ""))
+            settled = better_school_type(was,
+                                         record.get(SCHOOL_TYPE_COLUMN, ""))
+            where = positions.get(id(existing))
+            if not settled or settled == was or where is None:
+                continue
+            changes[where] = settled
+            corrections.append((path, clean(existing.get("School Name", ""))[:50],
+                                was or "blank", settled))
+        if changes:
+            planned[path] = changes
+    if not planned:
+        if made_here:
+            shutil.rmtree(backup_dir, ignore_errors=True)
+        return [], False
+
+    # 1. copy every file that will change, and verify the copy
+    copies = {}
+    for path in planned:
+        copy = os.path.join(backup_dir, "%s.before" % os.path.basename(path))
+        shutil.copy2(path, copy)
+        if not filecmp.cmp(path, copy, shallow=False):
+            raise SchoolTypeSyncError(
+                "the safety copy of %s does not match it" % path)
+        copies[path] = copy
+
+    # 2. write, restoring everything already written if one fails
+    written = []
+    try:
+        for path, changes in planned.items():
+            correct_school_type_in_workbook(path, changes)
+            written.append(path)
+    except Exception as error:                          # noqa: BLE001
+        for path in written:
+            shutil.copy2(copies[path], path)
+        LOG.error("   School Type correction failed on %s - %d file(s) "
+                  "rolled back, nothing changed: %s",
+                  os.path.basename(path), len(written), str(error)[:140])
+        return [], True
+    for path in planned:
+        LOG.info("   School Type corrected in %s (%d cell(s))",
+                 os.path.basename(path), len(planned[path]))
+    if made_here:
+        shutil.rmtree(backup_dir, ignore_errors=True)
+    return corrections, False
+
+
+def correct_master_school_types(records, paths=None):
+    """Put Private on rows already saved as Government, in place.
+
+    A school found under Government and later under Private is dropped by
+    the save path as a duplicate - correctly, since it must not become a
+    second row - which used to leave the wrong classification in the
+    workbook for ever. This corrects the row that is already there.
+
+    Only ever Government -> Private, decided by better_school_type(), and
+    only for a row the duplicate rules already judged to be the SAME
+    school. No other column is read or written. Returns a list of
+    ``(path, school name, old, new)`` for the report.
+    """
+    wanted = [r for r in records
+              if valid_school_type(r.get(SCHOOL_TYPE_COLUMN, ""))]
+    if not wanted:
+        return []
+    if paths is None:
+        paths = [master_path(), cycle_path(0)]
+    done = []
+    for path in paths:
+        if not path or not os.path.exists(path):
+            continue
+        rows = read_records(path)
+        if not rows:
+            continue
+        keymap = master_key_map(rows)
+        positions = {id(row): n for n, row in enumerate(rows, start=1)}
+        corrections = {}
+        for record in wanted:
+            existing = found_in_master(record, keymap)
+            if existing is None:
+                continue
+            was = clean(existing.get(SCHOOL_TYPE_COLUMN, ""))
+            settled = better_school_type(was, record.get(SCHOOL_TYPE_COLUMN,
+                                                         ""))
+            if not settled or settled == was:
+                continue
+            where = positions.get(id(existing))
+            if where is None:
+                continue
+            corrections[where] = settled
+            done.append((path, clean(existing.get("School Name", ""))[:50],
+                         was or "blank", settled))
+        if corrections:
+            changed = correct_school_type_in_workbook(path, corrections)
+            LOG.info("   corrected School Type on %d row(s) in %s",
+                     changed, os.path.basename(path))
+    return done
+
+
 def missing_from_master(records):
     """The records that genuinely are not in the master yet.
 
@@ -1960,6 +2289,86 @@ def night_pause_status():
     left = night_seconds_remaining()
     inside = " - IN IT NOW, %s left" % fmt_span(left) if left else ""
     return "%02d:00-%02d:00 %s%s" % (start, end, TIME_ZONE, inside)
+
+
+class RankRepoError(ValueError):
+    """The rank-wise repository URL could not be built, or is not safe."""
+
+
+#: Repositories this script must never push to, whatever a setting says.
+#: The rank-wise design was demonstrated using the Student Profile
+#: Extractor's repository; it belongs to another project and a stray push
+#: there would be somebody else's data loss, so it is refused by name.
+FORBIDDEN_GIT_REPOSITORIES = (
+    "github_profile_extractor",
+    "student_profile_extractor",
+)
+
+
+def rank_repo_url(this_rank=None, total=None, base=None):
+    """The repository URL for one rank: ``...school_extractor<rank>.git``.
+
+    The rank comes from the ordinary ladder - the top of this file,
+    rank.json, the environment, the command line - so a laptop that
+    already resolves to rank 7 gets repository 7 with nothing else to
+    configure.
+
+    Raises RankRepoError rather than returning a half-made URL: a wrong
+    destination is worse than no destination.
+    """
+    base = base_github_url if base is None else base
+    total = total_scripts if total is None else total
+    if this_rank is None:
+        this_rank = resolve_rank()[0]
+    try:
+        this_rank, total = int(this_rank), int(total)
+    except (TypeError, ValueError):
+        raise RankRepoError("rank and total_scripts must be whole numbers")
+    if total < 1:
+        raise RankRepoError("total_scripts is %d, which is not a fleet"
+                            % total)
+    if not 1 <= this_rank <= total:
+        raise RankRepoError("rank %d is outside 1..%d" % (this_rank, total))
+    base = clean(base)
+    if not base:
+        raise RankRepoError("base_github_url is empty")
+    if not base.endswith(".git"):
+        raise RankRepoError("base_github_url must end in .git, got %r"
+                            % base[:60])
+    for banned in FORBIDDEN_GIT_REPOSITORIES:
+        if banned in base.lower():
+            raise RankRepoError("%s belongs to another project - refusing "
+                                "to build a destination inside it" % banned)
+    # the rank goes immediately before the extension, and only there
+    return base[:-len(".git")] + str(this_rank) + ".git"
+
+
+def rank_repo_urls(total=None, base=None):
+    """Every rank's URL, 1..total - what an operator checks before setup."""
+    total = total_scripts if total is None else total
+    return [(n, rank_repo_url(n, total, base)) for n in range(1, int(total) + 1)]
+
+
+def rank_repo_ready(url, timeout=60):
+    """``(ok, why)``: does this repository exist AND accept a write?
+
+    Two questions, both answered without writing anything. ls-remote
+    proves the repository exists and this key can read it; push --dry-run
+    asks the server whether the same key could write, and sends no
+    objects. A destination that fails either is reported, never pushed to.
+    """
+    for banned in FORBIDDEN_GIT_REPOSITORIES:
+        if banned in str(url).lower():
+            return False, "%s belongs to another project - refused" % banned
+    ok, out = git_run(["ls-remote", "--heads", url], timeout=timeout)
+    if not ok:
+        return False, "cannot read %s (%s)" % (url, out.strip()[:120])
+    ok, out = git_run(["push", "--dry-run", url,
+                       "HEAD:refs/heads/_write_probe"], timeout=timeout)
+    if not ok:
+        return False, "no write access to %s (%s)" % (url,
+                                                      out.strip()[:120])
+    return True, "exists and accepts a write"
 
 
 def git_run(args, timeout=120, index=None):
@@ -2442,14 +2851,32 @@ def append_records(records):
             keymap.setdefault(key, record)
     fresh = []
     skipped = 0
+    duplicates = []
     for record in records:
         if found_in_master(record, keymap) is not None:
             skipped += 1
+            # Not a new row - but if this copy knows it is Private and the
+            # saved row says Government, the saved row is wrong and is
+            # corrected below. Nothing else about it is touched.
+            duplicates.append(record)
             continue
         fresh.append(record)
         # so two new records in the same batch cannot both go in
         for key in match_keys(record):
             keymap.setdefault(key, record)
+
+    # A duplicate adds no row, but it can still correct the row that is
+    # already there: Government -> Private and nothing else. Done before
+    # the early return, so a batch that is entirely duplicates still fixes
+    # the classifications it knows about.
+    if duplicates:
+        done, rolled_back = correct_school_types_everywhere(duplicates)
+        for _path, name, was, now in done:
+            LOG.info("   %s: School Type %s -> %s", name[:46], was, now)
+        if rolled_back:
+            LOG.warning("   School Type corrections were rolled back; the "
+                        "workbooks are unchanged and will be corrected on "
+                        "the next save")
 
     if not fresh:
         LOG.info("   nothing new to save: %d school(s) are already in %s",
@@ -7820,22 +8247,47 @@ def self_test():
     # --- 4b. the school type comes from the keyword -------------------------
     ok("School Type is one of the 57 columns",
        SCHOOL_TYPE_COLUMN in SCHOOL_COLUMNS)
+    ok("only Private and Government are allowed",
+       SCHOOL_TYPES_ALLOWED == ("Private", "Government"),
+       str(SCHOOL_TYPES_ALLOWED))
     for keyword, expected in (("Private Schools", "Private"),
                               ("Government Schools", "Government"),
-                              ("International Schools", "International"),
+                              ("Govt Schools", "Government"),
+                              # any other keyword must add NO new category
+                              ("International Schools", ""),
+                              ("CBSE Schools", ""),
                               ("", "")):
         ok("%r gives %r" % (keyword, expected),
            school_type_for_keyword(keyword) == expected,
            school_type_for_keyword(keyword))
+    for bad in ("Public", "Other", "Unknown", "International",
+                "Co-Educational"):
+        ok("%r is not a usable value" % bad, valid_school_type(bad) == "")
     typed = [blank_record(), blank_record()]
     marked = stamp_school_type(typed, "Private Schools")
     ok("every record of a keyword is marked", marked == 2 and all(
         r[SCHOOL_TYPE_COLUMN] == "Private" for r in typed))
-    already = blank_record()
-    already[SCHOOL_TYPE_COLUMN] = "Government"
-    stamp_school_type([already], "Private Schools")
-    ok("a type already set is not overwritten",
-       already[SCHOOL_TYPE_COLUMN] == "Government")
+    # PRIVATE WINS, whichever keyword reached the school first
+    for existing, incoming, expected in (("Government", "Private", "Private"),
+                                         ("Private", "Government", "Private"),
+                                         ("Private", "Private", "Private"),
+                                         ("Government", "Government",
+                                          "Government")):
+        ok("%s + %s gives %s" % (existing, incoming, expected),
+           better_school_type(existing, incoming) == expected,
+           better_school_type(existing, incoming))
+    upgraded = blank_record()
+    upgraded[SCHOOL_TYPE_COLUMN] = "Government"
+    stamp_school_type([upgraded], "Private Schools")
+    ok("the Private keyword upgrades a Government record",
+       upgraded[SCHOOL_TYPE_COLUMN] == "Private",
+       upgraded[SCHOOL_TYPE_COLUMN])
+    kept_private = blank_record()
+    kept_private[SCHOOL_TYPE_COLUMN] = "Private"
+    stamp_school_type([kept_private], "Government Schools")
+    ok("the Government keyword does not downgrade Private",
+       kept_private[SCHOOL_TYPE_COLUMN] == "Private",
+       kept_private[SCHOOL_TYPE_COLUMN])
     guessed = blank_record()
     guessed[SCHOOL_TYPE_COLUMN] = "Private"
     apply_answer(guessed, {SCHOOL_TYPE_COLUMN: "Co-educational"})
