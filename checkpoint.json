@@ -6,7 +6,7 @@
   "city_fingerprint": "4face9f1d03dd68c4c22d260484c501dbc091075c6decef04119ef5515c2e7f9",
   "current_city": [
     "Sikkim",
-    "Sichey"
+    "Tadong"
   ],
   "current_keyword": "Private Schools",
   "discovery_done": {},
@@ -71,6 +71,9 @@
       "phone:3592271200",
       "name+address:st thomas|8jm8+92r, png school road",
       "name+address:marigold|8jp7+3pv"
+    ],
+    "Sikkim|Tadong": [
+      "name+address:tiny pearls|8h7r+64q, nh10"
     ]
   },
   "completed_cities": [],
@@ -588,6 +591,13 @@
       "city": "Sichey",
       "reason": "Google searching is in its CAPTCHA cooldown for another 58 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T17:35:05"
+    },
+    {
+      "school": "Tiny Pearls School",
+      "state": "Sikkim",
+      "city": "Tadong",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 52 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:40:51"
     }
   ],
   "duplicates": 0,
@@ -596,7 +606,7 @@
   "git": {
     "branch": "school-data-rank-9",
     "pending": false,
-    "last_ok": "2026-11-19T17:29:44",
+    "last_ok": "2026-11-19T17:38:11",
     "last_error": ""
   },
   "work": {
@@ -605,5 +615,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:38:06"
+  "updated": "2026-11-19T17:43:15"
 }
