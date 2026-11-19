@@ -28,7 +28,9 @@
       "email:rgs.richmond@gmail.com",
       "email:renujn@yahoo.com",
       "phone:1127011137",
-      "phone:8076605812"
+      "phone:8076605812",
+      "email:dpskdn1996@gmail.com",
+      "email:infodg@thesamarthschool.edu.in"
     ]
   },
   "enriched": {
@@ -48,7 +50,9 @@
       "email:rgs.richmond@gmail.com",
       "email:renujn@yahoo.com",
       "phone:1127011137",
-      "phone:8076605812"
+      "phone:8076605812",
+      "email:dpskdn1996@gmail.com",
+      "email:infodg@thesamarthschool.edu.in"
     ]
   },
   "completed_cities": [],
@@ -451,6 +455,20 @@
       "city": "Delhi",
       "reason": "Google searching is in its CAPTCHA cooldown for another 195 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T16:32:31"
+    },
+    {
+      "school": "Deepanshu Public School",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 183 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:45:06"
+    },
+    {
+      "school": "The Samarth School",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 181 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:47:04"
     }
   ],
   "duplicates": 0,
@@ -459,7 +477,7 @@
   "git": {
     "branch": "school-data-rank-1",
     "pending": false,
-    "last_ok": "2026-11-19T16:31:24",
+    "last_ok": "2026-11-19T16:43:35",
     "last_error": ""
   },
   "work": {
@@ -468,5 +486,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:43:30"
+  "updated": "2026-11-19T16:52:59"
 }
