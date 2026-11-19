@@ -6,7 +6,7 @@
   "city_fingerprint": "4face9f1d03dd68c4c22d260484c501dbc091075c6decef04119ef5515c2e7f9",
   "current_city": [
     "Maharashtra",
-    "Rajgurunagar"
+    "Parli"
   ],
   "current_keyword": "Private Schools",
   "discovery_done": {},
@@ -54,6 +54,9 @@
       "phone:9226180081",
       "phone:9850004159",
       "phone:2135222054"
+    ],
+    "Maharashtra|Parli": [
+      "phone:9422241930"
     ]
   },
   "enriched": {
@@ -103,6 +106,10 @@
       "phone:9226180081",
       "phone:9850004159",
       "phone:2135222054"
+    ],
+    "Maharashtra|Parli": [
+      "phone:9422241930",
+      "name+address:foundation|natraj rang mandir"
     ]
   },
   "completed_cities": [],
@@ -461,15 +468,29 @@
       "city": "Rajgurunagar",
       "reason": "Google searching is in its CAPTCHA cooldown for another 91 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T17:40:15"
+    },
+    {
+      "school": "Mount Litera Zee School (MLZS) - Parli Vaijnath",
+      "state": "Maharashtra",
+      "city": "Parli",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 86 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:44:39"
+    },
+    {
+      "school": "Foundation School",
+      "state": "Maharashtra",
+      "city": "Parli",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 82 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:49:04"
     }
   ],
   "duplicates": 0,
-  "saved": 12,
+  "saved": 21,
   "cycle": 0,
   "git": {
     "branch": "school-data-rank-7",
     "pending": false,
-    "last_ok": "2026-11-19T17:39:30",
+    "last_ok": "2026-11-19T17:43:27",
     "last_error": ""
   },
   "work": {
@@ -478,5 +499,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:43:22"
+  "updated": "2026-11-19T17:52:18"
 }
