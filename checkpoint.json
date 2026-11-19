@@ -51,7 +51,8 @@
       "phone:9068551999",
       "phone:7455857947",
       "email:dma_1986@rediffmail.com",
-      "phone:7055607076"
+      "phone:7055607076",
+      "email:upmoradabad1731@narayanagroup.com"
     ]
   },
   "enriched": {
@@ -97,7 +98,9 @@
       "phone:9068551999",
       "phone:7455857947",
       "email:dma_1986@rediffmail.com",
-      "phone:7055607076"
+      "phone:7055607076",
+      "name+address:whitehall|8th milestone, rampur-bareilly road, p.o. kakrawa",
+      "email:upmoradabad1731@narayanagroup.com"
     ]
   },
   "completed_cities": [],
@@ -522,6 +525,20 @@
       "city": "Rampur",
       "reason": "Google searching is in its CAPTCHA cooldown for another 41 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T17:51:54"
+    },
+    {
+      "school": "Whitehall Public School",
+      "state": "Uttar Pradesh",
+      "city": "Rampur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 38 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:55:19"
+    },
+    {
+      "school": "Narayana Schools - Rampur, Moradabad",
+      "state": "Uttar Pradesh",
+      "city": "Rampur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 35 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:57:46"
     }
   ],
   "duplicates": 0,
@@ -530,7 +547,7 @@
   "git": {
     "branch": "school-data-rank-10",
     "pending": false,
-    "last_ok": "2026-11-19T17:47:16",
+    "last_ok": "2026-11-19T17:53:15",
     "last_error": ""
   },
   "work": {
@@ -539,5 +556,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:53:10"
+  "updated": "2026-11-19T17:59:03"
 }
