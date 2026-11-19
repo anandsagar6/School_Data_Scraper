@@ -13,6 +13,9 @@
   "keywords_done": {
     "Sikkim|Jorethang": [
       "Private Schools"
+    ],
+    "Sikkim|Tadong": [
+      "Private Schools"
     ]
   },
   "committed": {
@@ -46,7 +49,8 @@
       "phone:8250549053",
       "phone:9593386285",
       "email:cmps.tadong@gmail.com",
-      "phone:3592232646"
+      "phone:3592232646",
+      "email:amitabhaschool@gmail.com"
     ]
   },
   "enriched": {
@@ -88,7 +92,8 @@
       "phone:9593386285",
       "name+address:west point|8jh8+gjh, ridge rd",
       "email:cmps.tadong@gmail.com",
-      "phone:3592232646"
+      "phone:3592232646",
+      "email:amitabhaschool@gmail.com"
     ]
   },
   "completed_cities": [],
@@ -662,6 +667,13 @@
       "city": "Tadong",
       "reason": "Google searching is in its CAPTCHA cooldown for another 13 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T18:20:15"
+    },
+    {
+      "school": "Amitabha School",
+      "state": "Sikkim",
+      "city": "Tadong",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 186 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T19:32:53"
     }
   ],
   "duplicates": 0,
@@ -670,7 +682,7 @@
   "git": {
     "branch": "school-data-rank-9",
     "pending": false,
-    "last_ok": "2026-11-19T18:31:31",
+    "last_ok": "2026-11-19T19:32:07",
     "last_error": ""
   },
   "work": {
@@ -679,5 +691,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T19:32:03"
+  "updated": "2026-11-19T19:34:52"
 }
