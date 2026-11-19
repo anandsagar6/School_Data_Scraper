@@ -60,7 +60,8 @@
       "phone:9112217100",
       "phone:9881145793",
       "email:info@rplsparli.com",
-      "phone:7391017474"
+      "phone:7391017474",
+      "phone:9403267518"
     ]
   },
   "enriched": {
@@ -117,7 +118,8 @@
       "phone:9112217100",
       "phone:9881145793",
       "email:info@rplsparli.com",
-      "phone:7391017474"
+      "phone:7391017474",
+      "phone:9403267518"
     ]
   },
   "completed_cities": [],
@@ -518,6 +520,13 @@
       "city": "Parli",
       "reason": "Google searching is in its CAPTCHA cooldown for another 64 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T18:07:07"
+    },
+    {
+      "school": "Vidyavardhini Vidyalaya",
+      "state": "Maharashtra",
+      "city": "Parli",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 60 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:10:57"
     }
   ],
   "duplicates": 0,
@@ -526,7 +535,7 @@
   "git": {
     "branch": "school-data-rank-7",
     "pending": false,
-    "last_ok": "2026-11-19T18:01:12",
+    "last_ok": "2026-11-19T18:09:58",
     "last_error": ""
   },
   "work": {
@@ -535,5 +544,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T18:09:54"
+  "updated": "2026-11-19T18:16:44"
 }
