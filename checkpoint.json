@@ -24,7 +24,9 @@
       "phone:6764236422",
       "site:antaryamigurukul.in",
       "email:jnvangul9@gmail.com",
-      "phone:9438113993"
+      "phone:9438113993",
+      "email:rpd_angul@yahoo.com",
+      "phone:6764296027"
     ]
   },
   "enriched": {
@@ -41,7 +43,9 @@
       "name+address:angul|r3pv+c8v",
       "site:antaryamigurukul.in",
       "email:jnvangul9@gmail.com",
-      "phone:9438113993"
+      "phone:9438113993",
+      "email:rpd_angul@yahoo.com",
+      "phone:6764296027"
     ]
   },
   "completed_cities": [],
@@ -350,6 +354,20 @@
       "city": "Angul",
       "reason": "Google searching is in its CAPTCHA cooldown for another 167 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T16:23:20"
+    },
+    {
+      "school": "Rotary Public School",
+      "state": "Odisha",
+      "city": "Angul",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 161 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:29:52"
+    },
+    {
+      "school": "PM Shri Kendriya Vidyalaya No.1, Anugola",
+      "state": "Odisha",
+      "city": "Angul",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 158 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:32:58"
     }
   ],
   "duplicates": 0,
@@ -358,7 +376,7 @@
   "git": {
     "branch": "school-data-rank-8",
     "pending": false,
-    "last_ok": "2026-11-19T16:21:07",
+    "last_ok": "2026-11-19T16:28:36",
     "last_error": ""
   },
   "work": {
@@ -367,5 +385,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:28:32"
+  "updated": "2026-11-19T16:44:00"
 }
