@@ -74,7 +74,9 @@
     "Maharashtra|Ambajogai": [
       "email:admissions@podar.org",
       "phone:8788801400",
-      "phone:7588042130"
+      "phone:7588042130",
+      "phone:8904980486",
+      "phone:8888339284"
     ]
   },
   "enriched": {
@@ -145,7 +147,9 @@
       "email:admissions@podar.org",
       "phone:8788801400",
       "site:indo-british.com",
-      "phone:7588042130"
+      "phone:7588042130",
+      "phone:8904980486",
+      "phone:8888339284"
     ]
   },
   "completed_cities": [],
@@ -630,6 +634,20 @@
       "city": "Ambajogai",
       "reason": "Google searching is in its CAPTCHA cooldown for another 8 minute(s) - the official email and phone searches were NOT run",
       "when": "2026-11-19T19:02:17"
+    },
+    {
+      "school": "Angel English School",
+      "state": "Maharashtra",
+      "city": "Ambajogai",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 4 minute(s) - the official email and phone searches were NOT run",
+      "when": "2026-11-19T19:06:44"
+    },
+    {
+      "school": "Sanjivan National School Ambajogai",
+      "state": "Maharashtra",
+      "city": "Ambajogai",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 1 minute(s) - the official email and phone searches were NOT run",
+      "when": "2026-11-19T19:09:49"
     }
   ],
   "duplicates": 0,
@@ -638,7 +656,7 @@
   "git": {
     "branch": "school-data-rank-7",
     "pending": false,
-    "last_ok": "2026-11-19T18:57:51",
+    "last_ok": "2026-11-19T19:04:38",
     "last_error": ""
   },
   "work": {
@@ -647,5 +665,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T19:04:34"
+  "updated": "2026-11-19T19:19:45"
 }
