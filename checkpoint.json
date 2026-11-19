@@ -45,7 +45,9 @@
       "phone:7722033583",
       "site:gavhaneacademy.com",
       "phone:2435222105",
-      "email:aakashganga2017@gmail.com"
+      "email:aakashganga2017@gmail.com",
+      "phone:2135226154",
+      "phone:9850861300"
     ]
   },
   "enriched": {
@@ -89,7 +91,9 @@
       "phone:2435222105",
       "name+address:crazy kids|phata, pune - nashik hwy",
       "email:aakashganga2017@gmail.com",
-      "name+address:udaan|shantanu complex, behind district court road"
+      "name+address:udaan|shantanu complex, behind district court road",
+      "phone:2135226154",
+      "phone:9850861300"
     ]
   },
   "completed_cities": [],
@@ -413,6 +417,20 @@
       "city": "Rajgurunagar",
       "reason": "Google searching is in its CAPTCHA cooldown for another 110 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:20:51"
+    },
+    {
+      "school": "KTES English Medium School",
+      "state": "Maharashtra",
+      "city": "Rajgurunagar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 106 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:24:52"
+    },
+    {
+      "school": "K.D. Chaudhari Patil English Medium School",
+      "state": "Maharashtra",
+      "city": "Rajgurunagar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 103 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:27:43"
     }
   ],
   "duplicates": 0,
@@ -421,7 +439,7 @@
   "git": {
     "branch": "school-data-rank-7",
     "pending": false,
-    "last_ok": "2026-11-19T17:16:29",
+    "last_ok": "2026-11-19T17:22:50",
     "last_error": ""
   },
   "work": {
@@ -430,5 +448,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:22:46"
+  "updated": "2026-11-19T17:31:13"
 }
