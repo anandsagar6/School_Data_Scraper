@@ -19,7 +19,9 @@
       "phone:1142316891",
       "phone:1145161066",
       "email:info@stfroebelschool.com",
-      "email:info@moderninternationalschool.com"
+      "email:info@moderninternationalschool.com",
+      "email:admissions@mrgschool.edu.in",
+      "email:bbpschoolmv@gmail.com"
     ]
   },
   "enriched": {
@@ -30,7 +32,9 @@
       "phone:1142316891",
       "phone:1145161066",
       "email:info@stfroebelschool.com",
-      "email:info@moderninternationalschool.com"
+      "email:info@moderninternationalschool.com",
+      "email:admissions@mrgschool.edu.in",
+      "email:bbpschoolmv@gmail.com"
     ]
   },
   "completed_cities": [],
@@ -224,15 +228,29 @@
       "city": "Delhi",
       "reason": "Google searching is in its CAPTCHA cooldown for another 61 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T15:09:29"
+    },
+    {
+      "school": "MRG School",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 44 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T15:27:05"
+    },
+    {
+      "school": "Bharat Bharti Public School | Mayur Vihar Phase-3",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 40 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T15:30:20"
     }
   ],
   "duplicates": 0,
   "saved": 0,
   "cycle": 0,
   "git": {
-    "branch": "",
+    "branch": "school-data-rank-1",
     "pending": false,
-    "last_ok": "",
+    "last_ok": "2026-11-19T15:26:14",
     "last_error": ""
   },
   "work": {
@@ -241,5 +259,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T15:26:08"
+  "updated": "2026-11-19T15:32:25"
 }
