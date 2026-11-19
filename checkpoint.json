@@ -19,7 +19,8 @@
       "email:info@thescotts.in",
       "email:info@palladiumschool.com",
       "phone:8278017001",
-      "phone:8001023344"
+      "phone:8001023344",
+      "phone:9896029073"
     ]
   },
   "enriched": {
@@ -30,7 +31,8 @@
       "email:info@thescotts.in",
       "email:info@palladiumschool.com",
       "phone:8278017001",
-      "phone:8001023344"
+      "phone:8001023344",
+      "phone:9896029073"
     ]
   },
   "completed_cities": [],
@@ -230,9 +232,9 @@
   "saved": 0,
   "cycle": 0,
   "git": {
-    "branch": "",
+    "branch": "school-data-rank-4",
     "pending": false,
-    "last_ok": "",
+    "last_ok": "2026-11-19T15:47:26",
     "last_error": ""
   },
   "work": {
@@ -241,5 +243,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T15:47:21"
+  "updated": "2026-11-19T15:53:12"
 }
