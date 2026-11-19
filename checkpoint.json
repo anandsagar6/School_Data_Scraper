@@ -40,7 +40,8 @@
       "phone:7759222874"
     ],
     "Chhattisgarh|Sarguja": [
-      "phone:9826747037"
+      "phone:9826747037",
+      "phone:9826190902"
     ]
   },
   "enriched": {
@@ -80,7 +81,8 @@
     ],
     "Chhattisgarh|Sarguja": [
       "phone:9826747037",
-      "name+address:nehru|45cj+6rp"
+      "name+address:nehru|45cj+6rp",
+      "phone:9826190902"
     ]
   },
   "completed_cities": [],
@@ -515,6 +517,13 @@
       "city": "Sarguja",
       "reason": "Google searching is in its CAPTCHA cooldown for another 140 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:47:05"
+    },
+    {
+      "school": "Milestones School",
+      "state": "Chhattisgarh",
+      "city": "Sarguja",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 136 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:51:05"
     }
   ],
   "duplicates": 0,
@@ -523,7 +532,7 @@
   "git": {
     "branch": "school-data-rank-3",
     "pending": false,
-    "last_ok": "2026-11-19T17:44:38",
+    "last_ok": "2026-11-19T17:49:38",
     "last_error": ""
   },
   "work": {
@@ -532,5 +541,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:49:34"
+  "updated": "2026-11-19T17:57:59"
 }
