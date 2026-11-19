@@ -37,7 +37,9 @@
       "phone:9999464846",
       "email:student@srcapital.in",
       "phone:9870327326",
-      "email:newconventschool@yahoo.co.in"
+      "email:newconventschool@yahoo.co.in",
+      "phone:1149077554",
+      "phone:9953646646"
     ]
   },
   "enriched": {
@@ -67,7 +69,9 @@
       "phone:9999464846",
       "email:student@srcapital.in",
       "phone:9870327326",
-      "email:newconventschool@yahoo.co.in"
+      "email:newconventschool@yahoo.co.in",
+      "phone:1149077554",
+      "phone:9953646646"
     ]
   },
   "completed_cities": [],
@@ -540,6 +544,20 @@
       "city": "Delhi",
       "reason": "Google searching is in its CAPTCHA cooldown for another 152 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:15:48"
+    },
+    {
+      "school": "Shah International School",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 149 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:18:58"
+    },
+    {
+      "school": "NorthEx Public School",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 144 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:24:01"
     }
   ],
   "duplicates": 0,
@@ -548,7 +566,7 @@
   "git": {
     "branch": "school-data-rank-1",
     "pending": false,
-    "last_ok": "2026-11-19T17:11:08",
+    "last_ok": "2026-11-19T17:17:19",
     "last_error": ""
   },
   "work": {
@@ -557,5 +575,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:17:14"
+  "updated": "2026-11-19T17:27:16"
 }
