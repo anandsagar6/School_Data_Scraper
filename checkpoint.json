@@ -40,7 +40,8 @@
       "phone:7759232662",
       "phone:8871867411",
       "name+address:little lamp|9p4h+344",
-      "phone:9424144129"
+      "phone:9424144129",
+      "name+address:ghordewa|government higher secondary school ghordeva"
     ]
   },
   "completed_cities": [],
@@ -248,6 +249,13 @@
       "city": "Korba District",
       "reason": "Google searching is in its CAPTCHA cooldown for another 41 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T15:33:27"
+    },
+    {
+      "school": "ghordewa private school",
+      "state": "Chhattisgarh",
+      "city": "Korba District",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 25 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T15:48:48"
     }
   ],
   "duplicates": 0,
@@ -256,7 +264,7 @@
   "git": {
     "branch": "school-data-rank-3",
     "pending": false,
-    "last_ok": "2026-11-19T15:39:01",
+    "last_ok": "2026-11-19T15:46:55",
     "last_error": ""
   },
   "work": {
@@ -265,5 +273,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T15:46:51"
+  "updated": "2026-11-19T15:55:08"
 }
