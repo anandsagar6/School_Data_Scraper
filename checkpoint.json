@@ -1,0 +1,267 @@
+{
+  "version": 3,
+  "rank": 3,
+  "num_sys": 10,
+  "plan_fingerprint": "9f6ec37c475ac9daafd5eb9656e64aa94cce7cf6e8750e3f385e1c2fece2ac88",
+  "city_fingerprint": "4face9f1d03dd68c4c22d260484c501dbc091075c6decef04119ef5515c2e7f9",
+  "current_city": [
+    "Chhattisgarh",
+    "Korba District"
+  ],
+  "current_keyword": "Private Schools",
+  "discovery_done": {},
+  "keywords_done": {
+    "Chhattisgarh|Surajpur": [
+      "Private Schools"
+    ]
+  },
+  "committed": {
+    "Chhattisgarh|Korba District": [
+      "phone:9827483324",
+      "phone:9039069415",
+      "email:support@eviskorba.in",
+      "email:accounts@nepskorba.in",
+      "site:davkorba.com",
+      "phone:7759232662",
+      "phone:8871867411"
+    ]
+  },
+  "enriched": {
+    "Chhattisgarh|Surajpur": [
+      "name+address:saraswati shishu|surajpur"
+    ],
+    "Chhattisgarh|Korba District": [
+      "phone:9827483324",
+      "phone:9039069415",
+      "email:support@eviskorba.in",
+      "email:accounts@nepskorba.in",
+      "site:davkorba.com",
+      "phone:7759232662",
+      "phone:8871867411",
+      "name+address:little lamp|9p4h+344"
+    ]
+  },
+  "completed_cities": [],
+  "failed": [
+    {
+      "school": "Little Lamp English School",
+      "city": "Korba District",
+      "state": "Chhattisgarh",
+      "reason": "no answer arrived",
+      "when": "2026-11-19T14:55:34",
+      "record": {
+        "School Name": "Little Lamp English School",
+        "School Short Name": "",
+        "School Website": "",
+        "School Official Email": "",
+        "School Alternate Email": "",
+        "School Official Phone Number": "",
+        "School Alternate Phone Number": "",
+        "UDISE Code": "",
+        "School Type": "Private",
+        "School Management Type": "",
+        "School Category": "",
+        "Affiliation Board": "",
+        "Affiliation Number": "",
+        "School Registration Number": "",
+        "Year of Establishment": "",
+        "Classes Offered": "",
+        "Education Medium": "",
+        "Co-Educational Status": "",
+        "Residential School Status": "",
+        "Total Student Strength": "",
+        "Number of Boys": "",
+        "Number of Girls": "",
+        "Number of Teaching Staff": "",
+        "Number of Non-Teaching Staff": "",
+        "School Address": "9P4H+344",
+        "Area / Locality": "9P4H+344",
+        "Village / Town": "",
+        "City": "Korba District",
+        "Block / Tehsil": "",
+        "District": "",
+        "State": "Chhattisgarh",
+        "PIN Code": "",
+        "Country": "India",
+        "Principal Name": "",
+        "Principal Official Email": "",
+        "Principal Office Phone Number": "",
+        "Vice Principal Name": "",
+        "School Administrator Name": "",
+        "School Google Maps Link": "",
+        "School Latitude": "",
+        "School Longitude": "",
+        "School Working Days": "",
+        "School Office Hours": "",
+        "School Academic Session": "",
+        "Available Streams (Science / Commerce / Arts)": "",
+        "Computer Science Offered": "",
+        "Computer Lab Available": "",
+        "Number of Computers": "",
+        "Internet Available": "",
+        "Smart Classroom Available": "",
+        "Science Lab Available": "",
+        "Library Available": "",
+        "Auditorium / Seminar Hall Available": "",
+        "Existing IT / Coding / AI Programs": "",
+        "School Official Social Media Links": "",
+        "School Data Source URL": "",
+        "Additional School Notes": ""
+      }
+    },
+    {
+      "school": "Saraswati Higher Secondary School",
+      "city": "Korba District",
+      "state": "Chhattisgarh",
+      "reason": "no answer arrived",
+      "when": "2026-11-19T15:24:23",
+      "record": {
+        "School Name": "Saraswati Higher Secondary School",
+        "School Short Name": "",
+        "School Website": "",
+        "School Official Email": "",
+        "School Alternate Email": "",
+        "School Official Phone Number": "09424144129",
+        "School Alternate Phone Number": "",
+        "UDISE Code": "",
+        "School Type": "Private",
+        "School Management Type": "",
+        "School Category": "",
+        "Affiliation Board": "",
+        "Affiliation Number": "",
+        "School Registration Number": "",
+        "Year of Establishment": "",
+        "Classes Offered": "",
+        "Education Medium": "",
+        "Co-Educational Status": "",
+        "Residential School Status": "",
+        "Total Student Strength": "",
+        "Number of Boys": "",
+        "Number of Girls": "",
+        "Number of Teaching Staff": "",
+        "Number of Non-Teaching Staff": "",
+        "School Address": "Korba - Champa Rd, near Saraswati Higher Secondary School",
+        "Area / Locality": "Korba - Champa Rd, near Saraswati Higher Secondary School",
+        "Village / Town": "",
+        "City": "Korba District",
+        "Block / Tehsil": "",
+        "District": "",
+        "State": "Chhattisgarh",
+        "PIN Code": "",
+        "Country": "India",
+        "Principal Name": "",
+        "Principal Official Email": "",
+        "Principal Office Phone Number": "",
+        "Vice Principal Name": "",
+        "School Administrator Name": "",
+        "School Google Maps Link": "",
+        "School Latitude": "",
+        "School Longitude": "",
+        "School Working Days": "",
+        "School Office Hours": "",
+        "School Academic Session": "",
+        "Available Streams (Science / Commerce / Arts)": "",
+        "Computer Science Offered": "",
+        "Computer Lab Available": "",
+        "Number of Computers": "",
+        "Internet Available": "",
+        "Smart Classroom Available": "",
+        "Science Lab Available": "",
+        "Library Available": "",
+        "Auditorium / Seminar Hall Available": "",
+        "Existing IT / Coding / AI Programs": "",
+        "School Official Social Media Links": "",
+        "School Data Source URL": "",
+        "Additional School Notes": ""
+      }
+    }
+  ],
+  "contacts_pending": [
+    {
+      "school": "Saraswati Shishu Mandir",
+      "state": "Chhattisgarh",
+      "city": "Surajpur",
+      "reason": "source - email: none | phone: none",
+      "when": "2026-11-19T14:23:20"
+    },
+    {
+      "school": "Little Lamp English School",
+      "state": "Chhattisgarh",
+      "city": "Korba District",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 93 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T14:40:42"
+    },
+    {
+      "school": "NEW STAR ENGLISH SCHOOL",
+      "state": "Chhattisgarh",
+      "city": "Korba District",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 77 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T14:57:12"
+    },
+    {
+      "school": "St. Xaviers Public School Korba",
+      "state": "Chhattisgarh",
+      "city": "Korba District",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 74 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T15:00:10"
+    },
+    {
+      "school": "Eagle Vision International School",
+      "state": "Chhattisgarh",
+      "city": "Korba District",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 70 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T15:03:44"
+    },
+    {
+      "school": "New Era Progressive School",
+      "state": "Chhattisgarh",
+      "city": "Korba District",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 69 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T15:05:32"
+    },
+    {
+      "school": "Saraswati Higher Secondary School",
+      "state": "Chhattisgarh",
+      "city": "Korba District",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 64 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T15:09:39"
+    },
+    {
+      "school": "DAV Public School",
+      "state": "Chhattisgarh",
+      "city": "Korba District",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 48 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T15:25:59"
+    },
+    {
+      "school": "Delhi Public School, Jamnipali,Korba",
+      "state": "Chhattisgarh",
+      "city": "Korba District",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 44 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T15:29:43"
+    },
+    {
+      "school": "Little Steps School",
+      "state": "Chhattisgarh",
+      "city": "Korba District",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 41 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T15:33:27"
+    }
+  ],
+  "duplicates": 0,
+  "saved": 0,
+  "cycle": 0,
+  "git": {
+    "branch": "",
+    "pending": false,
+    "last_ok": "",
+    "last_error": ""
+  },
+  "work": {
+    "period_hours": 0.0,
+    "breaks_taken": 0,
+    "break_until": "",
+    "reason": ""
+  },
+  "updated": "2026-11-19T15:38:56"
+}
