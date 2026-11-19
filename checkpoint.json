@@ -34,7 +34,8 @@
       "email:srivastavagaurav2011@gmail.com",
       "phone:9936119488",
       "email:fertspn@gmail.com",
-      "email:info@scsschool.in"
+      "email:info@scsschool.in",
+      "email:renaissance_tlh@yahoo.co.in"
     ]
   },
   "enriched": {
@@ -62,7 +63,9 @@
       "email:srivastavagaurav2011@gmail.com",
       "phone:9936119488",
       "email:fertspn@gmail.com",
-      "email:info@scsschool.in"
+      "email:info@scsschool.in",
+      "email:renaissance_tlh@yahoo.co.in",
+      "name+address:kendriya no 2 ocf shahjahanpur|no-2, ocf, cantt. area shahjahanpur"
     ]
   },
   "completed_cities": [],
@@ -375,6 +378,20 @@
       "city": "Shahjahanpur",
       "reason": "Google searching is in its CAPTCHA cooldown for another 105 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T16:47:48"
+    },
+    {
+      "school": "The Renaissance Academy",
+      "state": "Uttar Pradesh",
+      "city": "Shahjahanpur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 102 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:50:58"
+    },
+    {
+      "school": "Kendriya Vidyalaya No.2 OCF Shahjahanpur",
+      "state": "Uttar Pradesh",
+      "city": "Shahjahanpur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 98 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T16:55:13"
     }
   ],
   "duplicates": 0,
@@ -383,7 +400,7 @@
   "git": {
     "branch": "school-data-rank-10",
     "pending": false,
-    "last_ok": "2026-11-19T16:43:49",
+    "last_ok": "2026-11-19T16:48:54",
     "last_error": ""
   },
   "work": {
@@ -392,5 +409,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:48:50"
+  "updated": "2026-11-19T16:57:14"
 }
