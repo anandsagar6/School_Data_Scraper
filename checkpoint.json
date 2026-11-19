@@ -38,7 +38,8 @@
       "phone:9755672037",
       "phone:7812221956",
       "phone:9753040755",
-      "phone:8109724606"
+      "phone:8109724606",
+      "phone:7974535250"
     ]
   },
   "enriched": {
@@ -70,7 +71,9 @@
       "phone:9755672037",
       "phone:7812221956",
       "phone:9753040755",
-      "phone:8109724606"
+      "phone:8109724606",
+      "phone:7974535250",
+      "name+address:shri guru nanak|rf43+7mv"
     ]
   },
   "completed_cities": [],
@@ -390,6 +393,20 @@
       "city": "Damoh",
       "reason": "Google searching is in its CAPTCHA cooldown for another 92 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T17:20:57"
+    },
+    {
+      "school": "Shining Star Play School damoh",
+      "state": "Madhya Pradesh",
+      "city": "Damoh",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 88 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:24:38"
+    },
+    {
+      "school": "Shri Guru Nanak Higher Secondary School",
+      "state": "Madhya Pradesh",
+      "city": "Damoh",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 86 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:27:20"
     }
   ],
   "duplicates": 0,
@@ -398,7 +415,7 @@
   "git": {
     "branch": "school-data-rank-6",
     "pending": false,
-    "last_ok": "2026-11-19T17:16:18",
+    "last_ok": "2026-11-19T17:24:00",
     "last_error": ""
   },
   "work": {
@@ -407,5 +424,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:23:56"
+  "updated": "2026-11-19T17:30:48"
 }
