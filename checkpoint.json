@@ -32,7 +32,9 @@
       "phone:8280149194"
     ],
     "Odisha|Dhenkanal": [
-      "email:ripsdkl@gmail.com"
+      "email:ripsdkl@gmail.com",
+      "phone:9437032662",
+      "phone:4044600600"
     ]
   },
   "enriched": {
@@ -59,7 +61,9 @@
       "name+address:mahima jyoti science college angul|q49p+vgj"
     ],
     "Odisha|Dhenkanal": [
-      "email:ripsdkl@gmail.com"
+      "email:ripsdkl@gmail.com",
+      "phone:9437032662",
+      "phone:4044600600"
     ]
   },
   "completed_cities": [],
@@ -424,6 +428,20 @@
       "city": "Dhenkanal",
       "reason": "Google searching is in its CAPTCHA cooldown for another 126 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:04:27"
+    },
+    {
+      "school": "St. Xavier's High School, Dhenkanal",
+      "state": "Odisha",
+      "city": "Dhenkanal",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 123 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:07:17"
+    },
+    {
+      "school": "Sri Chaitanya Techno School",
+      "state": "Odisha",
+      "city": "Dhenkanal",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 120 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:10:53"
     }
   ],
   "duplicates": 0,
@@ -432,7 +450,7 @@
   "git": {
     "branch": "school-data-rank-8",
     "pending": false,
-    "last_ok": "2026-11-19T16:58:02",
+    "last_ok": "2026-11-19T17:06:06",
     "last_error": ""
   },
   "work": {
@@ -441,5 +459,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:06:02"
+  "updated": "2026-11-19T17:13:08"
 }
