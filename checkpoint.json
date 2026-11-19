@@ -13,6 +13,9 @@
   "keywords_done": {
     "Maharashtra|Gadchiroli": [
       "Private Schools"
+    ],
+    "Maharashtra|Murtijapur": [
+      "Private Schools"
     ]
   },
   "committed": {
@@ -362,7 +365,7 @@
   "git": {
     "branch": "school-data-rank-7",
     "pending": false,
-    "last_ok": "2026-11-19T16:56:25",
+    "last_ok": "2026-11-19T17:03:00",
     "last_error": ""
   },
   "work": {
@@ -371,5 +374,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:02:56"
+  "updated": "2026-11-19T17:03:00"
 }
