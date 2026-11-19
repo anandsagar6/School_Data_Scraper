@@ -35,7 +35,9 @@
     "Assam|Karimganj": [
       "phone:9401375466",
       "email:karimganjppl@mahaemail.com",
-      "phone:3843261005"
+      "phone:3843261005",
+      "phone:6001178921",
+      "phone:3843262700"
     ]
   },
   "enriched": {
@@ -69,7 +71,9 @@
       "email:karimganjppl@mahaemail.com",
       "phone:3843261005",
       "name+address:baby land|lokkhi bazar rd",
-      "name+address:tiny hearts|v993+8p7"
+      "name+address:tiny hearts|v993+8p7",
+      "phone:6001178921",
+      "phone:3843262700"
     ]
   },
   "completed_cities": [],
@@ -476,6 +480,20 @@
       "city": "Karimganj",
       "reason": "Google searching is in its CAPTCHA cooldown for another 160 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:08:06"
+    },
+    {
+      "school": "Nectar Senior Secondary School",
+      "state": "Assam",
+      "city": "Karimganj",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 156 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:11:54"
+    },
+    {
+      "school": "Karimganj Senior Secondary School of Science",
+      "state": "Assam",
+      "city": "Karimganj",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 152 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:15:51"
     }
   ],
   "duplicates": 0,
@@ -484,7 +502,7 @@
   "git": {
     "branch": "school-data-rank-2",
     "pending": false,
-    "last_ok": "2026-11-19T17:02:40",
+    "last_ok": "2026-11-19T17:10:13",
     "last_error": ""
   },
   "work": {
@@ -493,5 +511,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:10:09"
+  "updated": "2026-11-19T17:18:41"
 }
