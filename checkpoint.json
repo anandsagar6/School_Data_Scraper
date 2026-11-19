@@ -24,7 +24,8 @@
       "email:ranavarsha@rediffmail.com",
       "email:admissions@vdjs.edu.in",
       "email:anilkasana4003@gmail.com",
-      "phone:9215649592"
+      "phone:9215649592",
+      "site:smshisar.org"
     ]
   },
   "enriched": {
@@ -40,7 +41,8 @@
       "email:ranavarsha@rediffmail.com",
       "email:admissions@vdjs.edu.in",
       "email:anilkasana4003@gmail.com",
-      "phone:9215649592"
+      "phone:9215649592",
+      "site:smshisar.org"
     ]
   },
   "completed_cities": [],
@@ -335,6 +337,13 @@
       "city": "Hisar",
       "reason": "Google searching is in its CAPTCHA cooldown for another 224 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T16:22:28"
+    },
+    {
+      "school": "St. Mary's School",
+      "state": "Haryana",
+      "city": "Hisar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 210 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:36:27"
     }
   ],
   "duplicates": 0,
@@ -343,7 +352,7 @@
   "git": {
     "branch": "school-data-rank-4",
     "pending": false,
-    "last_ok": "2026-11-19T16:21:52",
+    "last_ok": "2026-11-19T16:34:23",
     "last_error": ""
   },
   "work": {
@@ -352,5 +361,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:34:18"
+  "updated": "2026-11-19T16:42:50"
 }
