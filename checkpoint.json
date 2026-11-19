@@ -28,7 +28,9 @@
       "site:smshisar.org",
       "email:cpshsr59@yahoo.com",
       "email:info@gdgoenkahisar.com",
-      "phone:8222860360"
+      "phone:8222860360",
+      "phone:9254349592",
+      "phone:9416123377"
     ]
   },
   "enriched": {
@@ -49,7 +51,9 @@
       "email:cpshsr59@yahoo.com",
       "name+address:campus|5p25+8qg, ccs haryana agricultural university hisar",
       "email:info@gdgoenkahisar.com",
-      "phone:8222860360"
+      "phone:8222860360",
+      "phone:9254349592",
+      "phone:9416123377"
     ]
   },
   "completed_cities": [],
@@ -379,6 +383,20 @@
       "city": "Hisar",
       "reason": "Google searching is in its CAPTCHA cooldown for another 187 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T16:59:18"
+    },
+    {
+      "school": "Siddharth International School",
+      "state": "Haryana",
+      "city": "Hisar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 183 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:03:40"
+    },
+    {
+      "school": "Cosmos Public School",
+      "state": "Haryana",
+      "city": "Hisar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 179 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:07:54"
     }
   ],
   "duplicates": 0,
@@ -387,7 +405,7 @@
   "git": {
     "branch": "school-data-rank-4",
     "pending": false,
-    "last_ok": "2026-11-19T16:55:54",
+    "last_ok": "2026-11-19T17:02:18",
     "last_error": ""
   },
   "work": {
@@ -396,5 +414,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:02:13"
+  "updated": "2026-11-19T17:10:23"
 }
