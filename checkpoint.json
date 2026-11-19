@@ -41,7 +41,9 @@
     "Uttar Pradesh|Rampur": [
       "phone:9971776535",
       "phone:8865091309",
-      "email:simsrampur@gmail.com"
+      "email:simsrampur@gmail.com",
+      "email:stmarys_rampur@rediffmail.com",
+      "phone:7455837788"
     ]
   },
   "enriched": {
@@ -77,7 +79,9 @@
     "Uttar Pradesh|Rampur": [
       "phone:9971776535",
       "phone:8865091309",
-      "email:simsrampur@gmail.com"
+      "email:simsrampur@gmail.com",
+      "email:stmarys_rampur@rediffmail.com",
+      "phone:7455837788"
     ]
   },
   "completed_cities": [],
@@ -432,6 +436,20 @@
       "city": "Rampur",
       "reason": "Google searching is in its CAPTCHA cooldown for another 83 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T17:10:32"
+    },
+    {
+      "school": "St. Mary's Senior Secondary School",
+      "state": "Uttar Pradesh",
+      "city": "Rampur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 78 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:14:46"
+    },
+    {
+      "school": "Makoons Play School, Rampur",
+      "state": "Uttar Pradesh",
+      "city": "Rampur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 76 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:17:25"
     }
   ],
   "duplicates": 0,
@@ -440,7 +458,7 @@
   "git": {
     "branch": "school-data-rank-10",
     "pending": false,
-    "last_ok": "2026-11-19T17:03:22",
+    "last_ok": "2026-11-19T17:12:29",
     "last_error": ""
   },
   "work": {
@@ -449,5 +467,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:12:25"
+  "updated": "2026-11-19T17:25:31"
 }
