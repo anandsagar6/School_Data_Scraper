@@ -58,7 +58,8 @@
       "phone:5952357089",
       "phone:9149378089",
       "email:admissions@bachpanglobal.com",
-      "phone:9837323460"
+      "phone:9837323460",
+      "phone:9997629988"
     ]
   },
   "enriched": {
@@ -112,7 +113,8 @@
       "phone:5952357089",
       "phone:9149378089",
       "email:admissions@bachpanglobal.com",
-      "phone:9837323460"
+      "phone:9837323460",
+      "phone:9997629988"
     ]
   },
   "completed_cities": [],
@@ -593,6 +595,13 @@
       "city": "Rampur",
       "reason": "Google searching is in its CAPTCHA cooldown for another 8 minute(s) - the official email and phone searches were NOT run",
       "when": "2026-11-19T18:25:30"
+    },
+    {
+      "school": "ST. HARIS PUBLIC SCHOOL",
+      "state": "Uttar Pradesh",
+      "city": "Rampur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 2 minute(s) - the official email and phone searches were NOT run",
+      "when": "2026-11-19T18:31:20"
     }
   ],
   "duplicates": 0,
@@ -601,7 +610,7 @@
   "git": {
     "branch": "school-data-rank-10",
     "pending": false,
-    "last_ok": "2026-11-19T18:20:57",
+    "last_ok": "2026-11-19T18:29:04",
     "last_error": ""
   },
   "work": {
@@ -610,5 +619,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T18:28:59"
+  "updated": "2026-11-19T18:36:13"
 }
