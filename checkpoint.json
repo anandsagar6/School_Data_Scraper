@@ -23,7 +23,8 @@
       "email:accounts@nepskorba.in",
       "site:davkorba.com",
       "phone:7759232662",
-      "phone:8871867411"
+      "phone:8871867411",
+      "phone:9424144129"
     ]
   },
   "enriched": {
@@ -38,7 +39,8 @@
       "site:davkorba.com",
       "phone:7759232662",
       "phone:8871867411",
-      "name+address:little lamp|9p4h+344"
+      "name+address:little lamp|9p4h+344",
+      "phone:9424144129"
     ]
   },
   "completed_cities": [],
@@ -252,9 +254,9 @@
   "saved": 0,
   "cycle": 0,
   "git": {
-    "branch": "",
+    "branch": "school-data-rank-3",
     "pending": false,
-    "last_ok": "",
+    "last_ok": "2026-11-19T15:39:01",
     "last_error": ""
   },
   "work": {
@@ -263,5 +265,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T15:38:56"
+  "updated": "2026-11-19T15:46:51"
 }
