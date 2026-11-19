@@ -44,7 +44,8 @@
     "Maharashtra|Rajgurunagar": [
       "phone:7722033583",
       "site:gavhaneacademy.com",
-      "phone:2435222105"
+      "phone:2435222105",
+      "email:aakashganga2017@gmail.com"
     ]
   },
   "enriched": {
@@ -86,7 +87,9 @@
       "phone:7722033583",
       "site:gavhaneacademy.com",
       "phone:2435222105",
-      "name+address:crazy kids|phata, pune - nashik hwy"
+      "name+address:crazy kids|phata, pune - nashik hwy",
+      "email:aakashganga2017@gmail.com",
+      "name+address:udaan|shantanu complex, behind district court road"
     ]
   },
   "completed_cities": [],
@@ -396,6 +399,20 @@
       "city": "Rajgurunagar",
       "reason": "Google searching is in its CAPTCHA cooldown for another 118 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:12:39"
+    },
+    {
+      "school": "AAKASHGANGA INTERNATIONAL SCHOOL",
+      "state": "Maharashtra",
+      "city": "Rajgurunagar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 112 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:18:23"
+    },
+    {
+      "school": "Udaan international school",
+      "state": "Maharashtra",
+      "city": "Rajgurunagar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 110 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:20:51"
     }
   ],
   "duplicates": 0,
@@ -404,7 +421,7 @@
   "git": {
     "branch": "school-data-rank-7",
     "pending": false,
-    "last_ok": "2026-11-19T17:08:40",
+    "last_ok": "2026-11-19T17:16:29",
     "last_error": ""
   },
   "work": {
@@ -413,5 +430,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:16:25"
+  "updated": "2026-11-19T17:22:46"
 }
