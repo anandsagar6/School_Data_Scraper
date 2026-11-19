@@ -30,7 +30,9 @@
       "phone:1127011137",
       "phone:8076605812",
       "email:dpskdn1996@gmail.com",
-      "email:infodg@thesamarthschool.edu.in"
+      "email:infodg@thesamarthschool.edu.in",
+      "phone:1126142270",
+      "phone:9811131112"
     ]
   },
   "enriched": {
@@ -52,7 +54,9 @@
       "phone:1127011137",
       "phone:8076605812",
       "email:dpskdn1996@gmail.com",
-      "email:infodg@thesamarthschool.edu.in"
+      "email:infodg@thesamarthschool.edu.in",
+      "phone:1126142270",
+      "phone:9811131112"
     ]
   },
   "completed_cities": [],
@@ -469,6 +473,20 @@
       "city": "Delhi",
       "reason": "Google searching is in its CAPTCHA cooldown for another 181 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T16:47:04"
+    },
+    {
+      "school": "Tagore International School",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 173 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:55:06"
+    },
+    {
+      "school": "Gurukul sanskriti school (Private school)",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 170 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:57:33"
     }
   ],
   "duplicates": 0,
@@ -477,7 +495,7 @@
   "git": {
     "branch": "school-data-rank-1",
     "pending": false,
-    "last_ok": "2026-11-19T16:43:35",
+    "last_ok": "2026-11-19T16:53:05",
     "last_error": ""
   },
   "work": {
@@ -486,5 +504,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:52:59"
+  "updated": "2026-11-19T16:59:04"
 }
