@@ -78,7 +78,8 @@
       "phone:8904980486",
       "phone:8888339284",
       "email:ambejogai@podarprep.com",
-      "phone:2446247534"
+      "phone:2446247534",
+      "phone:7720077665"
     ]
   },
   "enriched": {
@@ -153,7 +154,9 @@
       "phone:8904980486",
       "phone:8888339284",
       "email:ambejogai@podarprep.com",
-      "phone:2446247534"
+      "phone:2446247534",
+      "phone:7720077665",
+      "name+address:c b|gut no-42, adas phata"
     ]
   },
   "completed_cities": [],
@@ -739,6 +742,20 @@
       "city": "Ambajogai",
       "reason": "Google searching is in its CAPTCHA cooldown for another 213 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T19:40:38"
+    },
+    {
+      "school": "Cambridge international school",
+      "state": "Maharashtra",
+      "city": "Ambajogai",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 209 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T19:45:14"
+    },
+    {
+      "school": "C.B.SCHOOL",
+      "state": "Maharashtra",
+      "city": "Ambajogai",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 205 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T19:48:50"
     }
   ],
   "duplicates": 0,
@@ -747,7 +764,7 @@
   "git": {
     "branch": "school-data-rank-7",
     "pending": false,
-    "last_ok": "2026-11-19T19:35:33",
+    "last_ok": "2026-11-19T19:43:13",
     "last_error": ""
   },
   "work": {
@@ -756,5 +773,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T19:43:08"
+  "updated": "2026-11-19T19:50:52"
 }
