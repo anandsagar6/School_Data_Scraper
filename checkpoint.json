@@ -78,7 +78,9 @@
       "phone:9008955251",
       "phone:9900423456",
       "name+address:st thomas|pandering kalpana mantapa, 14th cross, chamundeshwari nagar ",
-      "name+address:santhome p u college|gv2c+93h, 2nd cross rd"
+      "name+address:santhome p u college|gv2c+93h, 2nd cross rd",
+      "name+address:sadvidya pu college|haniyambadi rd",
+      "name+address:chinmaya mandya|073530 91234"
     ]
   },
   "completed_cities": [],
@@ -485,6 +487,20 @@
       "city": "Mandya",
       "reason": "Google searching is in its CAPTCHA cooldown for another 83 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T17:29:56"
+    },
+    {
+      "school": "Sadvidya PU College",
+      "state": "Karnataka",
+      "city": "Mandya",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 78 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:35:09"
+    },
+    {
+      "school": "Chinmaya Vidyalaya Mandya",
+      "state": "Karnataka",
+      "city": "Mandya",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 74 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:38:49"
     }
   ],
   "duplicates": 0,
@@ -493,7 +509,7 @@
   "git": {
     "branch": "school-data-rank-5",
     "pending": false,
-    "last_ok": "2026-11-19T17:24:13",
+    "last_ok": "2026-11-19T17:32:59",
     "last_error": ""
   },
   "work": {
@@ -502,5 +518,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:32:55"
+  "updated": "2026-11-19T17:40:21"
 }
