@@ -24,7 +24,10 @@
       "phone:8319850954",
       "email:info@amaljyotischool.in",
       "phone:7804006087",
-      "phone:9131093497"
+      "phone:9131093497",
+      "phone:7987373427",
+      "email:mionm.2018@gmail.com",
+      "phone:9424989933"
     ]
   },
   "enriched": {
@@ -46,7 +49,10 @@
       "name+address:nirmala mandla|j93c+779, mandla - jabalpur rd",
       "name+address:eklavya model residential achali semarkhapa mandla|07642 299 062",
       "phone:7804006087",
-      "phone:9131093497"
+      "phone:9131093497",
+      "phone:7987373427",
+      "email:mionm.2018@gmail.com",
+      "phone:9424989933"
     ]
   },
   "completed_cities": [],
@@ -310,6 +316,27 @@
       "city": "Mandla",
       "reason": "Google searching is in its CAPTCHA cooldown for another 127 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T16:45:39"
+    },
+    {
+      "school": "Mcop Solution Private Limited",
+      "state": "Madhya Pradesh",
+      "city": "Mandla",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 116 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:56:55"
+    },
+    {
+      "school": "Mandla Institute of Nursing",
+      "state": "Madhya Pradesh",
+      "city": "Mandla",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 114 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:58:37"
+    },
+    {
+      "school": "Maa Ambe High School",
+      "state": "Madhya Pradesh",
+      "city": "Mandla",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 111 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:01:45"
     }
   ],
   "duplicates": 0,
@@ -318,7 +345,7 @@
   "git": {
     "branch": "school-data-rank-6",
     "pending": false,
-    "last_ok": "2026-11-19T16:43:36",
+    "last_ok": "2026-11-19T16:55:46",
     "last_error": ""
   },
   "work": {
@@ -327,5 +354,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:55:42"
+  "updated": "2026-11-19T17:03:04"
 }
