@@ -33,7 +33,8 @@
       "email:contact@jjga.in"
     ],
     "Assam|Karimganj": [
-      "phone:9401375466"
+      "phone:9401375466",
+      "email:karimganjppl@mahaemail.com"
     ]
   },
   "enriched": {
@@ -62,7 +63,9 @@
     ],
     "Assam|Karimganj": [
       "name+address:little angels|v988+3x3, station rd, opp. capital travels",
-      "phone:9401375466"
+      "phone:9401375466",
+      "name+address:talent|w kanishail rd",
+      "email:karimganjppl@mahaemail.com"
     ]
   },
   "completed_cities": [],
@@ -434,6 +437,20 @@
       "city": "Karimganj",
       "reason": "Google searching is in its CAPTCHA cooldown for another 181 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T16:46:24"
+    },
+    {
+      "school": "Talent Academy",
+      "state": "Assam",
+      "city": "Karimganj",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 169 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:58:21"
+    },
+    {
+      "school": "Maharishi Vidya Mandir, Karimganj, Assam",
+      "state": "Assam",
+      "city": "Karimganj",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 167 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:01:01"
     }
   ],
   "duplicates": 0,
@@ -442,7 +459,7 @@
   "git": {
     "branch": "school-data-rank-2",
     "pending": false,
-    "last_ok": "2026-11-19T16:44:05",
+    "last_ok": "2026-11-19T16:57:32",
     "last_error": ""
   },
   "work": {
@@ -451,5 +468,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:57:28"
+  "updated": "2026-11-19T17:02:35"
 }
