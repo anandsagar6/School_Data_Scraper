@@ -32,7 +32,8 @@
       "phone:9254349592",
       "phone:9416123377",
       "email:holychildschool@hotmail.com",
-      "email:lapshisar@gmail.com"
+      "email:lapshisar@gmail.com",
+      "email:rishikul.hsr@gmail.com"
     ]
   },
   "enriched": {
@@ -57,7 +58,8 @@
       "phone:9254349592",
       "phone:9416123377",
       "email:holychildschool@hotmail.com",
-      "email:lapshisar@gmail.com"
+      "email:lapshisar@gmail.com",
+      "email:rishikul.hsr@gmail.com"
     ]
   },
   "completed_cities": [],
@@ -415,6 +417,13 @@
       "city": "Hisar",
       "reason": "Google searching is in its CAPTCHA cooldown for another 172 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:15:16"
+    },
+    {
+      "school": "RISHIKUL VIDYA MANDIR HISAR",
+      "state": "Haryana",
+      "city": "Hisar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 168 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:18:26"
     }
   ],
   "duplicates": 0,
@@ -423,7 +432,7 @@
   "git": {
     "branch": "school-data-rank-4",
     "pending": false,
-    "last_ok": "2026-11-19T17:10:28",
+    "last_ok": "2026-11-19T17:17:30",
     "last_error": ""
   },
   "work": {
@@ -432,5 +441,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:17:26"
+  "updated": "2026-11-19T17:23:52"
 }
