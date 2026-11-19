@@ -6,7 +6,7 @@
   "city_fingerprint": "4face9f1d03dd68c4c22d260484c501dbc091075c6decef04119ef5515c2e7f9",
   "current_city": [
     "Assam",
-    "North Lakhimpur"
+    "Karimganj"
   ],
   "current_keyword": "Private Schools",
   "discovery_done": {},
@@ -29,7 +29,8 @@
       "phone:9387852837",
       "phone:8472950746",
       "email:rwwjc2010@gmail.com",
-      "phone:9435541716"
+      "phone:9435541716",
+      "email:contact@jjga.in"
     ]
   },
   "enriched": {
@@ -53,7 +54,11 @@
       "phone:8472950746",
       "name+address:lakhimpur hs|64p7+wm3, chetia gaon road",
       "email:rwwjc2010@gmail.com",
-      "phone:9435541716"
+      "phone:9435541716",
+      "email:contact@jjga.in"
+    ],
+    "Assam|Karimganj": [
+      "name+address:little angels|v988+3x3, station rd, opp. capital travels"
     ]
   },
   "completed_cities": [],
@@ -404,6 +409,20 @@
       "city": "North Lakhimpur",
       "reason": "Google searching is in its CAPTCHA cooldown for another 202 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T16:25:21"
+    },
+    {
+      "school": "Jeevan Jyoti Grace Academy",
+      "state": "Assam",
+      "city": "North Lakhimpur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 194 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:33:21"
+    },
+    {
+      "school": "Little Angels School",
+      "state": "Assam",
+      "city": "Karimganj",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 190 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:37:41"
     }
   ],
   "duplicates": 0,
@@ -412,7 +431,7 @@
   "git": {
     "branch": "school-data-rank-2",
     "pending": false,
-    "last_ok": "2026-11-19T16:21:07",
+    "last_ok": "2026-11-19T16:31:54",
     "last_error": ""
   },
   "work": {
@@ -421,5 +440,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:31:50"
+  "updated": "2026-11-19T16:44:00"
 }
