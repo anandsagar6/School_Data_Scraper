@@ -44,7 +44,8 @@
       "phone:9401558194",
       "phone:8486929973",
       "phone:9365343465",
-      "phone:8723963517"
+      "phone:8723963517",
+      "email:kollol.sen@gmail.com"
     ]
   },
   "enriched": {
@@ -91,7 +92,9 @@
       "phone:9401558194",
       "phone:8486929973",
       "phone:9365343465",
-      "phone:8723963517"
+      "phone:8723963517",
+      "email:kollol.sen@gmail.com",
+      "name+address:makunda christian|c8mh+pj5, makunda christian leprosy and general hospital rd"
     ]
   },
   "completed_cities": [],
@@ -589,6 +592,20 @@
       "city": "Karimganj",
       "reason": "Google searching is in its CAPTCHA cooldown for another 112 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:55:48"
+    },
+    {
+      "school": "EuroKids Preschool - Nilmoni Road, Sribhumi",
+      "state": "Assam",
+      "city": "Karimganj",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 105 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T18:03:14"
+    },
+    {
+      "school": "Makunda Christian High School",
+      "state": "Assam",
+      "city": "Karimganj",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 101 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T18:06:42"
     }
   ],
   "duplicates": 0,
@@ -597,7 +614,7 @@
   "git": {
     "branch": "school-data-rank-2",
     "pending": false,
-    "last_ok": "2026-11-19T17:54:23",
+    "last_ok": "2026-11-19T18:02:11",
     "last_error": ""
   },
   "work": {
@@ -606,5 +623,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T18:02:05"
+  "updated": "2026-11-19T18:08:32"
 }
