@@ -43,7 +43,9 @@
       "phone:1662323800",
       "phone:9254181416",
       "phone:8373909277",
-      "email:info@osgu.ac.in"
+      "email:info@osgu.ac.in",
+      "phone:9996719978",
+      "email:aipsdobhi@gmail.com"
     ]
   },
   "enriched": {
@@ -81,7 +83,9 @@
       "phone:9254181416",
       "phone:8373909277",
       "name+address:shree krishna pranami|bagla road",
-      "email:info@osgu.ac.in"
+      "email:info@osgu.ac.in",
+      "phone:9996719978",
+      "email:aipsdobhi@gmail.com"
     ]
   },
   "completed_cities": [],
@@ -530,6 +534,20 @@
       "city": "Hisar",
       "reason": "Google searching is in its CAPTCHA cooldown for another 122 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T18:04:36"
+    },
+    {
+      "school": "SKY LIBRARY 2.0 (girls and boys ( separate ))",
+      "state": "Haryana",
+      "city": "Hisar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 120 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T18:06:52"
+    },
+    {
+      "school": "Aastha International Public School",
+      "state": "Haryana",
+      "city": "Hisar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 114 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T18:12:21"
     }
   ],
   "duplicates": 0,
@@ -538,7 +556,7 @@
   "git": {
     "branch": "school-data-rank-4",
     "pending": false,
-    "last_ok": "2026-11-19T17:59:50",
+    "last_ok": "2026-11-19T18:06:20",
     "last_error": ""
   },
   "work": {
@@ -547,5 +565,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T18:06:16"
+  "updated": "2026-11-19T18:14:38"
 }
