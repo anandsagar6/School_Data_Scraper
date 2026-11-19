@@ -51,7 +51,8 @@
       "email:gssshisar1@gmail.com",
       "phone:8813870220",
       "email:sfxhsr@yahoo.com",
-      "email:nlkshisar@gmail.com"
+      "email:nlkshisar@gmail.com",
+      "email:principalcrcoehisar@gmail.com"
     ]
   },
   "enriched": {
@@ -97,7 +98,9 @@
       "email:gssshisar1@gmail.com",
       "phone:8813870220",
       "email:sfxhsr@yahoo.com",
-      "email:nlkshisar@gmail.com"
+      "email:nlkshisar@gmail.com",
+      "name+address:digvijay memorial|3ppf+f24 taylor",
+      "email:principalcrcoehisar@gmail.com"
     ]
   },
   "completed_cities": [],
@@ -602,6 +605,20 @@
       "city": "Hisar",
       "reason": "Google searching is in its CAPTCHA cooldown for another 88 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T18:38:26"
+    },
+    {
+      "school": "Digvijay Memorial School",
+      "state": "Haryana",
+      "city": "Hisar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 81 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:45:58"
+    },
+    {
+      "school": "C.R. College of Education HISAR",
+      "state": "Haryana",
+      "city": "Hisar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 78 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:49:07"
     }
   ],
   "duplicates": 0,
@@ -610,7 +627,7 @@
   "git": {
     "branch": "school-data-rank-4",
     "pending": false,
-    "last_ok": "2026-11-19T18:32:44",
+    "last_ok": "2026-11-19T18:45:17",
     "last_error": ""
   },
   "work": {
@@ -619,5 +636,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T18:45:12"
+  "updated": "2026-11-19T18:51:01"
 }
