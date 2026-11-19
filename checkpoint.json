@@ -37,7 +37,8 @@
       "phone:3592284518",
       "phone:3592203093",
       "phone:9609010901",
-      "email:sirtnsss@gmail.com"
+      "email:sirtnsss@gmail.com",
+      "phone:3592271200"
     ]
   },
   "enriched": {
@@ -65,7 +66,9 @@
       "phone:3592284518",
       "phone:3592203093",
       "phone:9609010901",
-      "email:sirtnsss@gmail.com"
+      "email:sirtnsss@gmail.com",
+      "name+address:government|8jp3+8hg, sichey school rd",
+      "phone:3592271200"
     ]
   },
   "completed_cities": [],
@@ -555,6 +558,20 @@
       "city": "Sichey",
       "reason": "Google searching is in its CAPTCHA cooldown for another 74 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T17:18:43"
+    },
+    {
+      "school": "Government Secondary School",
+      "state": "Sikkim",
+      "city": "Sichey",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 72 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:21:21"
+    },
+    {
+      "school": "Mount Zion School Kidzee",
+      "state": "Sikkim",
+      "city": "Sichey",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 65 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:27:43"
     }
   ],
   "duplicates": 0,
@@ -563,7 +580,7 @@
   "git": {
     "branch": "school-data-rank-9",
     "pending": false,
-    "last_ok": "2026-11-19T17:12:49",
+    "last_ok": "2026-11-19T17:20:47",
     "last_error": ""
   },
   "work": {
@@ -572,5 +589,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:20:43"
+  "updated": "2026-11-19T17:29:40"
 }
