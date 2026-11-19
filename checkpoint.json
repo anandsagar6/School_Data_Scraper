@@ -21,7 +21,8 @@
       "phone:7225023868",
       "phone:7642250010",
       "phone:9516309866",
-      "phone:8319850954"
+      "phone:8319850954",
+      "email:info@amaljyotischool.in"
     ]
   },
   "enriched": {
@@ -37,7 +38,8 @@
       "name+address:takshshila niketan|block",
       "phone:9516309866",
       "phone:8319850954",
-      "name+address:galaxy group of institutions|rani avanti bhai, jha ward rd"
+      "name+address:galaxy group of institutions|rani avanti bhai, jha ward rd",
+      "email:info@amaljyotischool.in"
     ]
   },
   "completed_cities": [],
@@ -259,6 +261,13 @@
       "city": "Mandla",
       "reason": "Google searching is in its CAPTCHA cooldown for another 35 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T15:34:16"
+    },
+    {
+      "school": "Amal jyoti High School Maharajpur",
+      "state": "Madhya Pradesh",
+      "city": "Mandla",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 5 minute(s) - the official email and phone searches were NOT run",
+      "when": "2026-11-19T16:04:08"
     }
   ],
   "duplicates": 0,
@@ -267,7 +276,7 @@
   "git": {
     "branch": "school-data-rank-6",
     "pending": false,
-    "last_ok": "2026-11-19T15:48:21",
+    "last_ok": "2026-11-19T16:01:45",
     "last_error": ""
   },
   "work": {
@@ -276,5 +285,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:01:40"
+  "updated": "2026-11-19T16:06:43"
 }
