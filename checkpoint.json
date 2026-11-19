@@ -35,7 +35,9 @@
       "phone:9811131112",
       "phone:1127040970",
       "phone:9999464846",
-      "email:student@srcapital.in"
+      "email:student@srcapital.in",
+      "phone:9870327326",
+      "email:newconventschool@yahoo.co.in"
     ]
   },
   "enriched": {
@@ -63,7 +65,9 @@
       "name+address:stmartin delhi cantt|19, asalatpur rd",
       "phone:1127040970",
       "phone:9999464846",
-      "email:student@srcapital.in"
+      "email:student@srcapital.in",
+      "phone:9870327326",
+      "email:newconventschool@yahoo.co.in"
     ]
   },
   "completed_cities": [],
@@ -522,6 +526,20 @@
       "city": "Delhi",
       "reason": "Google searching is in its CAPTCHA cooldown for another 159 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:09:02"
+    },
+    {
+      "school": "Mayo International School",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 154 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:13:35"
+    },
+    {
+      "school": "New Convent Model Secondary School",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 152 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:15:48"
     }
   ],
   "duplicates": 0,
@@ -530,7 +548,7 @@
   "git": {
     "branch": "school-data-rank-1",
     "pending": false,
-    "last_ok": "2026-11-19T17:05:29",
+    "last_ok": "2026-11-19T17:11:08",
     "last_error": ""
   },
   "work": {
@@ -539,5 +557,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:11:03"
+  "updated": "2026-11-19T17:17:14"
 }
