@@ -46,7 +46,8 @@
       "phone:9008955251",
       "phone:9900423456",
       "email:aksharaipskowdle@gmail.com",
-      "email:bcp651@gmail.com"
+      "email:bcp651@gmail.com",
+      "phone:9008846132"
     ]
   },
   "enriched": {
@@ -84,7 +85,8 @@
       "name+address:sadvidya pu college|haniyambadi rd",
       "name+address:chinmaya mandya|073530 91234",
       "email:aksharaipskowdle@gmail.com",
-      "email:bcp651@gmail.com"
+      "email:bcp651@gmail.com",
+      "phone:9008846132"
     ]
   },
   "completed_cities": [],
@@ -519,6 +521,13 @@
       "city": "Mandya",
       "reason": "Google searching is in its CAPTCHA cooldown for another 68 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T17:44:44"
+    },
+    {
+      "school": "Cauvery Excel Pu College",
+      "state": "Karnataka",
+      "city": "Mandya",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 64 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:48:48"
     }
   ],
   "duplicates": 0,
@@ -527,14 +536,14 @@
   "git": {
     "branch": "school-data-rank-5",
     "pending": false,
-    "last_ok": "2026-11-19T17:40:26",
+    "last_ok": "2026-11-19T17:46:51",
     "last_error": ""
   },
   "work": {
-    "period_hours": 0.0,
+    "period_hours": 2.2,
     "breaks_taken": 0,
-    "break_until": "",
-    "reason": ""
+    "break_until": "2026-11-19T19:10:56",
+    "reason": "worked 2.22 h of a 2.2 h period - taking a 81 min break"
   },
-  "updated": "2026-11-19T17:46:47"
+  "updated": "2026-11-19T17:49:52"
 }
