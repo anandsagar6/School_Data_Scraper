@@ -34,7 +34,8 @@
     "Maharashtra|Murtijapur": [
       "email:admissions@academicheights.in",
       "phone:7756032746",
-      "email:ashok957@bachpanglobal.com"
+      "email:ashok957@bachpanglobal.com",
+      "phone:9623888666"
     ]
   },
   "enriched": {
@@ -67,7 +68,8 @@
       "name+address:shri vyankatesh balaji abhijeet bopte|p9m5+396",
       "phone:7756032746",
       "email:ashok957@bachpanglobal.com",
-      "name+address:gadge maharaj|p9p7+8cc"
+      "name+address:gadge maharaj|p9p7+8cc",
+      "phone:9623888666"
     ]
   },
   "completed_cities": [],
@@ -328,6 +330,13 @@
       "city": "Murtijapur",
       "reason": "Google searching is in its CAPTCHA cooldown for another 147 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T16:43:25"
+    },
+    {
+      "school": "Little Flower English Primary School",
+      "state": "Maharashtra",
+      "city": "Murtijapur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 141 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:50:08"
     }
   ],
   "duplicates": 0,
@@ -336,7 +345,7 @@
   "git": {
     "branch": "school-data-rank-7",
     "pending": false,
-    "last_ok": "2026-11-19T16:42:42",
+    "last_ok": "2026-11-19T16:48:57",
     "last_error": ""
   },
   "work": {
@@ -345,5 +354,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:48:52"
+  "updated": "2026-11-19T16:56:21"
 }
