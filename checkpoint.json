@@ -54,7 +54,8 @@
       "name+address:i e s girls|8g49+f28",
       "phone:8888577107",
       "name+address:urdu skil writers|asma naaz jabir shah",
-      "name+address:smt vaishali deshpande|7g67+c67"
+      "name+address:smt vaishali deshpande|7g67+c67",
+      "name+address:z p|7g86+65j"
     ]
   },
   "completed_cities": [],
@@ -266,6 +267,13 @@
       "city": "Achalpur",
       "reason": "Google searching is in its CAPTCHA cooldown for another 194 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T15:57:05"
+    },
+    {
+      "school": "Z P School",
+      "state": "Maharashtra",
+      "city": "Achalpur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 178 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:13:14"
     }
   ],
   "duplicates": 0,
@@ -274,7 +282,7 @@
   "git": {
     "branch": "school-data-rank-7",
     "pending": false,
-    "last_ok": "2026-11-19T15:54:41",
+    "last_ok": "2026-11-19T16:11:25",
     "last_error": ""
   },
   "work": {
@@ -283,5 +291,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:11:20"
+  "updated": "2026-11-19T16:19:24"
 }
