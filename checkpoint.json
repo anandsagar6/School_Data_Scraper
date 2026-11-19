@@ -39,7 +39,9 @@
       "phone:8327765623",
       "phone:6762224960",
       "phone:9437188035",
-      "phone:7894972586"
+      "phone:7894972586",
+      "phone:9453039580",
+      "email:jnvdhenkanal@gmail.com"
     ]
   },
   "enriched": {
@@ -75,7 +77,9 @@
       "phone:6762224960",
       "phone:9437188035",
       "phone:7894972586",
-      "name+address:venkateshwar|mh6x+v5p, main rd"
+      "name+address:venkateshwar|mh6x+v5p, main rd",
+      "phone:9453039580",
+      "email:jnvdhenkanal@gmail.com"
     ]
   },
   "completed_cities": [],
@@ -503,6 +507,20 @@
       "city": "Dhenkanal",
       "reason": "Google searching is in its CAPTCHA cooldown for another 89 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T17:41:22"
+    },
+    {
+      "school": "Kidzee Dhenkanal",
+      "state": "Odisha",
+      "city": "Dhenkanal",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 81 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:49:36"
+    },
+    {
+      "school": "P.M. S.H.R.I. Jawahar Navodaya Vidyalaya , Sarang, Dhenkanal",
+      "state": "Odisha",
+      "city": "Dhenkanal",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 79 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:51:33"
     }
   ],
   "duplicates": 0,
@@ -511,7 +529,7 @@
   "git": {
     "branch": "school-data-rank-8",
     "pending": false,
-    "last_ok": "2026-11-19T17:39:18",
+    "last_ok": "2026-11-19T17:47:39",
     "last_error": ""
   },
   "work": {
@@ -520,5 +538,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:47:34"
+  "updated": "2026-11-19T17:54:03"
 }
