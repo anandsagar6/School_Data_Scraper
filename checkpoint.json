@@ -38,7 +38,9 @@
       "phone:3843261005",
       "phone:6001178921",
       "phone:3843262700",
-      "email:markazkxj@gmail.com"
+      "email:markazkxj@gmail.com",
+      "phone:7086745651",
+      "phone:9954485060"
     ]
   },
   "enriched": {
@@ -78,7 +80,9 @@
       "email:markazkxj@gmail.com",
       "site:ihems.co.in",
       "name+address:kendriya karimganj|nil mony rd",
-      "name+address:jawahar navodaya harinagar karimganj|harinagar"
+      "name+address:jawahar navodaya harinagar karimganj|harinagar",
+      "phone:7086745651",
+      "phone:9954485060"
     ]
   },
   "completed_cities": [],
@@ -527,6 +531,20 @@
       "city": "Karimganj",
       "reason": "Google searching is in its CAPTCHA cooldown for another 138 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:29:42"
+    },
+    {
+      "school": "Holy Children H. S School",
+      "state": "Assam",
+      "city": "Karimganj",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 132 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:35:23"
+    },
+    {
+      "school": "Central Public School, Patharkandi",
+      "state": "Assam",
+      "city": "Karimganj",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 130 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:38:14"
     }
   ],
   "duplicates": 0,
@@ -535,7 +553,7 @@
   "git": {
     "branch": "school-data-rank-2",
     "pending": false,
-    "last_ok": "2026-11-19T17:26:09",
+    "last_ok": "2026-11-19T17:32:56",
     "last_error": ""
   },
   "work": {
@@ -544,5 +562,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:32:52"
+  "updated": "2026-11-19T17:40:12"
 }
