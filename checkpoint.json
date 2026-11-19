@@ -56,7 +56,9 @@
       "phone:9837269889",
       "phone:9259044872",
       "phone:5952357089",
-      "phone:9149378089"
+      "phone:9149378089",
+      "email:admissions@bachpanglobal.com",
+      "phone:9837323460"
     ]
   },
   "enriched": {
@@ -108,7 +110,9 @@
       "phone:9837269889",
       "phone:9259044872",
       "phone:5952357089",
-      "phone:9149378089"
+      "phone:9149378089",
+      "email:admissions@bachpanglobal.com",
+      "phone:9837323460"
     ]
   },
   "completed_cities": [],
@@ -575,6 +579,20 @@
       "city": "Rampur",
       "reason": "Google searching is in its CAPTCHA cooldown for another 18 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T18:15:38"
+    },
+    {
+      "school": "Bachpan Play School in Rampur",
+      "state": "Uttar Pradesh",
+      "city": "Rampur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 11 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:21:51"
+    },
+    {
+      "school": "Mount Litera Zee School (MLZS) - Koyla",
+      "state": "Uttar Pradesh",
+      "city": "Rampur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 8 minute(s) - the official email and phone searches were NOT run",
+      "when": "2026-11-19T18:25:30"
     }
   ],
   "duplicates": 0,
@@ -583,7 +601,7 @@
   "git": {
     "branch": "school-data-rank-10",
     "pending": false,
-    "last_ok": "2026-11-19T18:10:30",
+    "last_ok": "2026-11-19T18:20:57",
     "last_error": ""
   },
   "work": {
@@ -592,5 +610,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T18:20:53"
+  "updated": "2026-11-19T18:28:59"
 }
