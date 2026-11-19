@@ -995,7 +995,21 @@ _PIN = re.compile(r"(?<!\d)([1-9][0-9]{5})(?!\d)")
 _NOT_A_PIN = re.compile(
     r"(affiliation|affl?|udise|registration|reg|school|cbse|icse|board|code|"
     r"no\.?|number|#)\s*[:.\-]?\s*$", re.I)
-_EMAIL = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
+#: An email address in page text.
+#:
+#: The top-level domain must be a REAL one, and must not be followed by a
+#: letter. Google's extracted text runs the next words straight into an
+#: address - "info@edudel.nic.inRead more", "head@school.edu.inMissing:
+#: email" - and a loose pattern read those as "info@edudel.nic.inread" and
+#: "head@school.edu.inmissing", which went into the data as real addresses.
+#: Such text is genuinely ambiguous, so it now yields NO address at all,
+#: and the field is left blank rather than filled with something invented.
+_EMAIL_TLDS = ("co.in", "ac.in", "nic.in", "edu.in", "gov.in", "org.in",
+               "net.in", "sch.in", "res.in", "com", "org", "net", "edu",
+               "gov", "info", "biz", "in", "io", "me", "co", "uk", "us")
+_EMAIL = re.compile(
+    r"[A-Za-z0-9._%%+-]+@(?:[A-Za-z0-9-]+\.)+(?:%s)(?![A-Za-z])(?!\.[A-Za-z])"
+    % "|".join(t.replace(".", r"\.") for t in _EMAIL_TLDS), re.I)
 _URL = re.compile(r"https?://[^\s,;]+")
 
 
@@ -5939,6 +5953,7 @@ PHONE_TIE_NONE = 0
 PHONE_TIE_MAPS_CONFIRMED = 1
 PHONE_TIE_EMAIL_SEARCH = 2
 PHONE_TIE_PHONE_SEARCH = 3
+PHONE_TIE_AI_ANSWER = 4         # Google answered the question itself
 
 #: Columns this feature owns. Gemini is not allowed to fill them.
 OFFICIAL_EMAIL_COLUMN = "School Official Email"
@@ -6121,16 +6136,42 @@ def phone_evidence(text, record, phone, window=350):
     return False
 
 
+#: A Google Plus Code, the coordinate Maps shows when a place has no street
+#: address: "M4QH+PFF". Four to eight characters, a plus, then two or three,
+#: all from Plus Codes' own 20-letter alphabet.
+PLUS_CODE = re.compile(r"^[23456789CFGHJMPQRVWX]{4,8}\+[23456789CFGHJMPQRVWX]{2,3}$",
+                       re.I)
+
+
+def looks_like_plus_code(piece):
+    """Is this address fragment a coordinate rather than a place name?"""
+    return bool(PLUS_CODE.match(clean(piece).replace(" ", "")))
+
+
 def school_place(record):
-    """"Bengaluru Karnataka", with the locality when there is one."""
+    """"Bengaluru Karnataka", with the locality when there is one.
+
+    A PLUS CODE IS NOT A PLACE. Maps gives one instead of a street address
+    for many schools, and it arrives first in the address, so it was being
+    used as the locality: the search became "... in M4QH+PFF Delhi Delhi
+    NCR". Google rewrote that query, declined to answer it, and the one
+    stray email left on the page was taken as the school's own. So a
+    coordinate-looking fragment is skipped and the next piece of the
+    address is tried instead - and if none is usable, the city and state
+    alone make the better query.
+    """
     parts = [clean(record.get("City", "")), clean(record.get("State", ""))]
     place = " ".join(p for p in parts if p)
-    locality = clean(record.get("School Address", ""))
-    if locality:
-        # the first piece of the address, which is usually the locality
-        head = locality.split(",")[0].strip()
-        if head and head.lower() not in place.lower():
+    address = clean(record.get("School Address", ""))
+    if address:
+        for piece in address.split(","):
+            head = piece.strip()
+            if not head or looks_like_plus_code(head):
+                continue
+            if head.lower() in place.lower():
+                continue
             place = "%s %s" % (head, place) if place else head
+            break
     return place.strip()
 
 
@@ -6316,11 +6357,108 @@ def google_cooldown_note():
             "and are kept for a later retry" % int(left // 60 + 1))
 
 
+#: Where Google puts its AI answer. Tried in order; the layout changes
+#: often, so a text fallback follows if none of them match.
+AI_ANSWER_SELECTORS = ("div.h7Tj7e", "#m-x-content",
+                       "[data-attrid='SGEAnswer']", "div[data-subtree='aio']")
+
+#: Google saying it has no AI answer. The container still exists and holds
+#: this, so the text must be read, not merely found.
+AI_ANSWER_REFUSALS = ("an ai overview is not available",
+                      "can't generate an ai overview",
+                      "cannot generate an ai overview",
+                      "no ai overview is available")
+
+#: Shortest text that can be a real answer. Below this the container holds
+#: only a label or a leftover fragment.
+AI_ANSWER_MIN_CHARACTERS = 40
+
+#: Longest text that can be a real answer. While the answer is still
+#: loading the same container holds the whole page scaffold - 37,000
+#: characters, including BOTH "an AI Overview is not available" and
+#: "can't generate an AI Overview" as hidden templates. Reading that as
+#: the answer made every search look refused. Real answers measured
+#: 700-1,800 characters, so anything this long is still loading.
+AI_ANSWER_MAX_CHARACTERS = 8000
+
+#: How long to wait for the AI answer to arrive. Google loads it after the
+#: rest of the page, so reading straight after PAGE_SETTLE_SECONDS found
+#: nothing on every live search even where the answer did appear a moment
+#: later. The wait ends the instant the answer is readable.
+AI_ANSWER_WAIT_SECONDS = 10
+AI_ANSWER_POLL_SECONDS = 1.0
+
+
+def ai_answer_text(page, wait_seconds=None):
+    """Google's own AI answer for this search, or "" when there is none.
+
+    Google answers some of these searches itself, in a block at the top of
+    the results, and that answer is worth far more than a snippet: it is
+    Google's synthesis, it names the school, and it cites where it came
+    from. For "Govt Co-Ed Sr Sec School Sainik Vihar Delhi email address"
+    it returned the school's real Directorate of Education address, while
+    reading the whole page had taken a stranger's Gmail instead.
+
+    It is not always offered - the same search with a Plus Code in it was
+    refused - so this returns "" and the caller reads the rest of the page
+    as before. The refusal text lives in the same container as a real
+    answer, which is why the text is checked and not just the container.
+
+    Two things made this come back empty on every live search before.
+    Google loads the answer AFTER the rest of the page, so reading it
+    straight away found no container - hence the wait. And the words "AI
+    Overview" were required in the text, which is fragile; substantive
+    text in one of these containers, with no refusal in it, IS the answer.
+    """
+    waited = AI_ANSWER_WAIT_SECONDS if wait_seconds is None else wait_seconds
+    deadline = time.monotonic() + waited
+    while True:
+        for body in ai_answer_block(page):
+            if len(body) > AI_ANSWER_MAX_CHARACTERS:
+                continue           # the scaffold, not the answer: keep waiting
+            low = body.lower()
+            if any(no in low for no in AI_ANSWER_REFUSALS):
+                return ""          # it said it has none: stop waiting
+            if len(body) >= AI_ANSWER_MIN_CHARACTERS:
+                return body
+        if time.monotonic() >= deadline:
+            return ""
+        time.sleep(AI_ANSWER_POLL_SECONDS)
+
+
+def ai_answer_block(page):
+    """The texts in Google's AI answer containers right now, as a list.
+
+    Every selector that matched is returned, not just the first: while the
+    answer is loading one of them holds the whole page scaffold, and the
+    caller needs to see them all to tell the answer from the scaffold.
+    Read separately from ``ai_answer_text`` so the waiting lives in one
+    place and this stays a plain read of the page.
+    """
+    blocks = []
+    for selector in AI_ANSWER_SELECTORS:
+        try:
+            found = page.eval_on_selector_all(selector, "els => els.length")
+        except (PlaywrightError, PlaywrightTimeout, AttributeError):
+            continue
+        if not found:
+            continue
+        try:
+            text = page.eval_on_selector(selector, "el => el.innerText") or ""
+        except (PlaywrightError, PlaywrightTimeout, AttributeError):
+            continue
+        body = clean(text)
+        if body and body not in blocks:
+            blocks.append(body)
+    return blocks
+
+
 def run_google_search(browser, query):
     """Open one Google search and hand back its text and its result links.
 
-    Returns ``(text, links, why)``. A blocked search returns no results and
-    says so - it is reported, never worked around.
+    Returns ``(text, links, why, ai_text)``. ``ai_text`` is Google's own
+    AI answer, or "" when it did not give one. A blocked search returns no
+    results and says so - it is reported, never worked around.
     """
     url = GOOGLE_SEARCH_URL % urllib.parse.quote_plus(query)
     page = browser.page()
@@ -6329,7 +6467,14 @@ def run_google_search(browser, query):
     text = browser.text_of(page, "body")
     if looks_blocked(text):
         return "", [], ("Google served a challenge for this search; "
-                        "no official contact was taken from it")
+                        "no official contact was taken from it"), ""
+    # Google's own answer, when it gave one. Returned separately so the
+    # caller can prefer it over the scattered snippets below it.
+    ai_text = ai_answer_text(page)
+    if ai_text:
+        # The wait let the rest of the page finish too; re-read it so the
+        # fallback text is no older than the answer.
+        text = browser.text_of(page, "body") or text
     links = []
     try:
         for href in page.eval_on_selector_all(
@@ -6343,7 +6488,71 @@ def run_google_search(browser, query):
         # No link list is survivable: the snippet text is still read, and
         # without a verified link nothing is written anyway.
         pass
-    return text, links, ""
+    return text, links, "", ai_text
+
+
+#: How well an address matches the school it was found for. A page, and
+#: Google's own answer, often name several: the school's own, a zone or
+#: department address shared by hundreds of schools, and a staff member's
+#: personal Gmail. Taking whichever came first in the text put a
+#: stranger's address against one school and the Directorate of
+#: Education's general mailbox against another, so the candidates are now
+#: ranked and the best one is taken.
+EMAIL_RANK_PLAIN = 1          # nothing ties it to this school but proximity
+EMAIL_RANK_SCHOOL_NAME = 2    # the school's own name is in the address
+EMAIL_RANK_SCHOOL_CODE = 3    # the school's own code is in the address
+EMAIL_RANK_OWN_DOMAIN = 4     # it is on the school's own mail domain
+
+EMAIL_RANK_WHY = {
+    EMAIL_RANK_PLAIN: "the school name and place beside it",
+    EMAIL_RANK_SCHOOL_NAME: "the school's name inside the address",
+    EMAIL_RANK_SCHOOL_CODE: "the school's own code inside the address",
+    EMAIL_RANK_OWN_DOMAIN: "the school's own mail domain",
+}
+
+#: What a page calls a school's own identifying number.
+ID_LABELS = ("school id", "school code", "udise", "dise", "affiliation no",
+             "affiliation number", "school no", "u-dise")
+
+
+def labelled_codes(text):
+    """Every number the text presents as this school's own identifier.
+
+    Only numbers that follow one of ID_LABELS count. A bare number in the
+    text proves nothing - a pin code or a phone number would match - but
+    "School ID: 1411178" does, and an address built on that number
+    (1411178.sv@gmail.com) is the school's own.
+    """
+    codes = set()
+    body = clean(text)
+    low = body.lower()
+    for label in ID_LABELS:
+        at = low.find(label)
+        while at >= 0:
+            # Only the number right after the label. A wider window
+            # reached past it and swallowed the digits of the phone
+            # number printed next to the code.
+            run = re.search(r"\d{5,}", body[at:at + 30])
+            if run:
+                codes.add(run.group(0))
+            at = low.find(label, at + len(label))
+    return codes
+
+
+def email_rank(address, record, haystack):
+    """How strongly an address belongs to THIS school, highest is best."""
+    local, _, domain = address.lower().partition("@")
+    if host_belongs_to_school(domain, record):
+        return EMAIL_RANK_OWN_DOMAIN
+    codes = re.findall(r"\d{5,}", local)
+    if codes and set(codes) & labelled_codes(haystack):
+        return EMAIL_RANK_SCHOOL_CODE
+    letters = re.sub(r"[^a-z]", "", local)
+    if letters:
+        for word in name_words(record.get("School Name", "")):
+            if len(word) >= 4 and word in letters:
+                return EMAIL_RANK_SCHOOL_NAME
+    return EMAIL_RANK_PLAIN
 
 
 def search_evidence(text, record, value, window=350):
@@ -6470,7 +6679,7 @@ def find_official_contacts(director, record):
         query = contact_query(template, record)
         LOG.info("      search: %s", query[:96])
         try:
-            text, _links, why = run_google_search(browser, query)
+            text, _links, why, ai_text = run_google_search(browser, query)
         except (PlaywrightError, PlaywrightTimeout) as error:
             # The browser failed, not Google. No cooldown - but the search
             # did not happen, so the school is still owed one.
@@ -6495,52 +6704,76 @@ def find_official_contacts(director, record):
         if not text or branch_conflict(record, text):
             continue
 
-        # --- the official email, from the results text -----------------
-        if not found["email"] and not have_email:
-            for address in emails_in(text):
+        # GOOGLE'S OWN AI ANSWER FIRST, THE REST OF THE PAGE AFTER.
+        #
+        # When Google answers the question itself, that answer names the
+        # school and cites its sources, so it beats any snippet further
+        # down. Asked for Sainik Vihar it gave the school's Directorate of
+        # Education address; reading the whole page had taken a stranger's
+        # Gmail. Google does not always offer one - the same search with a
+        # Plus Code in it was refused - so this is a preference, not a
+        # requirement: "" simply means the page is read as before.
+        sources = ([("the AI answer", ai_text)] if ai_text else []) + [("the results", text)]
+        if ai_text:
+            LOG.info("      Google answered it itself (%d characters) - "
+                     "reading that first", len(ai_text))
+
+        for where, haystack in sources:
+            if found["email"] or have_email:
+                break
+            best = None
+            for address in emails_in(haystack):
                 domain = address.split("@")[-1]
                 if is_directory_host(domain) or foreign_country_host(domain):
                     continue
                 own_domain = host_belongs_to_school(domain, record)
-                if own_domain or search_evidence(text, record, address):
-                    found["email"] = address
-                    found["email_from"] = "search"
-                    found["notes"].append(
-                        "email verified by %s" % ("the school's own mail "
-                                                  "domain" if own_domain
-                                                  else "the school name and "
-                                                       "place beside it"))
+                if not (own_domain
+                        or search_evidence(haystack, record, address)):
+                    continue
+                rank = email_rank(address, record, haystack)
+                if best is None or rank > best[0]:
+                    best = (rank, address)
+            if best:
+                found["email"] = best[1]
+                found["email_from"] = ("ai" if where == "the AI answer"
+                                       else "search")
+                found["notes"].append("email from %s, verified by %s"
+                                      % (where, EMAIL_RANK_WHY[best[0]]))
+
+        for where, haystack in sources:
+            if found["phone_tie"] >= PHONE_TIE_AI_ANSWER:
+                break
+            # A school's UDISE code is eleven digits and reads exactly like
+            # a landline with an STD code. Google's answer gave "UDISE:
+            # 07010105901" and that went into the phone column. Any number
+            # the text itself labels as an identifier is not a phone.
+            codes = labelled_codes(haystack)
+            for phone in phones_in(haystack):
+                key = phone_key(phone)
+                if not key:
+                    continue
+                if re.sub(r"\D", "", phone) in codes:
+                    continue
+                if phone_evidence(haystack, record, phone):
+                    rank = (PHONE_TIE_AI_ANSWER if where == "the AI answer"
+                            else (PHONE_TIE_PHONE_SEARCH if what == "phone"
+                                  else PHONE_TIE_EMAIL_SEARCH))
+                    why_phone = "phone from %s, named beside the school" % where
+                elif maps_phone and key == maps_phone:
+                    rank = PHONE_TIE_MAPS_CONFIRMED
+                    why_phone = ("the number Google Maps showed, confirmed by "
+                                 "the search")
+                else:
+                    continue
+                if rank > found["phone_tie"]:
+                    found["phone"] = phone
+                    found["phone_from"] = ("ai" if where == "the AI answer"
+                                           else "search")
+                    found["phone_tie"] = rank
+                    found["notes"].append(why_phone)
+                if found["phone_tie"] >= PHONE_TIE_AI_ANSWER:
                     break
 
-        # --- the official phone, from the results text -----------------
-        # A verified search number is PREFERRED over the Maps one, which
-        # is why this can replace a value already on the record.
-        # --- the official phone, from the results text -----------------
-        # How firmly a number is tied to THIS school decides which wins, so
-        # a better-tied one later replaces an earlier one rather than being
-        # dropped because a number was already in hand.
-        for phone in phones_in(text):
-            key = phone_key(phone)
-            if not key:
-                continue
-            if phone_evidence(text, record, phone):
-                rank = (PHONE_TIE_PHONE_SEARCH if what == "phone"
-                        else PHONE_TIE_EMAIL_SEARCH)
-                why = ("phone verified by the school name and place beside "
-                       "it in the %s results" % what)
-            elif maps_phone and key == maps_phone:
-                rank = PHONE_TIE_MAPS_CONFIRMED
-                why = ("the number Google Maps showed, confirmed by the "
-                       "search")
-            else:
-                continue
-            if rank > found["phone_tie"]:
-                found["phone"] = phone
-                found["phone_from"] = "search"
-                found["phone_tie"] = rank
-                found["notes"].append(why)
-            if found["phone_tie"] >= PHONE_TIE_PHONE_SEARCH:
-                break           # nothing can be tied more firmly
 
     if not found["email"] and not have_email:
         found["notes"].append("no official email could be verified - left blank")
