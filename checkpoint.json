@@ -35,7 +35,9 @@
       "email:ripsdkl@gmail.com",
       "phone:9437032662",
       "phone:4044600600",
-      "phone:7682842755"
+      "phone:7682842755",
+      "phone:8327765623",
+      "phone:6762224960"
     ]
   },
   "enriched": {
@@ -66,7 +68,9 @@
       "phone:9437032662",
       "phone:4044600600",
       "name+address:ananda marga dhenkanal|bebartakateni",
-      "phone:7682842755"
+      "phone:7682842755",
+      "phone:8327765623",
+      "phone:6762224960"
     ]
   },
   "completed_cities": [],
@@ -459,6 +463,20 @@
       "city": "Dhenkanal",
       "reason": "Google searching is in its CAPTCHA cooldown for another 111 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:19:39"
+    },
+    {
+      "school": "Satyam International School",
+      "state": "Odisha",
+      "city": "Dhenkanal",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 108 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:22:31"
+    },
+    {
+      "school": "MontFort School",
+      "state": "Odisha",
+      "city": "Dhenkanal",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 104 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:27:12"
     }
   ],
   "duplicates": 0,
@@ -467,7 +485,7 @@
   "git": {
     "branch": "school-data-rank-8",
     "pending": false,
-    "last_ok": "2026-11-19T17:13:12",
+    "last_ok": "2026-11-19T17:21:40",
     "last_error": ""
   },
   "work": {
@@ -476,5 +494,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:21:36"
+  "updated": "2026-11-19T17:30:23"
 }
