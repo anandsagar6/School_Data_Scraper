@@ -47,7 +47,9 @@
       "phone:2435222105",
       "email:aakashganga2017@gmail.com",
       "phone:2135226154",
-      "phone:9850861300"
+      "phone:9850861300",
+      "phone:9226180081",
+      "phone:9850004159"
     ]
   },
   "enriched": {
@@ -93,7 +95,9 @@
       "email:aakashganga2017@gmail.com",
       "name+address:udaan|shantanu complex, behind district court road",
       "phone:2135226154",
-      "phone:9850861300"
+      "phone:9850861300",
+      "phone:9226180081",
+      "phone:9850004159"
     ]
   },
   "completed_cities": [],
@@ -431,6 +435,20 @@
       "city": "Rajgurunagar",
       "reason": "Google searching is in its CAPTCHA cooldown for another 103 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:27:43"
+    },
+    {
+      "school": "Vidyasagar English medium school",
+      "state": "Maharashtra",
+      "city": "Rajgurunagar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 98 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:32:29"
+    },
+    {
+      "school": "ERA KIDS A PLAY SCHOOL",
+      "state": "Maharashtra",
+      "city": "Rajgurunagar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 95 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:36:10"
     }
   ],
   "duplicates": 0,
@@ -439,7 +457,7 @@
   "git": {
     "branch": "school-data-rank-7",
     "pending": false,
-    "last_ok": "2026-11-19T17:22:50",
+    "last_ok": "2026-11-19T17:31:18",
     "last_error": ""
   },
   "work": {
@@ -448,5 +466,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:31:13"
+  "updated": "2026-11-19T17:39:26"
 }
