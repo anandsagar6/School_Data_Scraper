@@ -27,7 +27,9 @@
       "phone:6391600000",
       "email:lsppublicschool@outlook.com",
       "email:tps_spn@rediffmail.com",
-      "email:kv1canttspn@gmail.com"
+      "email:kv1canttspn@gmail.com",
+      "email:kirpalacademy@gmail.com",
+      "phone:9450415403"
     ]
   },
   "enriched": {
@@ -48,7 +50,9 @@
       "phone:6391600000",
       "email:lsppublicschool@outlook.com",
       "email:tps_spn@rediffmail.com",
-      "email:kv1canttspn@gmail.com"
+      "email:kv1canttspn@gmail.com",
+      "email:kirpalacademy@gmail.com",
+      "phone:9450415403"
     ]
   },
   "completed_cities": [],
@@ -312,6 +316,20 @@
       "city": "Shahjahanpur",
       "reason": "Google searching is in its CAPTCHA cooldown for another 5 minute(s) - the official email and phone searches were NOT run",
       "when": "2026-11-19T15:58:06"
+    },
+    {
+      "school": "St. Kirpal Academy",
+      "state": "Uttar Pradesh",
+      "city": "Shahjahanpur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 140 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:13:14"
+    },
+    {
+      "school": "BS Public School",
+      "state": "Uttar Pradesh",
+      "city": "Shahjahanpur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 136 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:17:25"
     }
   ],
   "duplicates": 0,
@@ -320,7 +338,7 @@
   "git": {
     "branch": "school-data-rank-10",
     "pending": false,
-    "last_ok": "2026-11-19T15:53:24",
+    "last_ok": "2026-11-19T16:12:21",
     "last_error": ""
   },
   "work": {
@@ -329,5 +347,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:12:16"
+  "updated": "2026-11-19T16:19:24"
 }
