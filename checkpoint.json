@@ -63,7 +63,8 @@
       "email:asrahosp@gmail.com"
     ],
     "Odisha|Jeypore": [
-      "phone:9937034243"
+      "phone:9937034243",
+      "phone:6854240167"
     ]
   },
   "enriched": {
@@ -123,7 +124,8 @@
     ],
     "Odisha|Jeypore": [
       "phone:9937034243",
-      "name+address:little angels|vh3f+w79, near kcc bank head office"
+      "name+address:little angels|vh3f+w79, near kcc bank head office",
+      "phone:6854240167"
     ]
   },
   "completed_cities": [],
@@ -764,6 +766,13 @@
       "city": "Jeypore",
       "reason": "Google searching is in its CAPTCHA cooldown for another 233 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T19:21:28"
+    },
+    {
+      "school": "Redwoods English School",
+      "state": "Odisha",
+      "city": "Jeypore",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 216 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T19:38:03"
     }
   ],
   "duplicates": 1,
@@ -772,14 +781,14 @@
   "git": {
     "branch": "school-data-rank-8",
     "pending": false,
-    "last_ok": "2026-11-19T19:20:46",
+    "last_ok": "2026-11-19T19:36:10",
     "last_error": ""
   },
   "work": {
-    "period_hours": 0.0,
+    "period_hours": 3.9,
     "breaks_taken": 0,
-    "break_until": "",
-    "reason": ""
+    "break_until": "2026-11-19T20:24:42",
+    "reason": "worked 3.93 h of a 3.9 h period - taking a 42 min break"
   },
-  "updated": "2026-11-19T19:36:06"
+  "updated": "2026-11-19T19:41:57"
 }
