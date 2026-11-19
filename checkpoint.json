@@ -37,7 +37,9 @@
       "phone:4044600600",
       "phone:7682842755",
       "phone:8327765623",
-      "phone:6762224960"
+      "phone:6762224960",
+      "phone:9437188035",
+      "phone:7894972586"
     ]
   },
   "enriched": {
@@ -70,7 +72,9 @@
       "name+address:ananda marga dhenkanal|bebartakateni",
       "phone:7682842755",
       "phone:8327765623",
-      "phone:6762224960"
+      "phone:6762224960",
+      "phone:9437188035",
+      "phone:7894972586"
     ]
   },
   "completed_cities": [],
@@ -477,6 +481,20 @@
       "city": "Dhenkanal",
       "reason": "Google searching is in its CAPTCHA cooldown for another 104 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:27:12"
+    },
+    {
+      "school": "Sanskar Public School",
+      "state": "Odisha",
+      "city": "Dhenkanal",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 98 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:32:30"
+    },
+    {
+      "school": "Lions International School",
+      "state": "Odisha",
+      "city": "Dhenkanal",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 94 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:36:47"
     }
   ],
   "duplicates": 0,
@@ -485,7 +503,7 @@
   "git": {
     "branch": "school-data-rank-8",
     "pending": false,
-    "last_ok": "2026-11-19T17:21:40",
+    "last_ok": "2026-11-19T17:30:28",
     "last_error": ""
   },
   "work": {
@@ -494,5 +512,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:30:23"
+  "updated": "2026-11-19T17:39:14"
 }
