@@ -39,6 +39,10 @@
       "phone:9609010901",
       "email:sirtnsss@gmail.com",
       "phone:3592271200"
+    ],
+    "Sikkim|Tadong": [
+      "phone:9733187407",
+      "phone:8250448118"
     ]
   },
   "enriched": {
@@ -73,7 +77,9 @@
       "name+address:marigold|8jp7+3pv"
     ],
     "Sikkim|Tadong": [
-      "name+address:tiny pearls|8h7r+64q, nh10"
+      "name+address:tiny pearls|8h7r+64q, nh10",
+      "phone:9733187407",
+      "phone:8250448118"
     ]
   },
   "completed_cities": [],
@@ -598,6 +604,20 @@
       "city": "Tadong",
       "reason": "Google searching is in its CAPTCHA cooldown for another 52 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T17:40:51"
+    },
+    {
+      "school": "The Learning Tree",
+      "state": "Sikkim",
+      "city": "Tadong",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 48 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:44:56"
+    },
+    {
+      "school": "Mount Zion Senior School",
+      "state": "Sikkim",
+      "city": "Tadong",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 45 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:48:19"
     }
   ],
   "duplicates": 0,
@@ -606,7 +626,7 @@
   "git": {
     "branch": "school-data-rank-9",
     "pending": false,
-    "last_ok": "2026-11-19T17:38:11",
+    "last_ok": "2026-11-19T17:43:19",
     "last_error": ""
   },
   "work": {
@@ -615,5 +635,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:43:15"
+  "updated": "2026-11-19T17:56:05"
 }
