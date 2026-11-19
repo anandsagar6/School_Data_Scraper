@@ -47,7 +47,9 @@
       "phone:8700608321",
       "phone:9990603603",
       "phone:8090907700",
-      "email:info@shokeeninternationalschool.com"
+      "email:info@shokeeninternationalschool.com",
+      "phone:7065499991",
+      "phone:9810181565"
     ]
   },
   "enriched": {
@@ -87,7 +89,9 @@
       "phone:8700608321",
       "phone:9990603603",
       "phone:8090907700",
-      "email:info@shokeeninternationalschool.com"
+      "email:info@shokeeninternationalschool.com",
+      "phone:7065499991",
+      "phone:9810181565"
     ]
   },
   "completed_cities": [],
@@ -630,6 +634,20 @@
       "city": "Delhi",
       "reason": "Google searching is in its CAPTCHA cooldown for another 112 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:55:46"
+    },
+    {
+      "school": "Icon International School",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 108 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:59:31"
+    },
+    {
+      "school": "Swati Modern Public Secondary School",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 103 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T18:04:25"
     }
   ],
   "duplicates": 0,
@@ -638,7 +656,7 @@
   "git": {
     "branch": "school-data-rank-1",
     "pending": false,
-    "last_ok": "2026-11-19T17:51:17",
+    "last_ok": "2026-11-19T17:57:40",
     "last_error": ""
   },
   "work": {
@@ -647,5 +665,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:57:34"
+  "updated": "2026-11-19T18:12:12"
 }
