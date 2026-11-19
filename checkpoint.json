@@ -44,7 +44,9 @@
       "phone:9844855230",
       "email:inventureashokashaala@gmail.com",
       "phone:9008955251",
-      "phone:9900423456"
+      "phone:9900423456",
+      "email:aksharaipskowdle@gmail.com",
+      "email:bcp651@gmail.com"
     ]
   },
   "enriched": {
@@ -80,7 +82,9 @@
       "name+address:st thomas|pandering kalpana mantapa, 14th cross, chamundeshwari nagar ",
       "name+address:santhome p u college|gv2c+93h, 2nd cross rd",
       "name+address:sadvidya pu college|haniyambadi rd",
-      "name+address:chinmaya mandya|073530 91234"
+      "name+address:chinmaya mandya|073530 91234",
+      "email:aksharaipskowdle@gmail.com",
+      "email:bcp651@gmail.com"
     ]
   },
   "completed_cities": [],
@@ -501,6 +505,20 @@
       "city": "Mandya",
       "reason": "Google searching is in its CAPTCHA cooldown for another 74 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T17:38:49"
+    },
+    {
+      "school": "Akshara International Public School",
+      "state": "Karnataka",
+      "city": "Mandya",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 72 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:40:56"
+    },
+    {
+      "school": "Bharathi College of Pharmacy",
+      "state": "Karnataka",
+      "city": "Mandya",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 68 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:44:44"
     }
   ],
   "duplicates": 0,
@@ -509,7 +527,7 @@
   "git": {
     "branch": "school-data-rank-5",
     "pending": false,
-    "last_ok": "2026-11-19T17:32:59",
+    "last_ok": "2026-11-19T17:40:26",
     "last_error": ""
   },
   "work": {
@@ -518,5 +536,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:40:21"
+  "updated": "2026-11-19T17:46:47"
 }
