@@ -21,7 +21,9 @@
       "phone:6764233166",
       "phone:7207888140",
       "phone:9861086018",
-      "phone:6764236422"
+      "phone:6764236422",
+      "site:antaryamigurukul.in",
+      "email:jnvangul9@gmail.com"
     ]
   },
   "enriched": {
@@ -35,7 +37,9 @@
       "phone:7207888140",
       "phone:9861086018",
       "phone:6764236422",
-      "name+address:angul|r3pv+c8v"
+      "name+address:angul|r3pv+c8v",
+      "site:antaryamigurukul.in",
+      "email:jnvangul9@gmail.com"
     ]
   },
   "completed_cities": [],
@@ -323,6 +327,20 @@
       "city": "Angul",
       "reason": "Google searching is in its CAPTCHA cooldown for another 185 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T16:05:22"
+    },
+    {
+      "school": "Antaryami Gurukul Academy",
+      "state": "Odisha",
+      "city": "Angul",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 179 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:12:04"
+    },
+    {
+      "school": "P.M. S.H.R.I. Jawahar Navodaya Vidyalaya , Champatimunda, Angul",
+      "state": "Odisha",
+      "city": "Angul",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 175 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:15:26"
     }
   ],
   "duplicates": 0,
@@ -331,7 +349,7 @@
   "git": {
     "branch": "school-data-rank-8",
     "pending": false,
-    "last_ok": "2026-11-19T16:04:16",
+    "last_ok": "2026-11-19T16:11:17",
     "last_error": ""
   },
   "work": {
@@ -340,5 +358,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:11:13"
+  "updated": "2026-11-19T16:21:02"
 }
