@@ -41,7 +41,9 @@
       "phone:1149077554",
       "phone:9953646646",
       "email:margaretschooldw@gmail.com",
-      "phone:1147313313"
+      "phone:1147313313",
+      "site:allindiaprivateschools.org",
+      "email:saintramanschool@gmail.com"
     ]
   },
   "enriched": {
@@ -75,7 +77,9 @@
       "phone:1149077554",
       "phone:9953646646",
       "email:margaretschooldw@gmail.com",
-      "phone:1147313313"
+      "phone:1147313313",
+      "site:allindiaprivateschools.org",
+      "email:saintramanschool@gmail.com"
     ]
   },
   "completed_cities": [],
@@ -576,6 +580,20 @@
       "city": "Delhi",
       "reason": "Google searching is in its CAPTCHA cooldown for another 136 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:32:03"
+    },
+    {
+      "school": "All India Private Schools Association",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 132 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:35:28"
+    },
+    {
+      "school": "Saint Raman school",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 128 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:39:29"
     }
   ],
   "duplicates": 0,
@@ -584,7 +602,7 @@
   "git": {
     "branch": "school-data-rank-1",
     "pending": false,
-    "last_ok": "2026-11-19T17:27:20",
+    "last_ok": "2026-11-19T17:34:47",
     "last_error": ""
   },
   "work": {
@@ -593,5 +611,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:34:42"
+  "updated": "2026-11-19T17:43:03"
 }
