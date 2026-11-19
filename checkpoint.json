@@ -39,7 +39,9 @@
       "phone:9870327326",
       "email:newconventschool@yahoo.co.in",
       "phone:1149077554",
-      "phone:9953646646"
+      "phone:9953646646",
+      "email:margaretschooldw@gmail.com",
+      "phone:1147313313"
     ]
   },
   "enriched": {
@@ -71,7 +73,9 @@
       "phone:9870327326",
       "email:newconventschool@yahoo.co.in",
       "phone:1149077554",
-      "phone:9953646646"
+      "phone:9953646646",
+      "email:margaretschooldw@gmail.com",
+      "phone:1147313313"
     ]
   },
   "completed_cities": [],
@@ -558,6 +562,20 @@
       "city": "Delhi",
       "reason": "Google searching is in its CAPTCHA cooldown for another 144 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:24:01"
+    },
+    {
+      "school": "St. Margaret School",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 139 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:28:34"
+    },
+    {
+      "school": "Brain International School",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 136 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:32:03"
     }
   ],
   "duplicates": 0,
@@ -566,7 +584,7 @@
   "git": {
     "branch": "school-data-rank-1",
     "pending": false,
-    "last_ok": "2026-11-19T17:17:19",
+    "last_ok": "2026-11-19T17:27:20",
     "last_error": ""
   },
   "work": {
@@ -575,5 +593,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:27:16"
+  "updated": "2026-11-19T17:34:42"
 }
