@@ -25,7 +25,9 @@
       "phone:7759232662",
       "phone:8871867411",
       "phone:9424144129",
-      "email:dhanirammemorialpublicschool@gmail.com"
+      "email:dhanirammemorialpublicschool@gmail.com",
+      "phone:7772030008",
+      "email:korbastfrancis2019@gmail.com"
     ]
   },
   "enriched": {
@@ -43,7 +45,9 @@
       "name+address:little lamp|9p4h+344",
       "phone:9424144129",
       "name+address:ghordewa|government higher secondary school ghordeva",
-      "email:dhanirammemorialpublicschool@gmail.com"
+      "email:dhanirammemorialpublicschool@gmail.com",
+      "phone:7772030008",
+      "email:korbastfrancis2019@gmail.com"
     ]
   },
   "completed_cities": [],
@@ -265,6 +269,20 @@
       "city": "Korba District",
       "reason": "Google searching is in its CAPTCHA cooldown for another 18 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T15:56:01"
+    },
+    {
+      "school": "AARYAN PUBLIC SCHOOL",
+      "state": "Chhattisgarh",
+      "city": "Korba District",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 11 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T16:02:59"
+    },
+    {
+      "school": "St.Francis English Medium School",
+      "state": "Chhattisgarh",
+      "city": "Korba District",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 9 minute(s) - the official email and phone searches were NOT run",
+      "when": "2026-11-19T16:05:15"
     }
   ],
   "duplicates": 0,
@@ -273,7 +291,7 @@
   "git": {
     "branch": "school-data-rank-3",
     "pending": false,
-    "last_ok": "2026-11-19T15:55:12",
+    "last_ok": "2026-11-19T16:01:31",
     "last_error": ""
   },
   "work": {
@@ -282,5 +300,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:01:27"
+  "updated": "2026-11-19T16:11:02"
 }
