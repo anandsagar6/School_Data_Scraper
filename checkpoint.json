@@ -64,7 +64,9 @@
       "name+address:lions|9p43+6h3",
       "phone:7428096975",
       "phone:9907927255",
-      "phone:7999576814"
+      "phone:7999576814",
+      "name+address:korba|10, m p nagar",
+      "name+address:balco township|cq58+gx8"
     ]
   },
   "completed_cities": [],
@@ -436,6 +438,20 @@
       "city": "Korba District",
       "reason": "Google searching is in its CAPTCHA cooldown for another 179 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:07:37"
+    },
+    {
+      "school": "Korba Public School",
+      "state": "Chhattisgarh",
+      "city": "Korba District",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 175 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:11:39"
+    },
+    {
+      "school": "Balco Township School",
+      "state": "Chhattisgarh",
+      "city": "Korba District",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 172 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:15:13"
     }
   ],
   "duplicates": 0,
@@ -444,7 +460,7 @@
   "git": {
     "branch": "school-data-rank-3",
     "pending": false,
-    "last_ok": "2026-11-19T17:05:11",
+    "last_ok": "2026-11-19T17:10:57",
     "last_error": ""
   },
   "work": {
@@ -453,5 +469,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:10:53"
+  "updated": "2026-11-19T17:17:27"
 }
