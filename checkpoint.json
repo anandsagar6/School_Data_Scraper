@@ -32,7 +32,8 @@
       "email:dpskdn1996@gmail.com",
       "email:infodg@thesamarthschool.edu.in",
       "phone:1126142270",
-      "phone:9811131112"
+      "phone:9811131112",
+      "phone:1127040970"
     ]
   },
   "enriched": {
@@ -56,7 +57,9 @@
       "email:dpskdn1996@gmail.com",
       "email:infodg@thesamarthschool.edu.in",
       "phone:1126142270",
-      "phone:9811131112"
+      "phone:9811131112",
+      "name+address:stmartin delhi cantt|19, asalatpur rd",
+      "phone:1127040970"
     ]
   },
   "completed_cities": [],
@@ -487,6 +490,20 @@
       "city": "Delhi",
       "reason": "Google searching is in its CAPTCHA cooldown for another 170 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T16:57:33"
+    },
+    {
+      "school": "stmartin school delhi cantt",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 167 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:00:53"
+    },
+    {
+      "school": "Rohini Public School",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 165 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:02:22"
     }
   ],
   "duplicates": 0,
@@ -495,7 +512,7 @@
   "git": {
     "branch": "school-data-rank-1",
     "pending": false,
-    "last_ok": "2026-11-19T16:53:05",
+    "last_ok": "2026-11-19T16:59:08",
     "last_error": ""
   },
   "work": {
@@ -504,5 +521,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:59:04"
+  "updated": "2026-11-19T17:05:24"
 }
