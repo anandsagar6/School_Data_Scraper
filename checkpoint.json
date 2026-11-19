@@ -35,7 +35,9 @@
       "phone:8884370070",
       "phone:8105696709",
       "phone:9480764900",
-      "phone:9844545101"
+      "phone:9844545101",
+      "site:60e40b6447e41.site123.me",
+      "phone:9916156256"
     ]
   },
   "enriched": {
@@ -58,7 +60,9 @@
       "phone:8884370070",
       "phone:8105696709",
       "phone:9480764900",
-      "phone:9844545101"
+      "phone:9844545101",
+      "site:60e40b6447e41.site123.me",
+      "phone:9916156256"
     ]
   },
   "completed_cities": [],
@@ -388,6 +392,20 @@
       "city": "Mandya",
       "reason": "Google searching is in its CAPTCHA cooldown for another 134 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T16:39:00"
+    },
+    {
+      "school": "Anikethana school of education ,high school & PUC",
+      "state": "Karnataka",
+      "city": "Mandya",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 129 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:44:20"
+    },
+    {
+      "school": "EuroKids Preschool - Vidayanagar, Mandya",
+      "state": "Karnataka",
+      "city": "Mandya",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 125 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:47:48"
     }
   ],
   "duplicates": 0,
@@ -396,7 +414,7 @@
   "git": {
     "branch": "school-data-rank-5",
     "pending": false,
-    "last_ok": "2026-11-19T16:35:12",
+    "last_ok": "2026-11-19T16:42:04",
     "last_error": ""
   },
   "work": {
@@ -405,5 +423,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:41:58"
+  "updated": "2026-11-19T16:58:49"
 }
