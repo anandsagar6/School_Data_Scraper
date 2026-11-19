@@ -43,7 +43,9 @@
       "phone:9453039580",
       "email:jnvdhenkanal@gmail.com",
       "phone:7978009732",
-      "phone:7077263579"
+      "phone:7077263579",
+      "email:principaldpsdhenkanal@gmail.com",
+      "email:kvdhenkanaltown@gmail.com"
     ]
   },
   "enriched": {
@@ -83,7 +85,9 @@
       "phone:9453039580",
       "email:jnvdhenkanal@gmail.com",
       "phone:7978009732",
-      "phone:7077263579"
+      "phone:7077263579",
+      "email:principaldpsdhenkanal@gmail.com",
+      "email:kvdhenkanaltown@gmail.com"
     ]
   },
   "completed_cities": [],
@@ -539,6 +543,20 @@
       "city": "Dhenkanal",
       "reason": "Google searching is in its CAPTCHA cooldown for another 70 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T18:00:18"
+    },
+    {
+      "school": "Delhi Public School DHENKANAL",
+      "state": "Odisha",
+      "city": "Dhenkanal",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 65 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:05:41"
+    },
+    {
+      "school": "Kendriya Vidyalaya",
+      "state": "Odisha",
+      "city": "Dhenkanal",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 63 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:07:41"
     }
   ],
   "duplicates": 0,
@@ -547,7 +565,7 @@
   "git": {
     "branch": "school-data-rank-8",
     "pending": false,
-    "last_ok": "2026-11-19T17:54:07",
+    "last_ok": "2026-11-19T18:03:27",
     "last_error": ""
   },
   "work": {
@@ -556,5 +574,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T18:03:23"
+  "updated": "2026-11-19T18:10:24"
 }
