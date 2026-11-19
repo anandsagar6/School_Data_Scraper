@@ -33,7 +33,9 @@
       "phone:9416123377",
       "email:holychildschool@hotmail.com",
       "email:lapshisar@gmail.com",
-      "email:rishikul.hsr@gmail.com"
+      "email:rishikul.hsr@gmail.com",
+      "email:info@nypshisar.edu.in",
+      "email:ppshsr20127@gmail.com"
     ]
   },
   "enriched": {
@@ -59,7 +61,9 @@
       "phone:9416123377",
       "email:holychildschool@hotmail.com",
       "email:lapshisar@gmail.com",
-      "email:rishikul.hsr@gmail.com"
+      "email:rishikul.hsr@gmail.com",
+      "email:info@nypshisar.edu.in",
+      "email:ppshsr20127@gmail.com"
     ]
   },
   "completed_cities": [],
@@ -424,6 +428,20 @@
       "city": "Hisar",
       "reason": "Google searching is in its CAPTCHA cooldown for another 168 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:18:26"
+    },
+    {
+      "school": "New Yashoda Public School",
+      "state": "Haryana",
+      "city": "Hisar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 162 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:24:44"
+    },
+    {
+      "school": "DAV Police Public School, Hisar",
+      "state": "Haryana",
+      "city": "Hisar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 158 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:28:28"
     }
   ],
   "duplicates": 0,
@@ -432,7 +450,7 @@
   "git": {
     "branch": "school-data-rank-4",
     "pending": false,
-    "last_ok": "2026-11-19T17:17:30",
+    "last_ok": "2026-11-19T17:23:56",
     "last_error": ""
   },
   "work": {
@@ -441,5 +459,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:23:52"
+  "updated": "2026-11-19T17:30:49"
 }
