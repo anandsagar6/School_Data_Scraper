@@ -43,7 +43,9 @@
       "email:margaretschooldw@gmail.com",
       "phone:1147313313",
       "site:allindiaprivateschools.org",
-      "email:saintramanschool@gmail.com"
+      "email:saintramanschool@gmail.com",
+      "phone:8700608321",
+      "phone:9990603603"
     ]
   },
   "enriched": {
@@ -79,7 +81,9 @@
       "email:margaretschooldw@gmail.com",
       "phone:1147313313",
       "site:allindiaprivateschools.org",
-      "email:saintramanschool@gmail.com"
+      "email:saintramanschool@gmail.com",
+      "phone:8700608321",
+      "phone:9990603603"
     ]
   },
   "completed_cities": [],
@@ -594,6 +598,20 @@
       "city": "Delhi",
       "reason": "Google searching is in its CAPTCHA cooldown for another 128 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:39:29"
+    },
+    {
+      "school": "Vivek Modern School",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 124 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:43:45"
+    },
+    {
+      "school": "Grow High International School",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 119 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:48:58"
     }
   ],
   "duplicates": 0,
@@ -602,7 +620,7 @@
   "git": {
     "branch": "school-data-rank-1",
     "pending": false,
-    "last_ok": "2026-11-19T17:34:47",
+    "last_ok": "2026-11-19T17:43:08",
     "last_error": ""
   },
   "work": {
@@ -611,5 +629,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:43:03"
+  "updated": "2026-11-19T17:51:11"
 }
