@@ -28,7 +28,9 @@
       "email:dhanirammemorialpublicschool@gmail.com",
       "phone:7772030008",
       "email:korbastfrancis2019@gmail.com",
-      "phone:9165695013"
+      "phone:9165695013",
+      "phone:7587706495",
+      "phone:7759249351"
     ]
   },
   "enriched": {
@@ -49,7 +51,9 @@
       "email:dhanirammemorialpublicschool@gmail.com",
       "phone:7772030008",
       "email:korbastfrancis2019@gmail.com",
-      "phone:9165695013"
+      "phone:9165695013",
+      "phone:7587706495",
+      "phone:7759249351"
     ]
   },
   "completed_cities": [],
@@ -292,6 +296,20 @@
       "city": "Korba District",
       "reason": "Google searching is in its CAPTCHA cooldown for another 2 minute(s) - the official email and phone searches were NOT run",
       "when": "2026-11-19T16:12:33"
+    },
+    {
+      "school": "SUMAN BHARTI HR.SEC.SCHOOL",
+      "state": "Chhattisgarh",
+      "city": "Korba District",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 222 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:24:41"
+    },
+    {
+      "school": "Career Public School",
+      "state": "Chhattisgarh",
+      "city": "Korba District",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 219 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:28:11"
     }
   ],
   "duplicates": 0,
@@ -300,7 +318,7 @@
   "git": {
     "branch": "school-data-rank-3",
     "pending": false,
-    "last_ok": "2026-11-19T16:11:06",
+    "last_ok": "2026-11-19T16:22:21",
     "last_error": ""
   },
   "work": {
@@ -309,5 +327,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:22:18"
+  "updated": "2026-11-19T16:31:39"
 }
