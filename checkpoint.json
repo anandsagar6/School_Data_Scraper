@@ -33,7 +33,9 @@
     "Karnataka|Mandya": [
       "phone:9482441172",
       "phone:8884370070",
-      "phone:8105696709"
+      "phone:8105696709",
+      "phone:9480764900",
+      "phone:9844545101"
     ]
   },
   "enriched": {
@@ -54,7 +56,9 @@
     "Karnataka|Mandya": [
       "phone:9482441172",
       "phone:8884370070",
-      "phone:8105696709"
+      "phone:8105696709",
+      "phone:9480764900",
+      "phone:9844545101"
     ]
   },
   "completed_cities": [],
@@ -370,6 +374,20 @@
       "city": "Mandya",
       "reason": "Google searching is in its CAPTCHA cooldown for another 149 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T16:23:47"
+    },
+    {
+      "school": "Ideal montessori, Mandya",
+      "state": "Karnataka",
+      "city": "Mandya",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 137 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:35:45"
+    },
+    {
+      "school": "Kidzee Pre school Chamundeshwari nagar Mandya",
+      "state": "Karnataka",
+      "city": "Mandya",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 134 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:39:00"
     }
   ],
   "duplicates": 0,
@@ -378,7 +396,7 @@
   "git": {
     "branch": "school-data-rank-5",
     "pending": false,
-    "last_ok": "2026-11-19T16:18:52",
+    "last_ok": "2026-11-19T16:35:12",
     "last_error": ""
   },
   "work": {
@@ -387,5 +405,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:35:08"
+  "updated": "2026-11-19T16:41:58"
 }
