@@ -10,7 +10,11 @@
   ],
   "current_keyword": "Private Schools",
   "discovery_done": {},
-  "keywords_done": {},
+  "keywords_done": {
+    "Odisha|Dhenkanal": [
+      "Private Schools"
+    ]
+  },
   "committed": {
     "Odisha|Angul": [
       "email:abnlsarangl@gmail.com",
@@ -89,7 +93,8 @@
       "email:principaldpsdhenkanal@gmail.com",
       "email:kvdhenkanaltown@gmail.com",
       "name+address:sarion up|jgwj+3qf, kankadhad, sarion road",
-      "name+address:odisha adarsha mahisapat dhenkanal|jjf2+275, unnamed road"
+      "name+address:odisha adarsha mahisapat dhenkanal|jjf2+275, unnamed road",
+      "name+address:brajnath badjena|mj23+8cw"
     ]
   },
   "completed_cities": [],
@@ -573,6 +578,13 @@
       "city": "Dhenkanal",
       "reason": "Google searching is in its CAPTCHA cooldown for another 55 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T18:16:07"
+    },
+    {
+      "school": "Brajnath Badjena High School",
+      "state": "Odisha",
+      "city": "Dhenkanal",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 49 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:21:38"
     }
   ],
   "duplicates": 0,
@@ -581,7 +593,7 @@
   "git": {
     "branch": "school-data-rank-8",
     "pending": false,
-    "last_ok": "2026-11-19T18:10:29",
+    "last_ok": "2026-11-19T18:20:58",
     "last_error": ""
   },
   "work": {
@@ -590,5 +602,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T18:20:54"
+  "updated": "2026-11-19T18:22:40"
 }
