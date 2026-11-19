@@ -33,7 +33,9 @@
       "email:infodg@thesamarthschool.edu.in",
       "phone:1126142270",
       "phone:9811131112",
-      "phone:1127040970"
+      "phone:1127040970",
+      "phone:9999464846",
+      "email:student@srcapital.in"
     ]
   },
   "enriched": {
@@ -59,7 +61,9 @@
       "phone:1126142270",
       "phone:9811131112",
       "name+address:stmartin delhi cantt|19, asalatpur rd",
-      "phone:1127040970"
+      "phone:1127040970",
+      "phone:9999464846",
+      "email:student@srcapital.in"
     ]
   },
   "completed_cities": [],
@@ -504,6 +508,20 @@
       "city": "Delhi",
       "reason": "Google searching is in its CAPTCHA cooldown for another 165 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:02:22"
+    },
+    {
+      "school": "Venus Public School",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 162 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:06:08"
+    },
+    {
+      "school": "SR Capital Senior Secondary School",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 159 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:09:02"
     }
   ],
   "duplicates": 0,
@@ -512,7 +530,7 @@
   "git": {
     "branch": "school-data-rank-1",
     "pending": false,
-    "last_ok": "2026-11-19T16:59:08",
+    "last_ok": "2026-11-19T17:05:29",
     "last_error": ""
   },
   "work": {
@@ -521,5 +539,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:05:24"
+  "updated": "2026-11-19T17:11:03"
 }
