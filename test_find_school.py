@@ -9,12 +9,14 @@ data.
     python3 test_find_school.py
 """
 
+import contextlib
 import importlib.util
 import inspect
 import datetime
 import json
 import logging
 import os
+import re
 import shutil
 import sys
 import tempfile
@@ -147,6 +149,55 @@ class Sandbox:
         for name, value in self.kept.items():
             setattr(fs, name, value)
         shutil.rmtree(self.folder, ignore_errors=True)
+
+
+@contextlib.contextmanager
+def pinned_scrolling(presses):
+    """Hold the Maps scrolling settings still for one measurement, in a
+    throwaway folder.
+
+    DOWN_PRESSES_PER_ROUND and SCROLL_PAUSE_SECONDS are random draws on
+    purpose, which makes any measurement of them unrepeatable - and the
+    real pause is tens of seconds, far too slow for a test. A test that
+    needs a deterministic answer pins them here and puts them back, so
+    the configured expressions in the file are never edited.
+
+    TEMP_DIR IS REDIRECTED TOO. Collecting writes the copied list to
+    TEMP_DIR, and a caller outside SandboxTest still has the real one, so
+    running the suite inside a production directory left a synthetic
+    "Karnataka_Bengaluru_private_schools.txt" among that rank's real
+    captures. Isolating it here protects every caller whatever its base
+    class, which matters because the suite is run on each laptop during a
+    deployment.
+    """
+    kept = (fs.DOWN_PRESSES_PER_ROUND, fs.SCROLL_PAUSE_SECONDS,
+            fs.DOWN_KEY_PAUSE_SECONDS, fs.PAGE_SETTLE_SECONDS,
+            fs.TEMP_DIR, fs.OUTPUT_DIR, fs.EXCEL_DIR)
+    folder = tempfile.mkdtemp(prefix="pinned_scrolling_")
+    fs.DOWN_PRESSES_PER_ROUND = presses
+    fs.SCROLL_PAUSE_SECONDS = 0
+    fs.DOWN_KEY_PAUSE_SECONDS = 0
+    fs.PAGE_SETTLE_SECONDS = 0
+    fs.OUTPUT_DIR = folder
+    fs.TEMP_DIR = os.path.join(folder, "Temp_Data")
+    fs.EXCEL_DIR = os.path.join(folder, "Excel_Data")
+    os.makedirs(fs.TEMP_DIR, exist_ok=True)
+    os.makedirs(fs.EXCEL_DIR, exist_ok=True)
+    try:
+        yield
+    finally:
+        (fs.DOWN_PRESSES_PER_ROUND, fs.SCROLL_PAUSE_SECONDS,
+         fs.DOWN_KEY_PAUSE_SECONDS, fs.PAGE_SETTLE_SECONDS,
+         fs.TEMP_DIR, fs.OUTPUT_DIR, fs.EXCEL_DIR) = kept
+        shutil.rmtree(folder, ignore_errors=True)
+
+
+def press_range():
+    """(lowest, highest) presses per round, whatever form the setting takes."""
+    span = fs.DOWN_PRESSES_PER_ROUND
+    if isinstance(span, (int, float)):
+        return int(span), int(span)
+    return int(span[0]), int(span[1])
 
 
 class SandboxTest(unittest.TestCase):
@@ -2879,7 +2930,28 @@ class NoCapTests(SandboxTest):
         self.assertEqual(result.reason,
                          "end-of-list message in the copied text")
         self.assertEqual(len(result.records), 200)
-        self.assertGreater(result.snapshots, 40)
+        # How MANY copies it takes depends on the press count, which is a
+        # random draw; that all 200 arrive is the invariant. Measured from
+        # 10 to 100 presses per round: always 200 records, 48 copies down
+        # to 6.
+        self.assertGreater(result.snapshots, 1)
+
+    def test_no_school_is_lost_at_either_end_of_the_press_range(self):
+        """Each copy takes the WHOLE list, so a bigger press count means
+        fewer copies, never fewer schools."""
+        low, high = press_range()
+        for presses in (low, high):
+            with pinned_scrolling(presses):
+                page = FakeMapsPage([maps_entry(n) for n in range(1, 201)],
+                                    per_scroll=5, visible=5)
+                result = fs.collect_search(FakeBrowser([page]),
+                                           "Private Schools", "Karnataka",
+                                           "Bengaluru")
+            self.assertTrue(result.complete, presses)
+            self.assertEqual(result.reason,
+                             "end-of-list message in the copied text")
+            self.assertEqual(len(result.records), 200,
+                             "%d presses per round lost schools" % presses)
 
     def test_a_list_that_never_ends_still_stops_on_its_own(self):
         """No cap must not mean an endless loop."""
@@ -3087,7 +3159,11 @@ class UserSettingsTests(unittest.TestCase):
         # is still checked, by this bound and the span below.
         self.assertLess(max(lines), 150,
                         "a user setting is far down the file")
-        self.assertLess(max(lines) - min(lines), 60,
+        # 80, not 60: base_github_url and final_github_url
+        # joined the block, which is what this test wants - the settings
+        # TOGETHER and near the top - so the bound follows the block rather
+        # than the block being squeezed. Same value as on master.
+        self.assertLess(max(lines) - min(lines), 80,
                         "the user settings are not in one block")
 
     def test_the_pacing_settings_are_right_below_the_imports(self):
@@ -3164,14 +3240,55 @@ class UserSettingsTests(unittest.TestCase):
         self.assertNotIn("SEARCH_TIMEOUT_SECONDS", source)
         self.assertIn("END_OF_LIST_MARKERS", source)
 
+    def test_the_suite_writes_nothing_into_the_real_temp_folder(self):
+        """A deployment runs this suite on a production laptop. It must not
+        leave a synthetic capture among that rank's real ones."""
+        before = set(os.listdir(fs.TEMP_DIR)) if os.path.isdir(fs.TEMP_DIR) else set()
+        real_temp = fs.TEMP_DIR
+        with pinned_scrolling(press_range()[0]):
+            self.assertNotEqual(fs.TEMP_DIR, real_temp,
+                                "TEMP_DIR was not redirected")
+            page = FakeMapsPage([maps_entry(n) for n in range(1, 21)],
+                                per_scroll=5, visible=5)
+            fs.collect_search(FakeBrowser([page]), "Private Schools",
+                              "Karnataka", "Bengaluru")
+        after = set(os.listdir(fs.TEMP_DIR)) if os.path.isdir(fs.TEMP_DIR) else set()
+        self.assertEqual(after, before,
+                         "the suite left files in the real Temp_Data: %s"
+                         % sorted(after - before))
+
     def test_giving_up_is_measured_in_presses_not_copies(self):
-        """Changing DOWN_PRESSES_PER_ROUND must not end searches early."""
+        """Giving up is counted in PRESSES, so the press-per-round setting
+        cannot shorten a search.
+
+        It used to divide the threshold by DOWN_PRESSES_PER_ROUND and
+        demand at least 15 copies. That was a proxy for "do not stop
+        early", and it stopped meaning anything once the setting became a
+        random draw: a high draw needs fewer copies to press the same
+        number of times. The threshold itself is what must not collapse,
+        so that is what is asserted - at both ends of the range, with the
+        count pinned so the test is deterministic.
+        """
         self.assertGreaterEqual(fs.SCROLL_NO_PROGRESS_PRESSES, 120)
-        rounds = fs.SCROLL_NO_PROGRESS_PRESSES / max(
-            fs.DOWN_PRESSES_PER_ROUND, 1)
-        self.assertGreaterEqual(
-            rounds, 15,
-            "a search would give up after only %.0f copies" % rounds)
+        low, high = press_range()
+        for presses in (low, high):
+            with pinned_scrolling(presses):
+                page = FakeMapsPage([maps_entry(n) for n in range(1, 201)],
+                                    per_scroll=5, visible=5,
+                                    end_message=False)
+                result = fs.collect_search(FakeBrowser([page]),
+                                           "Private Schools", "Karnataka",
+                                           "Bengaluru")
+            # it gave up only after pressing at least the threshold
+            pressed = int(re.search(r"\((\d+) Down presses\)",
+                                    result.reason).group(1))
+            self.assertGreaterEqual(
+                pressed, fs.SCROLL_NO_PROGRESS_PRESSES,
+                "%d presses per round gave up after only %d presses"
+                % (presses, pressed))
+            # and nothing was lost on the way to giving up
+            self.assertEqual(len(result.records), 200,
+                             "%d presses per round lost schools" % presses)
 
 
 # ===========================================================================
@@ -3906,11 +4023,20 @@ class ContactDuplicateTests(SandboxTest):
                          "www and a path made the same site look different")
 
     def test_the_same_phone_number_is_a_duplicate(self):
+        """One number written two ways must give one key.
+
+        The second name differs so that the PHONE is the only key that can
+        match - that is the point of the test. It used to be "River School
+        Annexe", but "annexe" now names a campus, which makes these two
+        different schools for a reason that has nothing to do with phone
+        formatting. A plainly different name tests the same thing without
+        confusing the two questions.
+        """
         first = school("River School",
                        **{"PIN Code": "560003", "School Address": "3 Road",
                           "School Official Phone Number": "+91 98111 22333"})
         self._save(first)
-        again = school("River School Annexe",
+        again = school("River Vidyalaya",
                        **{"PIN Code": "560003", "School Address": "3 Road",
                           "School Official Phone Number": "09811122333"})
         self.assertEqual(self._save(again), (0, 1),
@@ -4302,10 +4428,11 @@ class SchoolTypeComesFromTheKeywordTests(SandboxTest):
         self.assertEqual(len(fs.SCHOOL_COLUMNS), 57)
 
     def test_the_keyword_decides_the_value(self):
+        # only the two allowed values; any other keyword adds no category
         for keyword, expected in (("Private Schools", "Private"),
                                   ("Government Schools", "Government"),
-                                  ("International Schools", "International"),
-                                  ("Boarding School", "Boarding"),
+                                  ("International Schools", ""),
+                                  ("Boarding School", ""),
                                   ("  Private   Schools  ", "Private")):
             self.assertEqual(fs.school_type_for_keyword(keyword), expected,
                              keyword)
@@ -4321,9 +4448,7 @@ class SchoolTypeComesFromTheKeywordTests(SandboxTest):
         for record in records:
             self.assertEqual(record[fs.SCHOOL_TYPE_COLUMN], "Government")
 
-    def test_a_type_already_set_is_not_overwritten(self):
-        # a school found earlier by another keyword keeps the type that
-        # found it, rather than being relabelled by a later keyword
+    def test_private_is_never_downgraded_by_a_later_keyword(self):
         record = fs.blank_record()
         record[fs.SCHOOL_TYPE_COLUMN] = "Private"
         fs.stamp_school_type([record], "Government Schools")
@@ -4395,3 +4520,492 @@ class SchoolTypeComesFromTheKeywordTests(SandboxTest):
         # and after BOTH ways records are obtained
         self.assertLess(source.index("found.records = saved_records"), stamp)
         self.assertLess(source.index("found = collect_search"), stamp)
+
+
+class SchoolTypeIsPrivateOrGovernmentTests(SandboxTest):
+    """The column may hold only Private or Government, it comes from the
+    keyword, and one school found under both is Private whichever keyword
+    reached it first."""
+
+    def school(self, name="ABC School", school_type="", **extra):
+        record = fs.blank_record()
+        record.update({"School Name": name, "City": "Bengaluru",
+                       "State": "Karnataka", "Country": "India",
+                       "School Address": "12 MG Road, Bengaluru",
+                       "PIN Code": "560001",
+                       "School Official Phone Number": "08022221111"})
+        if school_type:
+            record[fs.SCHOOL_TYPE_COLUMN] = school_type
+        record.update(extra)
+        return record
+
+    # ---------------------------------------------- the allowed values
+    def test_only_two_values_are_allowed(self):
+        self.assertEqual(fs.SCHOOL_TYPES_ALLOWED, ("Private", "Government"))
+
+    def test_the_keyword_gives_private_or_government(self):
+        self.assertEqual(fs.school_type_for_keyword("Private Schools"),
+                         "Private")
+        self.assertEqual(fs.school_type_for_keyword("Government Schools"),
+                         "Government")
+
+    def test_any_other_keyword_gives_nothing_rather_than_a_new_category(self):
+        for keyword in ("International Schools", "CBSE Schools",
+                        "Boarding School", "Residential Schools", ""):
+            self.assertEqual(fs.school_type_for_keyword(keyword), "",
+                             keyword)
+
+    def test_a_keyword_naming_both_is_not_a_classification(self):
+        self.assertEqual(
+            fs.school_type_for_keyword("Private Government Schools"), "")
+
+    def test_no_other_value_passes_validation(self):
+        for bad in ("Public", "Other", "Unknown", "International",
+                    "Co-Educational", "private school", ""):
+            self.assertEqual(fs.valid_school_type(bad), "", bad)
+        # capitalisation is corrected rather than rejected
+        self.assertEqual(fs.valid_school_type("private"), "Private")
+        self.assertEqual(fs.valid_school_type("GOVERNMENT"), "Government")
+
+    # ------------------------------------- the four required combinations
+    def test_the_four_duplicate_combinations(self):
+        for existing, incoming, expected in (
+                ("Government", "Private", "Private"),
+                ("Private", "Government", "Private"),
+                ("Private", "Private", "Private"),
+                ("Government", "Government", "Government")):
+            self.assertEqual(fs.better_school_type(existing, incoming),
+                             expected, "%s + %s" % (existing, incoming))
+
+    def test_a_merge_settles_the_type_in_either_order(self):
+        for first, second in (("Government", "Private"),
+                              ("Private", "Government")):
+            kept = self.school(school_type=first)
+            fs.merge_records(kept, self.school(school_type=second))
+            self.assertEqual(kept[fs.SCHOOL_TYPE_COLUMN], "Private",
+                             "%s then %s" % (first, second))
+
+    def test_government_twice_stays_government(self):
+        kept = self.school(school_type="Government")
+        fs.merge_records(kept, self.school(school_type="Government"))
+        self.assertEqual(kept[fs.SCHOOL_TYPE_COLUMN], "Government")
+
+    # ------------------------------------------------- stamping a keyword
+    def test_every_record_of_the_private_keyword_gets_private(self):
+        records = [self.school("School %d" % n) for n in range(3)]
+        fs.stamp_school_type(records, "Private Schools")
+        for record in records:
+            self.assertEqual(record[fs.SCHOOL_TYPE_COLUMN], "Private")
+
+    def test_every_record_of_the_government_keyword_gets_government(self):
+        records = [self.school("School %d" % n) for n in range(3)]
+        fs.stamp_school_type(records, "Government Schools")
+        for record in records:
+            self.assertEqual(record[fs.SCHOOL_TYPE_COLUMN], "Government")
+
+    def test_the_private_keyword_upgrades_a_government_record(self):
+        record = self.school(school_type="Government")
+        fs.stamp_school_type([record], "Private Schools")
+        self.assertEqual(record[fs.SCHOOL_TYPE_COLUMN], "Private")
+
+    def test_the_government_keyword_does_not_downgrade_private(self):
+        record = self.school(school_type="Private")
+        fs.stamp_school_type([record], "Government Schools")
+        self.assertEqual(record[fs.SCHOOL_TYPE_COLUMN], "Private")
+
+    def test_a_legacy_value_is_replaced_by_the_keyword(self):
+        record = self.school(school_type="Co-Educational")
+        fs.stamp_school_type([record], "Government Schools")
+        self.assertEqual(record[fs.SCHOOL_TYPE_COLUMN], "Government")
+
+    def test_an_unusable_keyword_stamps_nothing(self):
+        record = self.school(school_type="Private")
+        self.assertEqual(fs.stamp_school_type([record],
+                                              "International Schools"), 0)
+        self.assertEqual(record[fs.SCHOOL_TYPE_COLUMN], "Private")
+
+    # ------------------------------------------------- only one record
+    def test_a_duplicate_makes_one_record_not_two(self):
+        index = fs.SchoolIndex()
+        index.add(self.school(school_type="Government"))
+        new, merged = fs.merge_into_index(
+            index, [self.school(school_type="Private")])
+        self.assertEqual((new, merged, len(index)), (0, 1, 1))
+        self.assertEqual(index.records[0][fs.SCHOOL_TYPE_COLUMN], "Private")
+
+    def test_two_campuses_are_never_merged(self):
+        index = fs.SchoolIndex()
+        index.add(self.school(school_type="Private", **{"PIN Code": "560001"}))
+        fs.merge_into_index(index, [self.school(school_type="Government",
+                                                **{"PIN Code": "560038"})])
+        self.assertEqual(len(index), 2)
+
+    # ------------------------------- correcting a row already in Excel
+    def test_a_saved_government_row_is_corrected_to_private(self):
+        saved = self.school(school_type="Government")
+        fs.append_records([saved])
+        rows = fs.read_records(fs.master_path())
+        self.assertEqual(rows[0][fs.SCHOOL_TYPE_COLUMN], "Government")
+        # the same school turns up again under the Private keyword
+        again = self.school(school_type="Private")
+        added, skipped = fs.append_records([again])
+        self.assertEqual((added, skipped), (0, 1), "it must not add a row")
+        rows = fs.read_records(fs.master_path())
+        self.assertEqual(len(rows), 1, "still one row")
+        self.assertEqual(rows[0][fs.SCHOOL_TYPE_COLUMN], "Private")
+
+    def test_a_saved_private_row_is_not_downgraded(self):
+        fs.append_records([self.school(school_type="Private")])
+        fs.append_records([self.school(school_type="Government")])
+        rows = fs.read_records(fs.master_path())
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0][fs.SCHOOL_TYPE_COLUMN], "Private")
+
+    def test_the_correction_changes_no_other_column(self):
+        saved = self.school(school_type="Government")
+        saved["School Official Email"] = "office@abcschool.edu.in"
+        saved["Additional School Notes"] = "keep me"
+        fs.append_records([saved])
+        before = fs.read_records(fs.master_path())[0]
+        fs.append_records([self.school(school_type="Private")])
+        after = fs.read_records(fs.master_path())[0]
+        for column in fs.SCHOOL_COLUMNS:
+            if column == fs.SCHOOL_TYPE_COLUMN:
+                continue
+            self.assertEqual(after.get(column, ""), before.get(column, ""),
+                             column)
+
+    def test_the_correction_survives_a_restart(self):
+        fs.append_records([self.school(school_type="Government")])
+        fs.append_records([self.school(school_type="Private")])
+        # reading the workbook fresh is what a restarted run does
+        rows = fs.read_records(fs.master_path())
+        self.assertEqual([r[fs.SCHOOL_TYPE_COLUMN] for r in rows], ["Private"])
+
+    def test_gemini_still_cannot_decide_the_type(self):
+        self.assertIn(fs.SCHOOL_TYPE_COLUMN, fs.gemini_skips_columns())
+        self.assertNotIn(fs.SCHOOL_TYPE_COLUMN, fs.requested_fields_text())
+        record = self.school(school_type="Government")
+        fs.apply_answer(record, {fs.SCHOOL_TYPE_COLUMN: "Private"})
+        self.assertEqual(record[fs.SCHOOL_TYPE_COLUMN], "Government",
+                         "Gemini must not set it, even to Private")
+
+
+class SchoolTypeAcrossEveryWorkbookTests(SandboxTest):
+    """The Private-over-Government rule must hold in master_data.xlsx,
+    current_data.xlsx, finished cycle files and the temporary workbook a
+    resumed run reads back - or a restart undoes the correction."""
+
+    def school(self, name="ABC School", school_type="", **extra):
+        record = fs.blank_record()
+        record.update({"School Name": name, "City": "Bengaluru",
+                       "State": "Karnataka", "Country": "India",
+                       "School Address": "12 MG Road, Bengaluru",
+                       "PIN Code": "560001",
+                       "School Official Phone Number": "08022221111"})
+        if school_type:
+            record[fs.SCHOOL_TYPE_COLUMN] = school_type
+        record.update(extra)
+        return record
+
+    def types_in(self, path):
+        return [r[fs.SCHOOL_TYPE_COLUMN] for r in fs.read_records(path)]
+
+    def test_every_workbook_kind_is_listed(self):
+        fs.write_records(fs.master_path(), [self.school(school_type="Government")])
+        fs.write_records(fs.cycle_path(0), [self.school(school_type="Government")])
+        fs.write_records(fs.cycle_path(1), [self.school(school_type="Government")])
+        fs.save_temp_excel("Karnataka", "Bengaluru",
+                           [self.school(school_type="Government")])
+        listed = [os.path.basename(p) for p in fs.school_type_workbooks()]
+        self.assertIn("master_data.xlsx", listed)
+        self.assertIn("current_data.xlsx", listed)
+        self.assertIn("current_data_cycle1.xlsx", listed)
+        self.assertTrue([n for n in listed if n.endswith("_temporary_schools.xlsx")],
+                        listed)
+
+    def test_a_correction_reaches_all_of_them(self):
+        for path in (fs.master_path(), fs.cycle_path(0), fs.cycle_path(1)):
+            fs.write_records(path, [self.school(school_type="Government")])
+        fs.save_temp_excel("Karnataka", "Bengaluru",
+                           [self.school(school_type="Government")])
+        temp = fs.temp_excel_path("Karnataka", "Bengaluru")
+
+        done, rolled_back = fs.correct_school_types_everywhere(
+            [self.school(school_type="Private")])
+        self.assertFalse(rolled_back)
+        self.assertTrue(done)
+        for path in (fs.master_path(), fs.cycle_path(0), fs.cycle_path(1), temp):
+            self.assertEqual(self.types_in(path), ["Private"],
+                             os.path.basename(path))
+
+    def test_private_is_never_downgraded_in_any_workbook(self):
+        for path in (fs.master_path(), fs.cycle_path(0)):
+            fs.write_records(path, [self.school(school_type="Private")])
+        done, _ = fs.correct_school_types_everywhere(
+            [self.school(school_type="Government")])
+        self.assertEqual(done, [])
+        for path in (fs.master_path(), fs.cycle_path(0)):
+            self.assertEqual(self.types_in(path), ["Private"])
+
+    def test_no_other_cell_changes_anywhere(self):
+        saved = self.school(school_type="Government")
+        saved["School Official Email"] = "office@abcschool.edu.in"
+        saved["Additional School Notes"] = "keep me"
+        fs.write_records(fs.master_path(), [saved])
+        before = fs.read_records(fs.master_path())[0]
+        fs.correct_school_types_everywhere([self.school(school_type="Private")])
+        after = fs.read_records(fs.master_path())[0]
+        self.assertEqual(len(after), 57)
+        for column in fs.SCHOOL_COLUMNS:
+            if column != fs.SCHOOL_TYPE_COLUMN:
+                self.assertEqual(after.get(column, ""), before.get(column, ""),
+                                 column)
+
+    def test_no_duplicate_row_is_ever_created(self):
+        fs.write_records(fs.master_path(), [self.school(school_type="Government")])
+        fs.correct_school_types_everywhere([self.school(school_type="Private")])
+        self.assertEqual(len(fs.read_records(fs.master_path())), 1)
+
+    def test_a_different_campus_is_not_touched(self):
+        other = self.school("ABC School", "Government", **{"PIN Code": "560038"})
+        fs.write_records(fs.master_path(), [other])
+        done, _ = fs.correct_school_types_everywhere(
+            [self.school(school_type="Private")])
+        self.assertEqual(done, [], "a different PIN must not be corrected")
+        self.assertEqual(self.types_in(fs.master_path()), ["Government"])
+
+    def test_the_correction_survives_a_restart(self):
+        fs.write_records(fs.master_path(), [self.school(school_type="Government")])
+        fs.save_temp_excel("Karnataka", "Bengaluru",
+                           [self.school(school_type="Government")])
+        fs.correct_school_types_everywhere([self.school(school_type="Private")])
+        # what a resumed run reads back
+        again = fs.load_temp_excel("Karnataka", "Bengaluru")
+        self.assertEqual([r[fs.SCHOOL_TYPE_COLUMN] for r in again], ["Private"])
+        self.assertEqual(self.types_in(fs.master_path()), ["Private"])
+
+    def test_a_failure_rolls_every_file_back(self):
+        for path in (fs.master_path(), fs.cycle_path(0), fs.cycle_path(1)):
+            fs.write_records(path, [self.school(school_type="Government")])
+        def raw(path):
+            with open(path, "rb") as handle:
+                return handle.read()
+
+        originals = {p: raw(p) for p in (fs.master_path(), fs.cycle_path(0),
+                                         fs.cycle_path(1))}
+        calls = {"n": 0}
+        real = fs.correct_school_type_in_workbook
+
+        def fail_on_the_second(path, changes):
+            calls["n"] += 1
+            if calls["n"] == 2:
+                raise OSError("disk full, pretend")
+            return real(path, changes)
+
+        fs.correct_school_type_in_workbook = fail_on_the_second
+        try:
+            done, rolled_back = fs.correct_school_types_everywhere(
+                [self.school(school_type="Private")])
+        finally:
+            fs.correct_school_type_in_workbook = real
+        self.assertTrue(rolled_back)
+        self.assertEqual(done, [])
+        for path, content in originals.items():
+            self.assertEqual(raw(path), content,
+                             "%s was not rolled back" % os.path.basename(path))
+            self.assertEqual(self.types_in(path), ["Government"])
+
+    def test_the_safety_copy_is_verified_before_writing(self):
+        source = inspect.getsource(fs.correct_school_types_everywhere)
+        self.assertIn("filecmp.cmp", source)
+        self.assertIn("shallow=False", source)
+
+
+class NamedCampusIsADifferentSchoolTests(SandboxTest):
+    """"Modern School" and "Modern School Branch II" can share a street
+    without being one school. The check reads the NAME only, uses a narrow
+    designator list, and yields to stronger identity evidence."""
+
+    MAPS_A = ("https://www.google.com/maps/place/X/@28.6,77.2,17z/"
+              "data=!3m1!4b1!1s0x390cfd1111:0x2222aaaa")
+    MAPS_B = ("https://www.google.com/maps/place/X/@28.7,77.3,17z/"
+              "data=!3m1!4b1!1s0x390cfd9999:0x8888bbbb")
+
+    def rec(self, name, locality="", pin="110001",
+            address="12 Ring Road, Delhi", link="", phone="", email=""):
+        record = fs.blank_record()
+        record.update({"School Name": name, "Area / Locality": locality,
+                       "PIN Code": pin, "School Address": address,
+                       "City": "Delhi", "State": "Delhi NCR",
+                       "School Google Maps Link": link,
+                       "School Official Phone Number": phone,
+                       "School Official Email": email})
+        return record
+
+    def test_the_reported_case_is_two_schools(self):
+        reason = fs.contradicts(self.rec("Modern School"),
+                                self.rec("Modern School Branch II"))
+        self.assertTrue(reason, "they merged despite the named campus")
+        self.assertIn("campus", reason)
+
+    def test_a_fuller_locality_does_not_split_one_school(self):
+        # the old branch-word list held address words - road, nagar,
+        # colony, main - so a copy with its locality filled in looked like
+        # a different campus
+        for locality in ("Barakhamba Road", "Lajpat Nagar", "South Extension",
+                         "Greater Kailash Colony", "Sector 15"):
+            self.assertEqual(
+                fs.contradicts(self.rec("Modern School", ""),
+                               self.rec("Modern School", locality)), "",
+                locality)
+
+    def test_the_same_maps_place_settles_it_whatever_the_names(self):
+        self.assertEqual(
+            fs.contradicts(self.rec("Modern School", link=self.MAPS_A),
+                           self.rec("Modern School Branch II",
+                                    link=self.MAPS_A)), "")
+
+    def test_a_shared_contact_does_not_merge_two_campuses(self):
+        """A trust runs several campuses on one switchboard, one domain
+        and one website. A shared contact says WHO RUNS a school, not
+        which building it is, so it must never merge two campuses: the row
+        that loses is a school nobody ever contacts."""
+        shared = (
+            ("the same phone", {"School Official Phone Number": "01123456789"},
+             {"School Official Phone Number": "+91 11 2345 6789"}),
+            ("the same official email", {"School Official Email":
+                                         "info@modern.edu.in"},
+             {"School Official Email": "info@modern.edu.in"}),
+            ("the same website", {"School Website": "https://modern.edu.in"},
+             {"School Website": "http://www.modern.edu.in/about"}),
+            ("all three at once",
+             {"School Official Phone Number": "01123456789",
+              "School Official Email": "info@modern.edu.in",
+              "School Website": "https://modern.edu.in"},
+             {"School Official Phone Number": "01123456789",
+              "School Official Email": "info@modern.edu.in",
+              "School Website": "https://modern.edu.in"}),
+        )
+        for why, left_fields, right_fields in shared:
+            left = self.rec("Modern School")
+            left.update(left_fields)
+            right = self.rec("Modern School Branch II")
+            right.update(right_fields)
+            reason = fs.contradicts(left, right)
+            self.assertTrue(reason, "%s merged two campuses" % why)
+            self.assertIn("campus", reason, why)
+
+    def test_a_shared_contact_does_not_add_a_second_row_for_one_campus(self):
+        """The rule must not split a school from ITSELF: the same name on
+        one phone line is still one school."""
+        left = self.rec("Modern School")
+        left["School Official Phone Number"] = "01123456789"
+        right = self.rec("Modern School")
+        right["School Official Phone Number"] = "+91 11 2345 6789"
+        self.assertEqual(fs.contradicts(left, right), "")
+
+    def test_a_matching_place_id_outranks_a_named_campus(self):
+        """The one piece of evidence that DOES beat a name: the same pin on
+        the same map, even with a shared contact as well."""
+        left = self.rec("Modern School", link=self.MAPS_A,
+                        phone="01123456789")
+        right = self.rec("Modern School Branch II", link=self.MAPS_A,
+                         phone="01123456789")
+        self.assertEqual(fs.contradicts(left, right), "")
+
+    def test_two_campuses_sharing_a_contact_get_two_rows(self):
+        index = fs.SchoolIndex()
+        first = self.rec("Modern School")
+        first["School Official Phone Number"] = "01123456789"
+        index.add(first)
+        second = self.rec("Modern School Branch II")
+        second["School Official Phone Number"] = "01123456789"
+        new, merged = fs.merge_into_index(index, [second])
+        self.assertEqual((new, merged, len(index)), (1, 0, 2))
+
+    def test_the_private_rule_still_holds_across_two_campuses(self):
+        """Each campus keeps its own classification; neither leaks."""
+        index = fs.SchoolIndex()
+        gov = self.rec("Modern School")
+        gov[fs.SCHOOL_TYPE_COLUMN] = "Government"
+        gov["School Official Phone Number"] = "01123456789"
+        index.add(gov)
+        branch = self.rec("Modern School Branch II")
+        branch[fs.SCHOOL_TYPE_COLUMN] = "Private"
+        branch["School Official Phone Number"] = "01123456789"
+        fs.merge_into_index(index, [branch])
+        self.assertEqual(len(index), 2)
+        types = sorted(r[fs.SCHOOL_TYPE_COLUMN] for r in index.records)
+        self.assertEqual(types, ["Government", "Private"])
+        # and a true duplicate of the Government one still becomes Private
+        same = self.rec("Modern School")
+        same[fs.SCHOOL_TYPE_COLUMN] = "Private"
+        same["School Official Phone Number"] = "01123456789"
+        fs.merge_into_index(index, [same])
+        self.assertEqual(len(index), 2)
+        types = sorted(r[fs.SCHOOL_TYPE_COLUMN] for r in index.records)
+        self.assertEqual(types, ["Private", "Private"])
+
+    def test_identical_names_are_never_split(self):
+        self.assertEqual(fs.contradicts(self.rec("Modern School"),
+                                        self.rec("Modern School")), "")
+        self.assertEqual(
+            fs.contradicts(self.rec("Modern School Branch II"),
+                           self.rec("Modern School Branch II")), "")
+
+    def test_two_numbered_branches_stay_separate(self):
+        reason = fs.contradicts(self.rec("Modern School Branch II"),
+                                self.rec("Modern School Branch III"))
+        self.assertTrue(reason, reason)
+
+    def test_the_designator_list_excludes_address_words(self):
+        for word in ("road", "nagar", "colony", "puram", "layout", "main",
+                     "north", "south", "east", "west", "extension"):
+            self.assertEqual(
+                fs.campus_designators({"School Name": "A School %s" % word}),
+                frozenset(), word)
+
+    def test_the_designator_list_holds_the_structural_words(self):
+        for word in ("Campus", "Branch", "Annexe", "Block", "Phase",
+                     "Sector", "Wing"):
+            self.assertEqual(
+                fs.campus_designators({"School Name": "A School %s" % word}),
+                frozenset({word.lower()}), word)
+
+    def test_the_school_level_words_are_not_campus_markers(self):
+        """"Senior Secondary School" is a name, not a campus. 7 of the 9
+        campus-looking names in the first collected city were exactly
+        that, so treating the level words as markers would split one
+        school from itself."""
+        for word in ("junior", "senior", "primary", "boys", "girls"):
+            self.assertEqual(
+                fs.campus_designators({"School Name": "A %s School" % word}),
+                frozenset(), word)
+
+    def test_a_fuller_school_name_is_still_one_school(self):
+        for short, full in (("St. Mary's School",
+                             "St. Mary's Senior Secondary School"),
+                            ("Sant Namdev Public School",
+                             "Sant Namdev Public Upper Primary School")):
+            self.assertEqual(fs.contradicts(self.rec(short), self.rec(full)),
+                             "", full)
+
+    def test_boys_and_girls_schools_are_still_separated(self):
+        """The both-sided case stays covered by branch_signature()."""
+        reason = fs.contradicts(self.rec("Nehru Boys School"),
+                                self.rec("Nehru Girls School"))
+        self.assertTrue(reason, reason)
+
+    def test_the_locality_is_never_read_for_a_campus(self):
+        self.assertEqual(
+            fs.campus_designators({"School Name": "Modern School",
+                                   "Area / Locality": "Campus Road"}),
+            frozenset())
+
+    def test_a_named_campus_gets_its_own_row(self):
+        index = fs.SchoolIndex()
+        index.add(self.rec("Modern School"))
+        new, merged = fs.merge_into_index(
+            index, [self.rec("Modern School Branch II")])
+        self.assertEqual((new, merged, len(index)), (1, 0, 2))
