@@ -52,7 +52,9 @@
       "phone:7455857947",
       "email:dma_1986@rediffmail.com",
       "phone:7055607076",
-      "email:upmoradabad1731@narayanagroup.com"
+      "email:upmoradabad1731@narayanagroup.com",
+      "phone:9837269889",
+      "phone:9259044872"
     ]
   },
   "enriched": {
@@ -100,7 +102,9 @@
       "email:dma_1986@rediffmail.com",
       "phone:7055607076",
       "name+address:whitehall|8th milestone, rampur-bareilly road, p.o. kakrawa",
-      "email:upmoradabad1731@narayanagroup.com"
+      "email:upmoradabad1731@narayanagroup.com",
+      "phone:9837269889",
+      "phone:9259044872"
     ]
   },
   "completed_cities": [],
@@ -539,6 +543,20 @@
       "city": "Rampur",
       "reason": "Google searching is in its CAPTCHA cooldown for another 35 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T17:57:46"
+    },
+    {
+      "school": "SAFEHANDS PRESCHOOL",
+      "state": "Uttar Pradesh",
+      "city": "Rampur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 32 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:00:52"
+    },
+    {
+      "school": "KIDS POINT SCHOOL",
+      "state": "Uttar Pradesh",
+      "city": "Rampur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 29 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:04:10"
     }
   ],
   "duplicates": 0,
@@ -547,7 +565,7 @@
   "git": {
     "branch": "school-data-rank-10",
     "pending": false,
-    "last_ok": "2026-11-19T17:53:15",
+    "last_ok": "2026-11-19T17:59:08",
     "last_error": ""
   },
   "work": {
@@ -556,5 +574,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:59:03"
+  "updated": "2026-11-19T18:10:25"
 }
