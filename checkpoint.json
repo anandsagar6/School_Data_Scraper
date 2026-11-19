@@ -36,7 +36,9 @@
       "email:rishikul.hsr@gmail.com",
       "email:info@nypshisar.edu.in",
       "email:ppshsr20127@gmail.com",
-      "email:info@opjms.edu.in"
+      "email:info@opjms.edu.in",
+      "phone:1662276025",
+      "email:thesanskarhsr@gmail.com"
     ]
   },
   "enriched": {
@@ -66,7 +68,9 @@
       "email:info@nypshisar.edu.in",
       "email:ppshsr20127@gmail.com",
       "email:info@opjms.edu.in",
-      "name+address:chandulal anglo vedic|5p58+2c5, balsamand rd"
+      "name+address:chandulal anglo vedic|5p58+2c5, balsamand rd",
+      "phone:1662276025",
+      "email:thesanskarhsr@gmail.com"
     ]
   },
   "completed_cities": [],
@@ -459,6 +463,20 @@
       "city": "Hisar",
       "reason": "Google searching is in its CAPTCHA cooldown for another 152 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:34:58"
+    },
+    {
+      "school": "Haryana School of Business",
+      "state": "Haryana",
+      "city": "Hisar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 150 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:36:31"
+    },
+    {
+      "school": "The Sanskar Plateau School",
+      "state": "Haryana",
+      "city": "Hisar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 146 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:40:46"
     }
   ],
   "duplicates": 0,
@@ -467,7 +485,7 @@
   "git": {
     "branch": "school-data-rank-4",
     "pending": false,
-    "last_ok": "2026-11-19T17:30:53",
+    "last_ok": "2026-11-19T17:36:00",
     "last_error": ""
   },
   "work": {
@@ -476,5 +494,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:35:55"
+  "updated": "2026-11-19T17:43:21"
 }
