@@ -100,7 +100,8 @@
       "email:sfxhsr@yahoo.com",
       "email:nlkshisar@gmail.com",
       "name+address:digvijay memorial|3ppf+f24 taylor",
-      "email:principalcrcoehisar@gmail.com"
+      "email:principalcrcoehisar@gmail.com",
+      "name+address:lakshmi|089506 36002"
     ]
   },
   "completed_cities": [],
@@ -619,6 +620,13 @@
       "city": "Hisar",
       "reason": "Google searching is in its CAPTCHA cooldown for another 78 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T18:49:07"
+    },
+    {
+      "school": "Lakshmi Convent School",
+      "state": "Haryana",
+      "city": "Hisar",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 74 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:52:24"
     }
   ],
   "duplicates": 0,
@@ -627,7 +635,7 @@
   "git": {
     "branch": "school-data-rank-4",
     "pending": false,
-    "last_ok": "2026-11-19T18:45:17",
+    "last_ok": "2026-11-19T18:51:06",
     "last_error": ""
   },
   "work": {
@@ -636,5 +644,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T18:51:01"
+  "updated": "2026-11-19T18:56:58"
 }
