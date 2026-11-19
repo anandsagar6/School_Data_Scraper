@@ -109,7 +109,8 @@
       "phone:1140934396",
       "phone:9811369470",
       "phone:1127016688",
-      "phone:9205765248"
+      "phone:9205765248",
+      "name+address:st andrews|j-46"
     ]
   },
   "completed_cities": [],
@@ -722,6 +723,13 @@
       "city": "Delhi",
       "reason": "Google searching is in its CAPTCHA cooldown for another 48 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T18:59:34"
+    },
+    {
+      "school": "St. Andrews Public School",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 45 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T19:02:40"
     }
   ],
   "duplicates": 0,
@@ -730,7 +738,7 @@
   "git": {
     "branch": "school-data-rank-1",
     "pending": false,
-    "last_ok": "2026-11-19T18:53:23",
+    "last_ok": "2026-11-19T19:00:51",
     "last_error": ""
   },
   "work": {
@@ -739,5 +747,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T19:00:45"
+  "updated": "2026-11-19T19:05:50"
 }
