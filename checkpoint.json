@@ -35,7 +35,8 @@
     ],
     "Madhya Pradesh|Damoh": [
       "phone:9425618918",
-      "phone:9755672037"
+      "phone:9755672037",
+      "phone:7812221956"
     ]
   },
   "enriched": {
@@ -64,7 +65,8 @@
     ],
     "Madhya Pradesh|Damoh": [
       "phone:9425618918",
-      "phone:9755672037"
+      "phone:9755672037",
+      "phone:7812221956"
     ]
   },
   "completed_cities": [],
@@ -363,6 +365,13 @@
       "city": "Damoh",
       "reason": "Google searching is in its CAPTCHA cooldown for another 105 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:08:04"
+    },
+    {
+      "school": "St.Norbert School",
+      "state": "Madhya Pradesh",
+      "city": "Damoh",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 100 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:13:03"
     }
   ],
   "duplicates": 0,
@@ -371,7 +380,7 @@
   "git": {
     "branch": "school-data-rank-6",
     "pending": false,
-    "last_ok": "2026-11-19T17:03:13",
+    "last_ok": "2026-11-19T17:11:10",
     "last_error": ""
   },
   "work": {
@@ -380,5 +389,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:11:06"
+  "updated": "2026-11-19T17:16:14"
 }
