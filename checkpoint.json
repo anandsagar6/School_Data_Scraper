@@ -34,7 +34,8 @@
     ],
     "Assam|Karimganj": [
       "phone:9401375466",
-      "email:karimganjppl@mahaemail.com"
+      "email:karimganjppl@mahaemail.com",
+      "phone:3843261005"
     ]
   },
   "enriched": {
@@ -65,7 +66,10 @@
       "name+address:little angels|v988+3x3, station rd, opp. capital travels",
       "phone:9401375466",
       "name+address:talent|w kanishail rd",
-      "email:karimganjppl@mahaemail.com"
+      "email:karimganjppl@mahaemail.com",
+      "phone:3843261005",
+      "name+address:baby land|lokkhi bazar rd",
+      "name+address:tiny hearts|v993+8p7"
     ]
   },
   "completed_cities": [],
@@ -451,6 +455,27 @@
       "city": "Karimganj",
       "reason": "Google searching is in its CAPTCHA cooldown for another 167 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:01:01"
+    },
+    {
+      "school": "Rowland's Memorial High School",
+      "state": "Assam",
+      "city": "Karimganj",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 165 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:03:14"
+    },
+    {
+      "school": "Baby Land English High School",
+      "state": "Assam",
+      "city": "Karimganj",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 163 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:04:59"
+    },
+    {
+      "school": "Tiny Hearts",
+      "state": "Assam",
+      "city": "Karimganj",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 160 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:08:06"
     }
   ],
   "duplicates": 0,
@@ -459,7 +484,7 @@
   "git": {
     "branch": "school-data-rank-2",
     "pending": false,
-    "last_ok": "2026-11-19T16:57:32",
+    "last_ok": "2026-11-19T17:02:40",
     "last_error": ""
   },
   "work": {
@@ -468,5 +493,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:02:35"
+  "updated": "2026-11-19T17:10:09"
 }
