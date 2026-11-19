@@ -41,7 +41,9 @@
       "email:admin@achieversinternational.in",
       "phone:9886913202",
       "site:republiccentral.school",
-      "phone:9844855230"
+      "phone:9844855230",
+      "email:inventureashokashaala@gmail.com",
+      "phone:9008955251"
     ]
   },
   "enriched": {
@@ -70,7 +72,9 @@
       "email:admin@achieversinternational.in",
       "phone:9886913202",
       "site:republiccentral.school",
-      "phone:9844855230"
+      "phone:9844855230",
+      "email:inventureashokashaala@gmail.com",
+      "phone:9008955251"
     ]
   },
   "completed_cities": [],
@@ -442,6 +446,20 @@
       "city": "Mandya",
       "reason": "Google searching is in its CAPTCHA cooldown for another 96 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T17:16:59"
+    },
+    {
+      "school": "Inventure Ashoka Shaala: Kindergarten, Preschool & Primary School From PreKG to 8th Grade",
+      "state": "Karnataka",
+      "city": "Mandya",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 93 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:20:02"
+    },
+    {
+      "school": "Geethanjali Higher Primary School, Mandya ( CBSE )",
+      "state": "Karnataka",
+      "city": "Mandya",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 91 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:22:00"
     }
   ],
   "duplicates": 0,
@@ -450,7 +468,7 @@
   "git": {
     "branch": "school-data-rank-5",
     "pending": false,
-    "last_ok": "2026-11-19T17:10:58",
+    "last_ok": "2026-11-19T17:18:52",
     "last_error": ""
   },
   "work": {
@@ -459,5 +477,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:18:47"
+  "updated": "2026-11-19T17:24:08"
 }
