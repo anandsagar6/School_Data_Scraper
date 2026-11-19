@@ -41,7 +41,8 @@
       "phone:8109724606",
       "phone:7974535250",
       "email:mvmdamoh@mssmail.org",
-      "email:timescompu@rediffmail.com"
+      "email:timescompu@rediffmail.com",
+      "email:kvdamohmp@gmail.com"
     ]
   },
   "enriched": {
@@ -77,7 +78,9 @@
       "phone:7974535250",
       "name+address:shri guru nanak|rf43+7mv",
       "email:mvmdamoh@mssmail.org",
-      "email:timescompu@rediffmail.com"
+      "email:timescompu@rediffmail.com",
+      "email:kvdamohmp@gmail.com",
+      "name+address:rhymes play to 8th|lane between nirman and suraj marbles"
     ]
   },
   "completed_cities": [],
@@ -425,6 +428,20 @@
       "city": "Damoh",
       "reason": "Google searching is in its CAPTCHA cooldown for another 78 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T17:34:46"
+    },
+    {
+      "school": "Kendriya Vidyalaya Damoh",
+      "state": "Madhya Pradesh",
+      "city": "Damoh",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 74 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:39:00"
+    },
+    {
+      "school": "Rhymes Public School- Play to 8th",
+      "state": "Madhya Pradesh",
+      "city": "Damoh",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 72 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:40:37"
     }
   ],
   "duplicates": 0,
@@ -433,7 +450,7 @@
   "git": {
     "branch": "school-data-rank-6",
     "pending": false,
-    "last_ok": "2026-11-19T17:30:52",
+    "last_ok": "2026-11-19T17:36:47",
     "last_error": ""
   },
   "work": {
@@ -442,5 +459,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:36:43"
+  "updated": "2026-11-19T17:43:18"
 }
