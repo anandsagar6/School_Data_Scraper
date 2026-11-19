@@ -6,7 +6,7 @@
   "city_fingerprint": "4face9f1d03dd68c4c22d260484c501dbc091075c6decef04119ef5515c2e7f9",
   "current_city": [
     "Maharashtra",
-    "Parli"
+    "Ambajogai"
   ],
   "current_keyword": "Private Schools",
   "discovery_done": {},
@@ -70,6 +70,10 @@
       "phone:9028511151",
       "phone:2446223678",
       "email:vaidyanathnursing@gmail.com"
+    ],
+    "Maharashtra|Ambajogai": [
+      "email:admissions@podar.org",
+      "phone:8788801400"
     ]
   },
   "enriched": {
@@ -135,6 +139,10 @@
       "phone:9028511151",
       "phone:2446223678",
       "email:vaidyanathnursing@gmail.com"
+    ],
+    "Maharashtra|Ambajogai": [
+      "email:admissions@podar.org",
+      "phone:8788801400"
     ]
   },
   "completed_cities": [],
@@ -591,15 +599,29 @@
       "city": "Parli",
       "reason": "Google searching is in its CAPTCHA cooldown for another 23 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T18:47:45"
+    },
+    {
+      "school": "Podar International School Ambejogai (CBSE)",
+      "state": "Maharashtra",
+      "city": "Ambajogai",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 20 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:50:23"
+    },
+    {
+      "school": "Chhatrapati Sambhaji Raje Global School & Jr. College, Ambajogai",
+      "state": "Maharashtra",
+      "city": "Ambajogai",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 18 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:53:01"
     }
   ],
   "duplicates": 0,
-  "saved": 21,
+  "saved": 32,
   "cycle": 0,
   "git": {
     "branch": "school-data-rank-7",
     "pending": false,
-    "last_ok": "2026-11-19T18:49:07",
+    "last_ok": "2026-11-19T18:49:12",
     "last_error": ""
   },
   "work": {
@@ -608,5 +630,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T18:49:07"
+  "updated": "2026-11-19T18:57:46"
 }
