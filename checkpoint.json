@@ -49,7 +49,9 @@
       "phone:8090907700",
       "email:info@shokeeninternationalschool.com",
       "phone:7065499991",
-      "phone:9810181565"
+      "phone:9810181565",
+      "phone:9811269490",
+      "phone:9667036772"
     ]
   },
   "enriched": {
@@ -91,7 +93,9 @@
       "phone:8090907700",
       "email:info@shokeeninternationalschool.com",
       "phone:7065499991",
-      "phone:9810181565"
+      "phone:9810181565",
+      "phone:9811269490",
+      "phone:9667036772"
     ]
   },
   "completed_cities": [],
@@ -648,6 +652,20 @@
       "city": "Delhi",
       "reason": "Google searching is in its CAPTCHA cooldown for another 103 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T18:04:25"
+    },
+    {
+      "school": "Sant Namdev Public School | Upper Primary School In Rani Bagh",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 94 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:14:14"
+    },
+    {
+      "school": "PSM World School",
+      "state": "Delhi NCR",
+      "city": "Delhi",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 90 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T18:17:52"
     }
   ],
   "duplicates": 0,
@@ -656,7 +674,7 @@
   "git": {
     "branch": "school-data-rank-1",
     "pending": false,
-    "last_ok": "2026-11-19T17:57:40",
+    "last_ok": "2026-11-19T18:12:18",
     "last_error": ""
   },
   "work": {
@@ -665,5 +683,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T18:12:12"
+  "updated": "2026-11-19T18:21:35"
 }
