@@ -36,7 +36,9 @@
     "Madhya Pradesh|Damoh": [
       "phone:9425618918",
       "phone:9755672037",
-      "phone:7812221956"
+      "phone:7812221956",
+      "phone:9753040755",
+      "phone:8109724606"
     ]
   },
   "enriched": {
@@ -66,7 +68,9 @@
     "Madhya Pradesh|Damoh": [
       "phone:9425618918",
       "phone:9755672037",
-      "phone:7812221956"
+      "phone:7812221956",
+      "phone:9753040755",
+      "phone:8109724606"
     ]
   },
   "completed_cities": [],
@@ -372,6 +376,20 @@
       "city": "Damoh",
       "reason": "Google searching is in its CAPTCHA cooldown for another 100 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:13:03"
+    },
+    {
+      "school": "Ojaswini College and School",
+      "state": "Madhya Pradesh",
+      "city": "Damoh",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 95 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:18:22"
+    },
+    {
+      "school": "St. John's Senior Secondary School",
+      "state": "Madhya Pradesh",
+      "city": "Damoh",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 92 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:20:57"
     }
   ],
   "duplicates": 0,
@@ -380,7 +398,7 @@
   "git": {
     "branch": "school-data-rank-6",
     "pending": false,
-    "last_ok": "2026-11-19T17:11:10",
+    "last_ok": "2026-11-19T17:16:18",
     "last_error": ""
   },
   "work": {
@@ -389,5 +407,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:16:14"
+  "updated": "2026-11-19T17:23:56"
 }
