@@ -35,7 +35,8 @@
       "email:info@ddmgroup.in",
       "phone:7428096975",
       "phone:9907927255",
-      "phone:7999576814"
+      "phone:7999576814",
+      "phone:7815275143"
     ]
   },
   "enriched": {
@@ -68,7 +69,9 @@
       "name+address:korba|10, m p nagar",
       "name+address:balco township|cq58+gx8",
       "name+address:shri har kishan|9p72+36q, tp nagar rd",
-      "name+address:jyoti sec|9m3r+2g7"
+      "name+address:jyoti sec|9m3r+2g7",
+      "name+address:saraswati shishu|9rpg+ccp, rajgamar main rd",
+      "phone:7815275143"
     ]
   },
   "completed_cities": [],
@@ -468,6 +471,20 @@
       "city": "Korba District",
       "reason": "Google searching is in its CAPTCHA cooldown for another 162 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:24:27"
+    },
+    {
+      "school": "Saraswati Shishu Mandir School",
+      "state": "Chhattisgarh",
+      "city": "Korba District",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 159 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:27:32"
+    },
+    {
+      "school": "Beacon English Medium higher secondary school,Shakti nagar",
+      "state": "Chhattisgarh",
+      "city": "Korba District",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 156 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:30:36"
     }
   ],
   "duplicates": 0,
@@ -476,7 +493,7 @@
   "git": {
     "branch": "school-data-rank-3",
     "pending": false,
-    "last_ok": "2026-11-19T17:17:31",
+    "last_ok": "2026-11-19T17:26:44",
     "last_error": ""
   },
   "work": {
@@ -485,5 +502,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:26:40"
+  "updated": "2026-11-19T17:32:19"
 }
