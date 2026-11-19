@@ -29,6 +29,9 @@
       "phone:9591422720",
       "email:ishnaplayschool@gmail.com",
       "email:litroc77@hotmail.com"
+    ],
+    "Karnataka|Mandya": [
+      "phone:9482441172"
     ]
   },
   "enriched": {
@@ -45,6 +48,9 @@
       "phone:9591422720",
       "email:ishnaplayschool@gmail.com",
       "email:litroc77@hotmail.com"
+    ],
+    "Karnataka|Mandya": [
+      "phone:9482441172"
     ]
   },
   "completed_cities": [],
@@ -339,6 +345,13 @@
       "city": "Mandya",
       "reason": "Google searching is in its CAPTCHA cooldown for another 12 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T15:57:16"
+    },
+    {
+      "school": "Orchids International Pre-school Mandya",
+      "state": "Karnataka",
+      "city": "Mandya",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 161 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:11:59"
     }
   ],
   "duplicates": 0,
@@ -347,7 +360,7 @@
   "git": {
     "branch": "school-data-rank-5",
     "pending": false,
-    "last_ok": "2026-11-19T15:53:50",
+    "last_ok": "2026-11-19T16:10:57",
     "last_error": ""
   },
   "work": {
@@ -356,5 +369,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:10:53"
+  "updated": "2026-11-19T16:18:48"
 }
