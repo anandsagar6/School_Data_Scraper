@@ -68,7 +68,9 @@
       "phone:9609010901",
       "email:sirtnsss@gmail.com",
       "name+address:government|8jp3+8hg, sichey school rd",
-      "phone:3592271200"
+      "phone:3592271200",
+      "name+address:st thomas|8jm8+92r, png school road",
+      "name+address:marigold|8jp7+3pv"
     ]
   },
   "completed_cities": [],
@@ -572,6 +574,20 @@
       "city": "Sichey",
       "reason": "Google searching is in its CAPTCHA cooldown for another 65 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T17:27:43"
+    },
+    {
+      "school": "St Thomas School",
+      "state": "Sikkim",
+      "city": "Sichey",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 62 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:30:55"
+    },
+    {
+      "school": "Marigold School",
+      "state": "Sikkim",
+      "city": "Sichey",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 58 minute(s) - the official email and phone searches were NOT ru",
+      "when": "2026-11-19T17:35:05"
     }
   ],
   "duplicates": 0,
@@ -580,7 +596,7 @@
   "git": {
     "branch": "school-data-rank-9",
     "pending": false,
-    "last_ok": "2026-11-19T17:20:47",
+    "last_ok": "2026-11-19T17:29:44",
     "last_error": ""
   },
   "work": {
@@ -589,5 +605,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:29:40"
+  "updated": "2026-11-19T17:38:06"
 }
