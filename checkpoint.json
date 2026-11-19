@@ -55,7 +55,9 @@
       "phone:7967326363",
       "phone:8120606633",
       "email:vsvpsbetul88@gmail.com",
-      "email:lfsssbzu@gmail.com"
+      "email:lfsssbzu@gmail.com",
+      "phone:8278001177",
+      "phone:9424001072"
     ]
   },
   "enriched": {
@@ -105,7 +107,9 @@
       "phone:7967326363",
       "phone:8120606633",
       "email:vsvpsbetul88@gmail.com",
-      "email:lfsssbzu@gmail.com"
+      "email:lfsssbzu@gmail.com",
+      "phone:8278001177",
+      "phone:9424001072"
     ]
   },
   "completed_cities": [],
@@ -610,6 +614,20 @@
       "city": "Betul",
       "reason": "Google searching is in its CAPTCHA cooldown for another 13 minute(s) - the official email and phone searches were NOT ru",
       "when": "2026-11-19T18:39:34"
+    },
+    {
+      "school": "EuroPride Academy- The School",
+      "state": "Madhya Pradesh",
+      "city": "Betul",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 9 minute(s) - the official email and phone searches were NOT run",
+      "when": "2026-11-19T18:43:31"
+    },
+    {
+      "school": "Shri Vinayakam School",
+      "state": "Madhya Pradesh",
+      "city": "Betul",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 7 minute(s) - the official email and phone searches were NOT run",
+      "when": "2026-11-19T18:46:10"
     }
   ],
   "duplicates": 0,
@@ -618,7 +636,7 @@
   "git": {
     "branch": "school-data-rank-6",
     "pending": false,
-    "last_ok": "2026-11-19T18:34:52",
+    "last_ok": "2026-11-19T18:42:09",
     "last_error": ""
   },
   "work": {
@@ -627,5 +645,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T18:42:04"
+  "updated": "2026-11-19T18:47:33"
 }
