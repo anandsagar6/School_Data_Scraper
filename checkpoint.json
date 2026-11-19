@@ -37,7 +37,8 @@
       "email:karimganjppl@mahaemail.com",
       "phone:3843261005",
       "phone:6001178921",
-      "phone:3843262700"
+      "phone:3843262700",
+      "email:markazkxj@gmail.com"
     ]
   },
   "enriched": {
@@ -73,7 +74,9 @@
       "name+address:baby land|lokkhi bazar rd",
       "name+address:tiny hearts|v993+8p7",
       "phone:6001178921",
-      "phone:3843262700"
+      "phone:3843262700",
+      "email:markazkxj@gmail.com",
+      "site:ihems.co.in"
     ]
   },
   "completed_cities": [],
@@ -494,6 +497,20 @@
       "city": "Karimganj",
       "reason": "Google searching is in its CAPTCHA cooldown for another 152 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T17:15:51"
+    },
+    {
+      "school": "KARIMGANJ MARKAZ ACADEMY",
+      "state": "Assam",
+      "city": "Karimganj",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 147 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:20:55"
+    },
+    {
+      "school": "Ideal Home English Medium School",
+      "state": "Assam",
+      "city": "Karimganj",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 143 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T17:24:23"
     }
   ],
   "duplicates": 0,
@@ -502,7 +519,7 @@
   "git": {
     "branch": "school-data-rank-2",
     "pending": false,
-    "last_ok": "2026-11-19T17:10:13",
+    "last_ok": "2026-11-19T17:18:46",
     "last_error": ""
   },
   "work": {
@@ -511,5 +528,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T17:18:41"
+  "updated": "2026-11-19T17:26:05"
 }
