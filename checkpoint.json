@@ -30,7 +30,9 @@
       "email:korbastfrancis2019@gmail.com",
       "phone:9165695013",
       "phone:7587706495",
-      "phone:7759249351"
+      "phone:7759249351",
+      "site:jpskorba.com",
+      "email:info@ddmgroup.in"
     ]
   },
   "enriched": {
@@ -53,7 +55,9 @@
       "email:korbastfrancis2019@gmail.com",
       "phone:9165695013",
       "phone:7587706495",
-      "phone:7759249351"
+      "phone:7759249351",
+      "site:jpskorba.com",
+      "email:info@ddmgroup.in"
     ]
   },
   "completed_cities": [],
@@ -310,6 +314,20 @@
       "city": "Korba District",
       "reason": "Google searching is in its CAPTCHA cooldown for another 219 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T16:28:11"
+    },
+    {
+      "school": "Jain Public School",
+      "state": "Chhattisgarh",
+      "city": "Korba District",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 214 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:32:24"
+    },
+    {
+      "school": "DDM Public School",
+      "state": "Chhattisgarh",
+      "city": "Korba District",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 212 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T16:35:13"
     }
   ],
   "duplicates": 0,
@@ -318,7 +336,7 @@
   "git": {
     "branch": "school-data-rank-3",
     "pending": false,
-    "last_ok": "2026-11-19T16:22:21",
+    "last_ok": "2026-11-19T16:31:43",
     "last_error": ""
   },
   "work": {
@@ -327,5 +345,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T16:31:39"
+  "updated": "2026-11-19T16:37:39"
 }
