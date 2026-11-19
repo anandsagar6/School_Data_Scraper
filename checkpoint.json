@@ -67,7 +67,9 @@
     ],
     "Uttar Pradesh|Saharanpur": [
       "email:highlandhallconvent@gmail.com",
-      "email:81115@cbseshiksha.in"
+      "email:81115@cbseshiksha.in",
+      "site:gdgoenkatoddlerhouse.com",
+      "email:spschool.principal@gmail.com"
     ]
   },
   "enriched": {
@@ -131,7 +133,9 @@
     ],
     "Uttar Pradesh|Saharanpur": [
       "email:highlandhallconvent@gmail.com",
-      "email:81115@cbseshiksha.in"
+      "email:81115@cbseshiksha.in",
+      "site:gdgoenkatoddlerhouse.com",
+      "email:spschool.principal@gmail.com"
     ]
   },
   "completed_cities": [],
@@ -887,6 +891,20 @@
       "city": "Saharanpur",
       "reason": "Google searching is in its CAPTCHA cooldown for another 175 minute(s) - the official email and phone searches were NOT r",
       "when": "2026-11-19T19:43:30"
+    },
+    {
+      "school": "GD Goenka Toddler House",
+      "state": "Uttar Pradesh",
+      "city": "Saharanpur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 160 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T19:58:42"
+    },
+    {
+      "school": "Saharanpur Public School",
+      "state": "Uttar Pradesh",
+      "city": "Saharanpur",
+      "reason": "Google searching is in its CAPTCHA cooldown for another 157 minute(s) - the official email and phone searches were NOT r",
+      "when": "2026-11-19T20:01:52"
     }
   ],
   "duplicates": 0,
@@ -895,7 +913,7 @@
   "git": {
     "branch": "school-data-rank-10",
     "pending": false,
-    "last_ok": "2026-11-19T19:39:32",
+    "last_ok": "2026-11-19T19:57:32",
     "last_error": ""
   },
   "work": {
@@ -904,5 +922,5 @@
     "break_until": "",
     "reason": ""
   },
-  "updated": "2026-11-19T19:57:27"
+  "updated": "2026-11-19T20:04:19"
 }
